@@ -1,0 +1,268 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Счастливый через музыку</title>
+<style>
+:root{--bg:#F3EEE8;--card:#FBF8F4;--rose:#8F5F64;--olive:#737C67;--gold:#B99A6B;--text:#332B2A;--lav:#A99BAB;--border:#DED5CE}
+*{box-sizing:border-box}body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;background:var(--bg);color:var(--text)}
+.app{max-width:430px;margin:auto;padding:24px 20px 100px}.card,.practice{background:var(--card);border:1px solid var(--border);border-radius:22px;padding:18px;margin:16px 0}
+.practice{width:100%;text-align:left;color:var(--text)}.btn{width:100%;border:0;border-radius:17px;padding:15px 18px;font-size:16px;font-weight:700;margin-top:10px;background:var(--rose);color:#fff}.secondary{background:#E9DFD8;color:var(--text)}.lav{background:var(--lav)}.olive{background:var(--olive)}
+input,textarea{width:100%;border:1px solid var(--border);border-radius:15px;padding:13px;background:#fff;font-size:16px;margin-top:8px;color:var(--text)}textarea{min-height:100px}.hidden{display:none!important}.record{width:160px;height:160px;border-radius:50%;border:0;background:var(--rose);color:#fff;font-size:18px;font-weight:700;display:block;margin:26px auto 12px}.timer{text-align:center;font-size:42px}.small{font-size:13px;color:#746b65}audio{width:100%;margin-top:10px}.entry{padding:14px 0;border-bottom:1px solid var(--border)}.nav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:min(430px,100%);display:grid;grid-template-columns:repeat(3,1fr);background:var(--card);border-top:1px solid var(--border)}.nav button{background:none;border:0;padding:12px;color:var(--text)}.back{border:0;background:none;color:var(--rose);font-weight:700;padding:0}.row{display:flex;gap:8px}.row .btn{flex:1}.chip{display:inline-block;background:#EFE7E1;border-radius:999px;padding:5px 9px;font-size:12px}
+</style>
+</head>
+<body>
+<div class="app">
+<div class="small">Счастливый через музыку</div>
+<section id="authView">
+<h1>Звучать так, как ты есть.</h1>
+<p>Создай аккаунт или войди. Твои записи будут храниться приватно.</p>
+<div class="card">
+<input id="email" type="email" placeholder="Email">
+<input id="password" type="password" minlength="6" placeholder="Пароль">
+<button class="btn" id="loginBtn">Войти</button>
+<button class="btn secondary" id="signupBtn">Создать аккаунт</button>
+<div id="authMsg" class="small"></div>
+</div>
+</section>
+<section id="appView" class="hidden">
+<div id="todayTab">
+<h1>Как ты звучишь сегодня?</h1>
+<div class="card">
+<label>Энергия: <span id="energyVal">5</span>/10<input id="energy" type="range" min="1" max="10" value="5"></label>
+<label>Как тебе внутри: <span id="beforeVal">5</span>/10<input id="before" type="range" min="1" max="10" value="5"></label>
+<input id="wordBefore" placeholder="Одно слово">
+</div>
+<div class="card">
+<h2>Голосовой дневник</h2>
+<button id="recordBtn" class="record">🎙<br>Звучать</button>
+<div id="timer" class="timer">00:00</div>
+<div id="status" class="small">Нажми, чтобы начать запись.</div>
+<div id="preview" class="hidden">
+<audio id="player" controls></audio>
+<input id="title" placeholder="Название">
+<label>Как тебе сейчас: <span id="afterVal">6</span>/10<input id="after" type="range" min="1" max="10" value="6"></label>
+<input id="wordAfter" placeholder="Что изменилось?">
+<button id="saveBtn" class="btn">Сохранить</button>
+</div>
+</div>
+</div>
+<div id="journalTab" class="hidden"><h1>Мой дневник</h1><div class="card" id="journalList">Загрузка…</div></div>
+<div id="playTab" class="hidden">
+<div id="playList">
+<h1>Поиграть</h1>
+<button id="surpriseBtn" class="btn lav">Удиви меня</button>
+<div id="practiceList"></div>
+</div>
+<div id="practiceView" class="hidden">
+<button id="backBtn" class="back">← Назад к играм</button>
+<div class="card">
+<div id="practiceCategory" class="small"></div>
+<h2 id="practiceTitle"></h2>
+<p id="practiceInstruction"></p>
+<button id="practiceRecordBtn" class="record">🎙<br>Начать запись</button>
+<div id="practiceTimer" class="timer">00:00</div>
+<div id="practiceStatus" class="small">Нажми, чтобы начать.</div>
+<div id="practicePreview" class="hidden">
+<audio id="practicePlayer" controls></audio>
+<div class="row"><button id="rerecordBtn" class="btn secondary">Перезаписать</button><button id="nextBtn" class="btn olive">Далее</button></div>
+</div>
+</div>
+<div id="reflection" class="card hidden">
+<h3>Моя рефлексия</h3>
+<p id="reflectionPrompt">Что ты услышала в себе?</p>
+<textarea id="reflectionText" placeholder="Напиши пару слов"></textarea>
+<button id="reflectionVoiceBtn" class="btn secondary">🎙 Записать голосовую рефлексию</button>
+<div id="reflectionStatus" class="small"></div>
+<audio id="reflectionPlayer" class="hidden" controls></audio>
+<button id="savePracticeBtn" class="btn">Сохранить в дневник</button>
+<button id="againBtn" class="btn secondary">Ещё один раунд</button>
+<button id="randomAgainBtn" class="btn lav">Другая случайная игра</button>
+</div>
+</div>
+</div>
+<button id="logoutBtn" class="btn secondary">Выйти</button>
+</section>
+</div>
+<nav id="nav" class="nav hidden"><button data-tab="today">Сегодня</button><button data-tab="journal">Дневник</button><button data-tab="play">Поиграть</button></nav>
+<script type="module">
+import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.57.4';
+const s = createClient('https://uecdlqlwsrqmocbpgiwj.supabase.co','sb_publishable_QJ_4e8-BHl0gOZifGqdv1w_doFwpTlb',{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true}});
+const $ = id => document.getElementById(id);
+const setText = (el, value) => { el.textContent = value ?? ''; };
+const fmt = n => String(Math.floor(n/60)).padStart(2,'0') + ':' + String(n%60).padStart(2,'0');
+let recorder, stream, chunks=[], blob, blobUrl, seconds=0, timerId;
+let practiceRecorder, practiceStream, practiceChunks=[], practiceBlob, practiceBlobUrl, practiceSeconds=0, practiceTimerId;
+let reflectionRecorder, reflectionStream, reflectionChunks=[], reflectionBlob, reflectionBlobUrl;
+let selectedPractice = null;
+let practiceCache = [];
+const reflectionPrompts = ['Что ты услышала в себе?','Что тебя удивило?','Что изменилось после этой игры?','Где ты была свободнее, чем обычно?','Что хочется сохранить из этого звучания?'];
+
+function show(loggedIn){
+  $('authView').classList.toggle('hidden', loggedIn);
+  $('appView').classList.toggle('hidden', !loggedIn);
+  $('nav').classList.toggle('hidden', !loggedIn);
+  if(loggedIn){ loadJournal(); loadPractices(); }
+}
+
+$('loginBtn').addEventListener('click', async()=>{
+  const {error}=await s.auth.signInWithPassword({email:$('email').value.trim(),password:$('password').value});
+  setText($('authMsg'), error ? error.message : 'Готово');
+});
+$('signupBtn').addEventListener('click', async()=>{
+  const {data,error}=await s.auth.signUp({email:$('email').value.trim(),password:$('password').value,options:{emailRedirectTo:location.origin}});
+  setText($('authMsg'), error ? error.message : (data.session ? 'Аккаунт создан.' : 'Проверь почту и подтверди email, затем вернись сюда.'));
+});
+$('logoutBtn').addEventListener('click', ()=>s.auth.signOut());
+s.auth.onAuthStateChange((_e,session)=>show(!!session));
+show(!!(await s.auth.getSession()).data.session);
+$('energy').addEventListener('input',e=>setText($('energyVal'),e.target.value));
+$('before').addEventListener('input',e=>setText($('beforeVal'),e.target.value));
+$('after').addEventListener('input',e=>setText($('afterVal'),e.target.value));
+
+async function startRecording(kind){
+  const isPractice = kind==='practice';
+  const activeRecorder = isPractice ? practiceRecorder : recorder;
+  if(activeRecorder && activeRecorder.state==='recording'){ activeRecorder.stop(); return; }
+  try{
+    const media = await navigator.mediaDevices.getUserMedia({audio:true});
+    const rec = new MediaRecorder(media);
+    const localChunks=[];
+    let localSeconds=0;
+    const timerEl = isPractice ? $('practiceTimer') : $('timer');
+    const statusEl = isPractice ? $('practiceStatus') : $('status');
+    timerEl.textContent='00:00';
+    rec.ondataavailable=e=>{ if(e.data.size) localChunks.push(e.data); };
+    rec.onstop=()=>{
+      media.getTracks().forEach(t=>t.stop());
+      if(isPractice){
+        clearInterval(practiceTimerId);
+        practiceSeconds=localSeconds;
+        practiceBlob=new Blob(localChunks,{type:rec.mimeType||'audio/webm'});
+        if(practiceBlobUrl) URL.revokeObjectURL(practiceBlobUrl);
+        practiceBlobUrl=URL.createObjectURL(practiceBlob);
+        $('practicePlayer').src=practiceBlobUrl;
+        $('practicePreview').classList.remove('hidden');
+      } else {
+        clearInterval(timerId);
+        seconds=localSeconds;
+        blob=new Blob(localChunks,{type:rec.mimeType||'audio/webm'});
+        if(blobUrl) URL.revokeObjectURL(blobUrl);
+        blobUrl=URL.createObjectURL(blob);
+        $('player').src=blobUrl;
+        $('preview').classList.remove('hidden');
+      }
+      setText(statusEl,'Готово. Прослушай запись.');
+    };
+    rec.start();
+    setText(statusEl,'Запись идёт… Нажми ещё раз, чтобы остановить.');
+    const int=setInterval(()=>{ localSeconds++; timerEl.textContent=fmt(localSeconds); },1000);
+    if(isPractice){ practiceRecorder=rec; practiceStream=media; practiceTimerId=int; }
+    else { recorder=rec; stream=media; timerId=int; }
+  }catch(e){
+    setText(isPractice?$('practiceStatus'):$('status'),'Микрофон: '+e.message);
+  }
+}
+
+$('recordBtn').addEventListener('click',()=>startRecording('basic'));
+$('practiceRecordBtn').addEventListener('click',()=>startRecording('practice'));
+$('rerecordBtn').addEventListener('click',()=>{ resetPractice(); startRecording('practice'); });
+
+$('saveBtn').addEventListener('click',async()=>{
+  if(!blob) return;
+  const user=(await s.auth.getUser()).data.user; if(!user) return;
+  const {data:row,error}=await s.from('voice_entries').insert({user_id:user.id,title:$('title').value||'Мой звук сегодня',duration_before:seconds,energy_before:+$('energy').value,state_before:+$('before').value,state_after:+$('after').value,word_before:$('wordBefore').value,word_after:$('wordAfter').value}).select().single();
+  if(error){ setText($('status'),error.message); return; }
+  const ext=blob.type.includes('mp4')?'m4a':'webm';
+  const path=`${user.id}/${row.id}/before.${ext}`;
+  const up=await s.storage.from('voice-recordings').upload(path,blob,{contentType:blob.type});
+  if(up.error){ setText($('status'),up.error.message); return; }
+  await s.from('voice_entries').update({audio_path_before:path}).eq('id',row.id);
+  setText($('status'),'Сохранено'); $('preview').classList.add('hidden'); loadJournal();
+});
+
+async function loadJournal(){
+  const {data}=await s.from('voice_entries').select('*').order('created_at',{ascending:false}).limit(30);
+  const list=$('journalList'); list.replaceChildren();
+  for(const e of data||[]){
+    const d=document.createElement('div'); d.className='entry';
+    const title=document.createElement('b'); setText(title,e.title||'Мой звук'); d.appendChild(title);
+    const date=document.createElement('div'); date.className='small'; setText(date,new Date(e.created_at).toLocaleString('ru-RU')); d.appendChild(date);
+    if(e.audio_path_before){ const signed=await s.storage.from('voice-recordings').createSignedUrl(e.audio_path_before,3600); if(signed.data?.signedUrl){ const a=document.createElement('audio'); a.controls=true; a.src=signed.data.signedUrl; d.appendChild(a); } }
+    if(e.reflection_text){ const p=document.createElement('p'); p.className='small'; setText(p,'Рефлексия: '+e.reflection_text); d.appendChild(p); }
+    if(e.reflection_audio_path){ const signed=await s.storage.from('voice-recordings').createSignedUrl(e.reflection_audio_path,3600); if(signed.data?.signedUrl){ const a=document.createElement('audio'); a.controls=true; a.src=signed.data.signedUrl; d.appendChild(a); } }
+    list.appendChild(d);
+  }
+  if(!list.children.length) setText(list,'Здесь появятся твои записи.');
+}
+
+async function loadPractices(){
+  const {data}=await s.from('practices').select('*').eq('is_active',true).limit(50);
+  practiceCache=data||[];
+  const list=$('practiceList'); list.replaceChildren();
+  practiceCache.forEach(p=>{
+    const card=document.createElement('button'); card.type='button'; card.className='practice';
+    const h=document.createElement('h2'); setText(h,p.title); card.appendChild(h);
+    const instruction=document.createElement('p'); setText(instruction,p.instruction); card.appendChild(instruction);
+    if(p.category){ const chip=document.createElement('span'); chip.className='chip'; setText(chip,p.category); card.appendChild(chip); }
+    card.addEventListener('click',()=>openPractice(p)); list.appendChild(card);
+  });
+}
+
+function openPractice(p){
+  selectedPractice=p;
+  $('playList').classList.add('hidden'); $('practiceView').classList.remove('hidden');
+  setText($('practiceCategory'),p.category||'Практика'); setText($('practiceTitle'),p.title); setText($('practiceInstruction'),p.instruction);
+  resetPractice(); resetReflection();
+}
+function resetPractice(){
+  practiceBlob=null; practiceSeconds=0; $('practiceTimer').textContent='00:00'; $('practicePreview').classList.add('hidden'); $('reflection').classList.add('hidden'); setText($('practiceStatus'),'Нажми, чтобы начать.');
+}
+function resetReflection(){
+  $('reflectionText').value=''; reflectionBlob=null; $('reflectionPlayer').classList.add('hidden'); $('reflectionPlayer').removeAttribute('src'); setText($('reflectionStatus'),''); setText($('reflectionPrompt'),reflectionPrompts[Math.floor(Math.random()*reflectionPrompts.length)]);
+}
+$('nextBtn').addEventListener('click',()=>{ $('reflection').classList.remove('hidden'); $('reflection').scrollIntoView({behavior:'smooth',block:'start'}); });
+
+$('reflectionVoiceBtn').addEventListener('click',async()=>{
+  if(reflectionRecorder && reflectionRecorder.state==='recording'){ reflectionRecorder.stop(); return; }
+  try{
+    reflectionStream=await navigator.mediaDevices.getUserMedia({audio:true}); reflectionChunks=[]; reflectionRecorder=new MediaRecorder(reflectionStream);
+    reflectionRecorder.ondataavailable=e=>{ if(e.data.size) reflectionChunks.push(e.data); };
+    reflectionRecorder.onstop=()=>{
+      reflectionStream.getTracks().forEach(t=>t.stop()); reflectionBlob=new Blob(reflectionChunks,{type:reflectionRecorder.mimeType||'audio/webm'});
+      if(reflectionBlobUrl) URL.revokeObjectURL(reflectionBlobUrl); reflectionBlobUrl=URL.createObjectURL(reflectionBlob); $('reflectionPlayer').src=reflectionBlobUrl; $('reflectionPlayer').classList.remove('hidden'); setText($('reflectionStatus'),'Голосовая рефлексия готова.'); $('reflectionVoiceBtn').textContent='🎙 Записать заново';
+    };
+    reflectionRecorder.start(); setText($('reflectionStatus'),'Запись идёт… Нажми ещё раз, чтобы остановить.'); $('reflectionVoiceBtn').textContent='■ Остановить запись';
+  }catch(e){ setText($('reflectionStatus'),'Микрофон: '+e.message); }
+});
+
+$('savePracticeBtn').addEventListener('click',async()=>{
+  if(!practiceBlob || !selectedPractice) return;
+  const user=(await s.auth.getUser()).data.user; if(!user) return;
+  setText($('practiceStatus'),'Сохраняю…');
+  let payload={user_id:user.id,practice_id:selectedPractice.id,title:selectedPractice.title,duration_before:practiceSeconds,reflection_text:$('reflectionText').value.trim()||null};
+  let result=await s.from('voice_entries').insert(payload).select().single();
+  if(result.error && /reflection_text/i.test(result.error.message)){ delete payload.reflection_text; result=await s.from('voice_entries').insert(payload).select().single(); }
+  if(result.error){ setText($('practiceStatus'),result.error.message); return; }
+  const row=result.data;
+  const ext=practiceBlob.type.includes('mp4')?'m4a':'webm'; const mainPath=`${user.id}/${row.id}/before.${ext}`;
+  const up=await s.storage.from('voice-recordings').upload(mainPath,practiceBlob,{contentType:practiceBlob.type}); if(up.error){ setText($('practiceStatus'),up.error.message); return; }
+  const update={audio_path_before:mainPath};
+  if($('reflectionText').value.trim()) update.reflection_text=$('reflectionText').value.trim();
+  if(reflectionBlob){ const rext=reflectionBlob.type.includes('mp4')?'m4a':'webm'; const rpath=`${user.id}/${row.id}/reflection.${rext}`; const rup=await s.storage.from('voice-recordings').upload(rpath,reflectionBlob,{contentType:reflectionBlob.type}); if(!rup.error) update.reflection_audio_path=rpath; }
+  let upd=await s.from('voice_entries').update(update).eq('id',row.id);
+  if(upd.error && /(reflection_text|reflection_audio_path)/i.test(upd.error.message)){ await s.from('voice_entries').update({audio_path_before:mainPath}).eq('id',row.id); setText($('practiceStatus'),'Запись сохранена. Для рефлексии нужно добавить поля в Supabase.'); }
+  else if(upd.error){ setText($('practiceStatus'),upd.error.message); return; }
+  else setText($('practiceStatus'),'Сохранено в дневник.');
+  loadJournal();
+});
+
+$('againBtn').addEventListener('click',()=>{ resetPractice(); resetReflection(); });
+const randomPractice=()=>{ if(practiceCache.length) openPractice(practiceCache[Math.floor(Math.random()*practiceCache.length)]); };
+$('surpriseBtn').addEventListener('click',randomPractice); $('randomAgainBtn').addEventListener('click',randomPractice);
+$('backBtn').addEventListener('click',()=>{ $('practiceView').classList.add('hidden'); $('playList').classList.remove('hidden'); });
+document.querySelectorAll('.nav button').forEach(b=>b.addEventListener('click',()=>{ ['today','journal','play'].forEach(x=>$(x+'Tab').classList.toggle('hidden',x!==b.dataset.tab)); if(b.dataset.tab==='journal') loadJournal(); }));
+</script>
+</body>
+</html>
