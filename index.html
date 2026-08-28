@@ -13,6 +13,13 @@
     main{max-width:900px;margin:auto;padding:64px 24px 96px} h1{font-size:clamp(2.4rem,7vw,5rem);line-height:.98;margin:0 0 22px;letter-spacing:-.045em} h2{font-size:clamp(1.55rem,3vw,2.25rem);margin:54px 0 16px;letter-spacing:-.025em} h3{margin-top:28px}
     .eyebrow{font-size:.82rem;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);font-weight:700}.lead{font-size:1.28rem;max-width:760px}.muted{color:var(--muted)}
     .pill{display:inline-block;border:1px solid var(--line);background:var(--card);border-radius:999px;padding:7px 12px;margin:4px 6px 4px 0;font-size:.92rem}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px}.card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:22px}.cta{margin-top:28px;display:flex;gap:12px;flex-wrap:wrap}.btn{display:inline-block;padding:12px 16px;border-radius:12px;text-decoration:none;border:1px solid var(--ink);color:var(--ink);font-weight:650}.btn.primary{background:var(--ink);color:white}.faq{border-top:1px solid var(--line);padding:18px 0}.links a{color:var(--accent)} footer{margin-top:64px;padding-top:22px;border-top:1px solid var(--line);color:var(--muted);font-size:.9rem}
+  
+    .funnel{margin-top:28px}.step{display:grid;grid-template-columns:42px 1fr;gap:14px;align-items:start;padding:18px 0;border-top:1px solid var(--line)}
+    .stepnum{width:36px;height:36px;border-radius:50%;display:grid;place-items:center;background:var(--ink);color:#fff;font-weight:800}
+    .price{font-size:1.25rem;font-weight:800;margin:.35rem 0}.tag{display:inline-block;background:#f4e9e2;border-radius:999px;padding:5px 9px;font-size:.78rem;margin-bottom:8px}
+    .service-card{display:flex;flex-direction:column}.service-card .cta{margin-top:auto;padding-top:10px}.service-card h3{margin-top:4px}
+    .highlight{border:2px solid var(--accent)}.mini{font-size:.88rem;color:var(--muted)}.route{background:#fff;border:1px solid var(--line);border-radius:18px;padding:22px;margin-top:18px}
+
   </style>
   <script type="application/ld+json">
   {
@@ -46,6 +53,21 @@
         "audience":{"@type":"Audience","audienceType":"Adults"},
         "description":"Лаборатория гибкости мышления через голосовую импровизацию. Голос используется как инструмент для спонтанности, поиска новых решений, реакции на изменения и снижения страха ошибки.",
         "offers":{"@type":"Offer","price":"820","priceCurrency":"ILS","url":"https://pay.grow.link/NTg2MDk~d4e48feebaa3b64552443c37c50fa46a-Mzg0OTAwMQ"}
+      },
+
+      {
+        "@type":"OfferCatalog",
+        "name":"Форматы работы Марии Красиловой",
+        "itemListElement":[
+          {"@type":"Offer","name":"Вокал для взрослых","price":"160","priceCurrency":"ILS","url":"https://wa.me/message/KQMCQYKAVSL7J1"},
+          {"@type":"Offer","name":"Фортепиано для детей, 45 минут","price":"120","priceCurrency":"ILS","url":"https://wa.me/message/KQMCQYKAVSL7J1"},
+          {"@type":"Offer","name":"Фортепиано для детей, 60 минут","price":"150","priceCurrency":"ILS","url":"https://wa.me/message/KQMCQYKAVSL7J1"},
+          {"@type":"Offer","name":"Живи и звучи","price":"820","priceCurrency":"ILS","url":"https://pay.grow.link/NTg2MDk~d4e48feebaa3b64552443c37c50fa46a-Mzg0OTAwMQ"},
+          {"@type":"Offer","name":"Уникальный музыкальный портрет","url":"https://wa.me/message/KQMCQYKAVSL7J1"},
+          {"@type":"Offer","name":"Эмоции в песню","url":"https://wa.me/message/KQMCQYKAVSL7J1"},
+          {"@type":"Offer","name":"Голос без страха — самостоятельно","price":"220","priceCurrency":"ILS","url":"https://wa.me/message/KQMCQYKAVSL7J1"},
+          {"@type":"Offer","name":"Голос без страха — с личной обратной связью","price":"499","priceCurrency":"ILS","url":"https://wa.me/message/KQMCQYKAVSL7J1"}
+        ]
       },
       {
         "@type":"FAQPage",
@@ -94,20 +116,163 @@
   <h2>Почему импровизация связана с креативностью</h2>
   <p>Исследования музыкальной импровизации связывают тренировку импровизации с показателями беглости и оригинальности в задачах на дивергентное мышление. «Живи и звучи» не является психологической или медицинской терапией; это образовательная творческая практика.</p>
 
-  <div class="card" style="margin-top:20px">
-    <h3>Творческий дневник</h3>
-    <p>Короткие импровизационные практики через голос: записать сегодняшний звук, поиграть с музыкальной задачей, заметить изменение и сохранить запись в личном дневнике.</p>
-    <div class="cta">
-      <a class="btn primary" href="/app.html">Открыть творческий дневник</a>
+
+
+  <h2>Выберите, как вам удобнее начать</h2>
+  <p>Можно заниматься самостоятельно онлайн, прийти в живую группу или работать со мной индивидуально.</p>
+
+  <div class="grid">
+    <div class="card service-card highlight">
+      <span class="tag">Онлайн · 14 дней</span>
+      <h3>«Голос без страха»</h3>
+      <p>Онлайн-программа для тех, кому хочется звучать свободнее, но мешают страх, стеснение, внутренний критик или ощущение «я не умею».</p>
+      <p><strong>7 практических заданий в течение 14 дней.</strong> Новое задание приходит раз в два дня, чтобы между практиками было время попробовать, услышать себя и не перегружаться.</p>
+      <p><strong>Доступ к материалам сохраняется на 2 месяца.</strong></p>
+
+      <div class="grid" style="margin-top:14px">
+        <div class="card flat">
+          <span class="tag">Самостоятельно</span>
+          <h3>220 ₪</h3>
+          <p>Вы проходите программу самостоятельно и получаете доступ ко всем 7 заданиям на 2 месяца.</p>
+        </div>
+
+        <div class="card flat">
+          <span class="tag">С личной обратной связью</span>
+          <h3>499 ₪</h3>
+          <p>Вы проходите те же 7 заданий и получаете мою личную обратную связь по вашим голосовым практикам. Доступ к материалам — 2 месяца.</p>
+        </div>
+      </div>
+
+      <p class="mini">Сейчас материалы и доступ я отправляю участникам лично. В дальнейшем программа будет переходить на автоматическую выдачу.</p>
+      <div class="cta">
+        <a class="btn primary" href="https://wa.me/message/KQMCQYKAVSL7J1" target="_blank" rel="noopener noreferrer">Выбрать формат</a>
+      </div>
+    </div>
+
+    <div class="card service-card">
+      <span class="tag">Бесплатно онлайн</span>
+      <h3>Творческий дневник</h3>
+      <p>Попробуйте короткую практику: обозначить состояние словом, голосом, рисунком или движением, прозвучать и заметить, что изменилось.</p>
+      <div class="cta"><a class="btn" href="/app.html">Открыть дневник</a></div>
+    </div>
+
+    <div class="card service-card">
+      <span class="tag">Офлайн в Хайфе</span>
+      <h3>«Живи и звучи»</h3>
+      <p>Групповая лаборатория гибкости мышления через голосовую и музыкальную импровизацию. Сейчас формат проходит очно.</p>
+      <p class="price">820 ₪ за цикл</p>
+      <div class="cta"><a class="btn" href="#liveandsound">Подробнее</a></div>
+    </div>
+
+    <div class="card service-card">
+      <span class="tag">Лично со мной</span>
+      <h3>Индивидуальная работа</h3>
+      <p>Вокал очно или онлайн, импровизация, фортепиано и персональный музыкальный портрет.</p>
+      <div class="cta"><a class="btn" href="#individual">Посмотреть варианты</a></div>
     </div>
   </div>
 
-  <h2>Форматы</h2>
-  <div class="grid">
-    <div class="card"><h3>Группа</h3><p>«Живи и звучи» — лаборатория через импровизацию. Хайфа, живые встречи.</p></div>
-    <div class="card"><h3>Мастер-класс</h3><p>«Эмоции в песню» — превращение переживания в звук, музыкальный материал и песню.</p></div>
-    <div class="card"><h3>Индивидуально</h3><p>Работа с голосом, музыкальной импровизацией и свободой звучания для взрослых.</p></div>
+  <div class="route">
+    <h3>Если вы пока не готовы к группе или урокам</h3>
+    <p>Начните с «Голос без страха»: это самый простой способ познакомиться с моим подходом дома и в своём темпе. После программы можно продолжить самостоятельно, прийти в «Живи и звучи» или выбрать индивидуальную работу.</p>
   </div>
+
+
+  <h2>Все форматы работы</h2>
+  <div class="grid">
+
+    <div class="card service-card" id="individual">
+      <span class="tag">Индивидуально</span>
+      <h3>Вокал для взрослых</h3>
+      <p>Голос, свобода звучания, музыкальность, импровизация и работа с песней. Подходит и тем, кто считает, что «не умеет петь».</p>
+      <p class="mini">Формат: очно в Хайфе / Нагарии или онлайн.</p>
+      <p class="price">160 ₪ / 60 минут</p>
+      <p class="mini">Абонемент 4 занятия — 600 ₪.</p>
+      <div class="cta"><a class="btn primary" href="https://wa.me/message/KQMCQYKAVSL7J1" target="_blank" rel="noopener noreferrer">Записаться</a></div>
+    </div>
+
+    <div class="card service-card">
+      <span class="tag">Индивидуально</span>
+      <h3>Фортепиано</h3>
+      <p>Для детей и начинающих: музыка как живой язык, а не только правильные ноты. Техника, слух, чтение, аккорды и творческие задания.</p>
+      <p class="price">120 ₪ / 45 минут</p>
+      <p class="mini">150 ₪ / 60 минут.</p>
+      <div class="cta"><a class="btn primary" href="https://wa.me/message/KQMCQYKAVSL7J1" target="_blank" rel="noopener noreferrer">Узнать о месте</a></div>
+    </div>
+
+    <div class="card service-card">
+      <span class="tag">Индивидуально</span>
+      <h3>Импровизация и свобода звучания</h3>
+      <p>Для музыкантов и немузикантов: когда хочется меньше контроля, больше вариантов, смелости и способности создавать «из ничего».</p>
+      <p class="mini">Формат и длительность подбираются под задачу.</p>
+      <div class="cta"><a class="btn primary" href="https://wa.me/message/KQMCQYKAVSL7J1" target="_blank" rel="noopener noreferrer">Обсудить задачу</a></div>
+    </div>
+
+    <div class="card service-card highlight" id="liveandsound">
+      <span class="tag">Группа</span>
+      <h3>«Живи и звучи»</h3>
+      <p>Лаборатория гибкости мышления через голосовую импровизацию. Для тех, кто оказался в точке «старые решения больше не работают» и хочет тренировать новые способы реагировать.</p>
+      <p class="price">820 ₪ за цикл</p>
+      <p class="mini">Хайфа · сентябрь–октябрь · четверги 19:30–21:00.</p>
+      <div class="cta">
+        <a class="btn primary" href="https://wa.me/message/KQMCQYKAVSL7J1" target="_blank" rel="noopener noreferrer">Задать вопрос</a>
+        <a class="btn" href="https://pay.grow.link/NTg2MDk~d4e48feebaa3b64552443c37c50fa46a-Mzg0OTAwMQ" target="_blank" rel="noopener noreferrer">Оплатить 820 ₪</a>
+      </div>
+    </div>
+
+    <div class="card service-card" id="portrait">
+      <span class="tag">Премиальный индивидуальный формат</span>
+      <h3>Уникальный музыкальный портрет</h3>
+      <p>Это персональный авторский формат. Сначала я около часа разговариваю с вами о том, что сейчас важно: о желаниях, внутренних задачах, переменах, сильных сторонах и том, к чему хочется прийти.</p>
+      <p>Дополнительно я смотрю вашу астрологическую карту и использую её как один из символических инструментов для поиска тем, образов и того, что можно назвать «задачами души».</p>
+      <p>После этой встречи я создаю для вас индивидуальную музыку — произведение, которое рождается из нашего разговора, ваших образов и личной темы. Это не готовый шаблон и не подбор существующей композиции, а музыка, созданная специально для вас.</p>
+      <p class="mini">В результате вы получаете собственную музыкальную запись, к которой можно возвращаться как к личному образу, напоминанию или музыкальному якорю. Стоимость уточняется перед записью.</p>
+
+      <div class="divider"></div>
+      <h3>Почему у этого формата есть профессиональная основа</h3>
+
+      <p><strong>Я работаю здесь прежде всего как композитор.</strong> Моя задача — услышать в рассказе человека не только слова, но и движение, напряжение, паузы, контрасты, повторяющиеся мотивы и эмоциональную драматургию, а затем перевести всё это в музыкальную форму: мелодию, гармонию, ритм, фактуру и тембр.</p>
+
+      <p><strong>Вторая основа — мой многолетний опыт музыканта в playback theatre.</strong> Playback Theatre строится вокруг реальной истории человека: рассказ выслушивается, а затем художественно «возвращается» ему через импровизацию. Для музыканта это постоянная практика мгновенно слышать эмоциональную тему истории и превращать её в музыкальный образ.</p>
+
+      <p><strong>Есть и исследовательский контекст.</strong> Научные работы показывают связь музыки с автобиографической памятью и личностно значимыми воспоминаниями. Исследования музыкальной импровизации также связывают опыт импровизации с беглостью и оригинальностью в задачах на дивергентное мышление. Это не означает, что «музыкальный портрет» является терапией или имеет доказанный лечебный эффект; исследования объясняют отдельные механизмы, на которых основан мой творческий метод.</p>
+
+      <p><strong>Астрология в этом процессе занимает отдельное место.</strong> Я использую карту не как диагностику и не как научное доказательство, а как дополнительный символический язык, который может дать материал для вопросов, образов и разговора. Главный инструмент создания портрета — мой профессиональный музыкальный слух, композиторский опыт, импровизация и то, что я слышу в истории конкретного человека.</p>
+
+      <p class="mini"><strong>Исследования и контекст:</strong>
+        <a href="https://pubmed.ncbi.nlm.nih.gov/36223919/" target="_blank" rel="noopener noreferrer">систематический обзор о музыкально вызванных автобиографических воспоминаниях</a> ·
+        <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC4092035/" target="_blank" rel="noopener noreferrer">исследование опыта музыкальной импровизации и показателей креативности</a> ·
+        <a href="https://pubmed.ncbi.nlm.nih.gov/24369762/" target="_blank" rel="noopener noreferrer">публикация о Playback Theatre как форме художественного возвращения личных историй</a>.
+      </p>
+
+      <div class="cta"><a class="btn primary" href="https://wa.me/message/KQMCQYKAVSL7J1" target="_blank" rel="noopener noreferrer">Хочу музыкальный портрет</a></div>
+    </div>
+
+    <div class="card service-card">
+      <span class="tag">Мастер-класс</span>
+      <h3>«Эмоции в песню»</h3>
+      <p>Практика, в которой переживание превращается в звук, музыкальный материал и собственную песню. Возможен как открытый мастер-класс, корпоративный или групповой формат.</p>
+      <div class="cta"><a class="btn primary" href="https://wa.me/message/KQMCQYKAVSL7J1" target="_blank" rel="noopener noreferrer">Заказать мастер-класс</a></div>
+    </div>
+
+    <div class="card service-card">
+      <span class="tag">Онлайн</span>
+      <h3>«Голос без страха»</h3>
+      <p class="mini">Раньше программа называлась «Разреши себе звучать».</p>
+      <p>14 дней · 7 заданий · новое задание раз в два дня · доступ к материалам 2 месяца.</p>
+      <p class="price">220 ₪ самостоятельно</p>
+      <p class="price">499 ₪ с личной обратной связью</p>
+      <div class="cta"><a class="btn primary" href="https://wa.me/message/KQMCQYKAVSL7J1" target="_blank" rel="noopener noreferrer">Выбрать формат</a></div>
+    </div>
+
+</div>
+
+  <div class="route">
+    <h3>Не знаете, что выбрать?</h3>
+    <p>Напишите мне в WhatsApp 2–3 предложения: что сейчас хочется изменить, чему научиться или что попробовать. Я предложу подходящий формат — без обязательства покупать.</p>
+    <div class="cta"><a class="btn primary" href="https://wa.me/message/KQMCQYKAVSL7J1" target="_blank" rel="noopener noreferrer">Написать Марии</a></div>
+  </div>
+
 
   <h2>Частые вопросы</h2>
   <div class="faq"><strong>Нужно ли уметь петь?</strong><br>Нет. Можно прийти без вокального опыта.</div>
