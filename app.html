@@ -1,0 +1,830 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#f5efe9">
+<title>Счастливый через музыку — творческий дневник</title>
+<meta name="description" content="Творческий дневник Марии Красиловой: состояние через слово, голос, рисунок и движение; музыкальная импровизация; рефлексия до и после.">
+<meta name="robots" content="index,follow">
+<link rel="canonical" href="https://mariakrasilovacom.vercel.app/app.html">
+<style>
+:root{
+  --bg:#f5efe9;--paper:#fffdf9;--paper2:#faf6f0;--text:#2f2928;--muted:#756b67;
+  --rose:#8f5961;--rose2:#b77d85;--olive:#75806d;--lav:#978a9d;--gold:#b99667;
+  --line:#e4d9d1;--shadow:0 18px 48px rgba(78,57,50,.08);--danger:#985d58;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:
+radial-gradient(circle at 10% 0%,rgba(183,125,133,.10),transparent 33%),
+radial-gradient(circle at 90% 10%,rgba(117,128,109,.09),transparent 30%),
+var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","Segoe UI",Inter,Arial,sans-serif}
+button,input,textarea{font:inherit}
+button{cursor:pointer}
+.shell{max-width:560px;margin:auto;min-height:100vh;padding:18px 16px calc(108px + env(safe-area-inset-bottom))}
+.brandbar{display:flex;align-items:center;justify-content:space-between;margin:6px 2px 18px}
+.brand{font-size:13px;letter-spacing:.08em;text-transform:uppercase;color:var(--rose);font-weight:800}
+.soft-link{border:0;background:transparent;color:var(--muted);padding:6px 0}
+.hero{padding:6px 2px 8px}
+h1{font-size:clamp(32px,8vw,48px);line-height:1.02;letter-spacing:-.04em;margin:4px 0 12px}
+h2{font-size:24px;letter-spacing:-.02em;margin:0 0 8px}
+h3{font-size:18px;margin:0 0 8px}
+p{line-height:1.55}
+.lead{font-size:17px;color:var(--muted);margin:0}
+.card{background:rgba(255,253,249,.92);border:1px solid rgba(228,217,209,.95);border-radius:24px;padding:18px;margin:14px 0;box-shadow:var(--shadow);backdrop-filter:blur(10px)}
+.card.flat{box-shadow:none;background:var(--paper2)}
+.hidden{display:none!important}
+.small{font-size:13px;color:var(--muted);line-height:1.45}
+.label{font-size:13px;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:.06em}
+input,textarea{width:100%;background:#fff;border:1px solid var(--line);border-radius:16px;padding:14px 15px;color:var(--text);outline:none;margin-top:9px}
+input:focus,textarea:focus{border-color:var(--rose2);box-shadow:0 0 0 3px rgba(183,125,133,.12)}
+textarea{min-height:110px;resize:vertical}
+.btn{width:100%;border:0;border-radius:17px;padding:15px 17px;margin-top:10px;font-weight:800;background:var(--rose);color:#fff;box-shadow:0 8px 20px rgba(143,89,97,.16)}
+.btn:active{transform:translateY(1px)}
+.btn.secondary{background:#eee4dc;color:var(--text);box-shadow:none}
+.btn.olive{background:var(--olive)}
+.btn.lav{background:var(--lav)}
+.btn.ghost{background:transparent;color:var(--muted);border:1px solid var(--line);box-shadow:none}
+.btn.inline{width:auto;display:inline-flex;align-items:center;gap:7px;padding:10px 13px;margin:0}
+.progress{height:6px;background:#eadfd8;border-radius:999px;overflow:hidden;margin:8px 0 18px}
+.progress>span{display:block;height:100%;width:25%;background:linear-gradient(90deg,var(--rose),var(--gold));border-radius:inherit;transition:.25s}
+.stepnote{display:flex;justify-content:space-between;gap:10px;color:var(--muted);font-size:12px}
+.chips{display:flex;flex-wrap:wrap;gap:7px;margin:12px 0}
+.chip{border:1px solid var(--line);background:#fff;color:var(--text);border-radius:999px;padding:9px 12px;font-size:14px}
+.chip.selected{background:var(--rose);color:#fff;border-color:var(--rose)}
+.chip.nochange.selected{background:var(--olive);border-color:var(--olive)}
+.mode-grid{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:12px}
+.mode{border:1px solid var(--line);background:#fff;border-radius:18px;padding:14px;text-align:left;color:var(--text);min-height:84px}
+.mode strong{display:block;margin-top:7px}
+.mode span{font-size:12px;color:var(--muted)}
+.mode.open{border-color:var(--rose2);background:#fff9f7}
+.mode-panel{margin-top:13px;padding-top:13px;border-top:1px solid var(--line)}
+canvas.draw{display:block;width:100%;height:260px;background:#fff;border:1px solid var(--line);border-radius:20px;touch-action:none}
+.canvas-tools{display:flex;justify-content:space-between;gap:8px;align-items:center;margin-top:9px}
+.colorrow{display:flex;gap:7px;align-items:center}
+.swatch{width:32px;height:32px;border-radius:50%;border:2px solid #fff;outline:1px solid var(--line)}
+.record-orb{width:174px;height:174px;border:0;border-radius:50%;background:
+radial-gradient(circle at 35% 28%,#b9868d 0,#925b63 46%,#74464d 100%);
+color:#fff;display:block;margin:24px auto 14px;font-size:18px;font-weight:850;box-shadow:0 20px 45px rgba(116,70,77,.25)}
+.record-orb.recording{animation:pulse 1.2s infinite}
+@keyframes pulse{50%{transform:scale(1.035);box-shadow:0 22px 55px rgba(143,89,97,.38)}}
+.timer{text-align:center;font-size:38px;font-variant-numeric:tabular-nums;letter-spacing:-.03em}
+.status{text-align:center;color:var(--muted);font-size:13px}
+audio,video{width:100%;margin-top:10px;border-radius:16px;background:#000}
+.video-wrap{position:relative;background:#1f1b1a;border-radius:20px;overflow:hidden;margin-top:10px}
+.video-wrap video{margin:0;display:block;max-height:480px;object-fit:cover}
+.camera-actions{display:flex;gap:8px;margin-top:10px}
+.camera-actions .btn{flex:1}
+.draw-caption,.media-caption{font-size:13px;color:var(--muted);margin:8px 0 0}
+.practice{display:block;width:100%;border:1px solid var(--line);background:var(--paper);border-radius:21px;padding:17px;text-align:left;margin:10px 0;color:var(--text);box-shadow:var(--shadow)}
+.practice .tag{display:inline-block;font-size:12px;color:var(--rose);font-weight:800;margin-bottom:6px}
+.divider{height:1px;background:var(--line);margin:18px 0}
+.compare{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.comparebox{border:1px solid var(--line);border-radius:18px;padding:13px;background:#fff}
+.comparebox b{display:block;margin-bottom:5px}
+.entry{padding:18px 0;border-bottom:1px solid var(--line)}
+.entry:last-child{border-bottom:0}
+.entry-head{display:flex;justify-content:space-between;gap:8px;align-items:flex-start}
+.entry-title{font-weight:850}
+.entry-date{font-size:12px;color:var(--muted)}
+.reflection-q{font-size:18px;font-weight:750;line-height:1.35}
+.nav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:min(560px,100%);display:grid;grid-template-columns:repeat(3,1fr);padding:7px 8px calc(7px + env(safe-area-inset-bottom));background:rgba(255,253,249,.94);border-top:1px solid var(--line);backdrop-filter:blur(14px);z-index:40}
+.nav button{border:0;background:transparent;padding:10px 6px;color:var(--muted);border-radius:14px;font-weight:700}
+.nav button.active{background:#f1e7df;color:var(--rose)}
+.toast{position:fixed;left:50%;bottom:95px;transform:translateX(-50%) translateY(15px);background:#332b2a;color:#fff;padding:11px 14px;border-radius:14px;opacity:0;pointer-events:none;transition:.25s;z-index:50;font-size:13px;max-width:calc(100% - 32px)}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+.empty{text-align:center;padding:28px 10px;color:var(--muted)}
+@media(max-width:390px){.mode-grid{grid-template-columns:1fr}.compare{grid-template-columns:1fr}.record-orb{width:158px;height:158px}}
+
+.mix-card{background:linear-gradient(145deg,rgba(151,138,157,.10),rgba(185,150,103,.10)),var(--paper);border:1px solid var(--line);border-radius:24px;padding:18px;margin:14px 0;box-shadow:var(--shadow)}
+.mix-grid{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:12px}
+.mix-grid .btn{margin:0}
+.mix-result{margin-top:14px;padding-top:14px;border-top:1px solid var(--line)}
+.mix-meta{display:flex;justify-content:space-between;gap:10px;align-items:center;margin:8px 0;color:var(--muted);font-size:12px}
+.mix-history{margin-top:14px}
+.mix-item{padding:12px 0;border-top:1px solid var(--line)}
+.mix-item:first-child{border-top:0}
+@media(max-width:390px){.mix-grid{grid-template-columns:1fr}}
+
+</style>
+</head>
+<body>
+<div class="shell">
+  <div class="brandbar">
+    <div class="brand">Счастливый через музыку</div>
+    <button id="logoutTop" class="soft-link hidden">Выйти</button>
+  </div>
+
+  <section id="authView">
+    <div class="hero">
+      <div class="label">Творческий дневник</div>
+      <h1>Не объяснять себя. Выразить.</h1>
+      <p class="lead">Словом, голосом, рисунком или движением. А потом заметить, что изменилось.</p>
+    </div>
+    <div class="card">
+      <input id="email" type="email" placeholder="Email" autocomplete="email">
+      <input id="password" type="password" minlength="6" placeholder="Пароль" autocomplete="current-password">
+      <button id="loginBtn" class="btn">Войти</button>
+      <button id="signupBtn" class="btn secondary">Создать аккаунт</button>
+      <div id="authMsg" class="small" style="margin-top:10px"></div>
+    </div>
+  </section>
+
+  <section id="appView" class="hidden">
+    <div id="todayTab">
+      <div class="stepnote"><span>Сегодня</span><span>1 → 4</span></div>
+      <div class="progress"><span id="todayProgress"></span></div>
+      <div class="hero">
+        <div class="label">Шаг 1</div>
+        <h1>Как ты сегодня?</h1>
+        <p class="lead">Можно выбрать несколько эмоций — или вообще не пользоваться словами.</p>
+      </div>
+      <div id="todayBeforeState"></div>
+
+      <div class="card">
+        <div class="label">Шаг 2</div>
+        <h2>Дай этому прозвучать</h2>
+        <p class="small">Не нужно красиво, правильно или музыкально. Просто начни с того звука, который есть.</p>
+        <button id="recordBtn" class="record-orb">🎙<br>Звучать</button>
+        <div id="timer" class="timer">00:00</div>
+        <div id="status" class="status">Нажми, чтобы начать запись</div>
+
+        <div id="preview" class="hidden">
+          <audio id="player" controls></audio>
+          <input id="title" placeholder="Название — если хочется">
+          <div class="divider"></div>
+          <div class="label">Шаг 3</div>
+          <h2>Что изменилось?</h2>
+          <p class="small">Никаких изменений — тоже полноценный результат.</p>
+          <div id="todayAfterState"></div>
+          <div class="divider"></div>
+          <div class="label">Шаг 4</div>
+          <h2>Заметь</h2>
+          <p id="todayReflectionPrompt" class="reflection-q"></p>
+          <textarea id="todayReflectionText" placeholder="Можно написать свой ответ"></textarea>
+          <button id="todayReflectionVoiceBtn" class="btn secondary">🎙 Наговорить ответ</button>
+          <div id="todayReflectionStatus" class="small"></div>
+          <audio id="todayReflectionPlayer" class="hidden" controls></audio>
+          <button id="saveBtn" class="btn">Сохранить сегодняшний след</button>
+        </div>
+      </div>
+    </div>
+
+    <div id="journalTab" class="hidden">
+      <div class="hero">
+        <div class="label">Личный архив</div>
+        <h1>Мой дневник</h1>
+        <p class="lead">Не отчёт о себе, а следы того, как ты звучала, двигалась, рисовала и менялась.</p>
+      </div>
+      <div class="mix-card">
+        <div class="label">Звуковой портрет</div>
+        <h2>Как я звучала</h2>
+        <p class="small">Приложение возьмёт короткие фрагменты твоих импровизаций за период и соберёт их в один трек. Не нужно записываться каждый день — используется всё, что есть.</p>
+        <div class="mix-grid">
+          <button id="makeWeekMixBtn" class="btn lav">♫ Трек недели</button>
+          <button id="makeMonthMixBtn" class="btn olive">♫ Трек месяца</button>
+        </div>
+        <div id="mixStatus" class="small" style="margin-top:10px"></div>
+        <div id="mixResult" class="mix-result hidden">
+          <label class="small" for="mixTitleInput">Название трека</label>
+          <input id="mixTitleInput" placeholder="Название трека">
+          <div class="small">Я предложила название автоматически — его можно изменить как угодно.</div>
+          <div id="mixResultMeta" class="mix-meta"></div>
+          <audio id="mixPlayer" controls></audio>
+          <button id="saveMixBtn" class="btn">Сохранить этот трек</button>
+        </div>
+        <div class="mix-history">
+          <h3>Сохранённые треки</h3>
+          <div id="mixHistory" class="small">Загрузка…</div>
+        </div>
+      </div>
+      <div class="card" id="journalList"><div class="empty">Загрузка…</div></div>
+    </div>
+
+    <div id="playTab" class="hidden">
+      <div id="playList">
+        <div class="hero">
+          <div class="label">Импровизационные игры</div>
+          <h1>Поиграть</h1>
+          <p class="lead">Выбери направление или позволь случаю выбрать за тебя.</p>
+        </div>
+        <button id="surpriseBtn" class="btn lav">🎲 Удиви меня</button>
+        <div id="practiceList"></div>
+      </div>
+
+      <div id="practiceView" class="hidden">
+        <button id="backBtn" class="soft-link">← Все игры</button>
+        <div class="card">
+          <div id="practiceCategory" class="label"></div>
+          <h2 id="practiceTitle"></h2>
+          <p id="practiceInstruction"></p>
+          <div class="divider"></div>
+          <h3>Как ты сейчас?</h3>
+          <div id="practiceBeforeState"></div>
+          <button id="practiceRecordBtn" class="record-orb">🎙<br>Начать</button>
+          <div id="practiceTimer" class="timer">00:00</div>
+          <div id="practiceStatus" class="status">Нажми, чтобы начать</div>
+          <div id="practicePreview" class="hidden">
+            <audio id="practicePlayer" controls></audio>
+            <div class="camera-actions">
+              <button id="rerecordBtn" class="btn secondary">Перезаписать</button>
+              <button id="nextBtn" class="btn olive">Дальше</button>
+            </div>
+          </div>
+        </div>
+
+        <div id="reflection" class="card hidden">
+          <h2>Что изменилось?</h2>
+          <p class="small">Можно выбрать несколько состояний, добавить своё или отметить, что ничего не изменилось.</p>
+          <div id="practiceAfterState"></div>
+          <div class="divider"></div>
+          <div class="label">Рефлексия</div>
+          <p id="reflectionPrompt" class="reflection-q"></p>
+          <textarea id="reflectionText" placeholder="Напиши, если хочется"></textarea>
+          <button id="reflectionVoiceBtn" class="btn secondary">🎙 Наговорить рефлексию</button>
+          <div id="reflectionStatus" class="small"></div>
+          <audio id="reflectionPlayer" class="hidden" controls></audio>
+          <button id="savePracticeBtn" class="btn">Сохранить в дневник</button>
+          <button id="againBtn" class="btn secondary">Ещё один раунд</button>
+          <button id="randomAgainBtn" class="btn lav">Другая случайная игра</button>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<nav id="nav" class="nav hidden">
+  <button data-tab="today" class="active">Сегодня</button>
+  <button data-tab="journal">Дневник</button>
+  <button data-tab="play">Поиграть</button>
+</nav>
+<div id="toast" class="toast"></div>
+
+<script type="module">
+import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.57.4';
+
+const s=createClient('https://uecdlqlwsrqmocbpgiwj.supabase.co','sb_publishable_QJ_4e8-BHl0gOZifGqdv1w_doFwpTlb',
+{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true}});
+const $=id=>document.getElementById(id);
+const setText=(el,v)=>{if(el)el.textContent=v??''};
+const fmt=n=>String(Math.floor(n/60)).padStart(2,'0')+':'+String(n%60).padStart(2,'0');
+const toast=(msg)=>{const t=$('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2600)};
+
+const emotionGroups=[
+ ['Тепло',['радость','нежность','благодарность','любовь','спокойствие','надежда']],
+ ['Живость',['интерес','вдохновение','любопытство','возбуждение','свобода','уверенность']],
+ ['Напряжение',['тревога','страх','злость','раздражение','напряжение','нетерпение']],
+ ['Тяжесть',['грусть','обида','одиночество','усталость','бессилие','тоска']],
+ ['Сложно назвать',['растерянность','стыд','вина','скука','пустота','перегруз','смешанные чувства']]
+];
+const reflectionPrompts=[
+ 'Что ты услышала в себе?',
+ 'Что тебя удивило?',
+ 'Что изменилось — даже совсем чуть-чуть?',
+ 'Где ты была свободнее, чем обычно?',
+ 'Что хочется сохранить из этого звучания?',
+ 'Что ты сделала иначе, чем обычно?',
+ 'Что произошло, когда ты разрешила себе ошибиться?',
+ 'Какой новый ход ты сейчас обнаружила?',
+ 'Как это можно перенести в реальную ситуацию сегодня?',
+ 'Если бы это звучание было советом тебе — что бы оно сказало?',
+ 'Что хочется забрать с собой из этой практики?',
+ 'Что сейчас стало яснее?',
+ 'Где ты перестала себя контролировать — и что произошло?',
+ 'Какой момент хочется повторить ещё раз?'
+];
+
+const stateStore={}, voiceStateRecorders={}, videoRecorders={};
+
+function stateTemplate(prefix,after=false){
+ return `<div class="card flat">
+   <div class="label">${after?'После':'Сейчас'}</div>
+   <h3>${after?'Что ты чувствуешь теперь?':'Можно начать со слов'}</h3>
+   <div id="${prefix}EmotionGroups"></div>
+   ${after?`<button type="button" class="chip nochange" id="${prefix}NoChange">Ничего не изменилось</button>`:''}
+   <input id="${prefix}Custom" placeholder="Или свой вариант">
+   <div class="divider"></div>
+   <div class="small">А можно вообще без слов:</div>
+   <div class="mode-grid">
+     <button class="mode" data-mode="draw" data-prefix="${prefix}">🎨<strong>Нарисовать</strong><span>линией, цветом, пятном</span></button>
+     <button class="mode" data-mode="voice" data-prefix="${prefix}">🎙<strong>Прозвучать</strong><span>голосом, шумом, дыханием</span></button>
+     <button class="mode" data-mode="video" data-prefix="${prefix}">🎥<strong>Движение</strong><span>жестом, телом, танцем</span></button>
+     <button class="mode" data-mode="words" data-prefix="${prefix}">✍️<strong>Написать</strong><span>как есть, без редактуры</span></button>
+   </div>
+
+   <div id="${prefix}drawPanel" class="mode-panel hidden">
+     <canvas id="${prefix}Canvas" class="draw"></canvas>
+     <div class="canvas-tools">
+       <div class="colorrow">
+         <input id="${prefix}Color" type="color" value="#8f5961" aria-label="Цвет">
+         <button type="button" class="chip swatch" data-color="#8f5961" style="background:#8f5961"></button>
+         <button type="button" class="chip swatch" data-color="#75806d" style="background:#75806d"></button>
+         <button type="button" class="chip swatch" data-color="#978a9d" style="background:#978a9d"></button>
+         <button type="button" class="chip swatch" data-color="#b99667" style="background:#b99667"></button>
+       </div>
+       <button type="button" class="btn inline secondary" id="${prefix}Clear">Очистить</button>
+     </div>
+     <p class="draw-caption">Не рисунок «чего-то», а след состояния.</p>
+   </div>
+
+   <div id="${prefix}voicePanel" class="mode-panel hidden">
+     <button class="btn secondary" id="${prefix}VoiceBtn">🎙 Записать состояние голосом</button>
+     <div id="${prefix}VoiceStatus" class="small"></div>
+     <audio id="${prefix}VoicePlayer" class="hidden" controls></audio>
+   </div>
+
+   <div id="${prefix}videoPanel" class="mode-panel hidden">
+     <p class="small">Можно просто двигаться. Не обязательно танцевать «красиво».</p>
+     <div class="video-wrap hidden" id="${prefix}CameraWrap"><video id="${prefix}Camera" autoplay muted playsinline></video></div>
+     <div class="camera-actions">
+       <button type="button" class="btn secondary" id="${prefix}CameraBtn">📷 Открыть камеру</button>
+       <button type="button" class="btn hidden" id="${prefix}VideoRecordBtn">● Начать видео</button>
+     </div>
+     <div id="${prefix}VideoStatus" class="small"></div>
+     <video id="${prefix}VideoPreview" class="hidden" controls playsinline></video>
+     <div class="small" style="margin-top:8px">Если встроенная камера не сработает:</div>
+     <input id="${prefix}VideoFallback" type="file" accept="video/*" capture="user">
+   </div>
+
+   <div id="${prefix}wordsPanel" class="mode-panel hidden">
+     <textarea id="${prefix}Words" placeholder="Можно просто выписать всё, что сейчас есть — без структуры"></textarea>
+   </div>
+ </div>`;
+}
+
+function initState(prefix,after=false){
+ stateStore[prefix]={selected:new Set(),noChange:false,voiceBlob:null,videoBlob:null,videoFile:null,drawn:false,canvasReady:false,cameraStream:null};
+ $(prefix+'State').innerHTML=stateTemplate(prefix,after);
+ const groups=$(prefix+'EmotionGroups');
+ emotionGroups.forEach(([title,items])=>{
+   const lab=document.createElement('div');lab.className='small';lab.style.marginTop='10px';lab.style.fontWeight='800';lab.textContent=title;groups.appendChild(lab);
+   const row=document.createElement('div');row.className='chips';
+   items.forEach(e=>{const b=document.createElement('button');b.type='button';b.className='chip';b.textContent=e;
+     b.onclick=()=>{b.classList.toggle('selected');b.classList.contains('selected')?stateStore[prefix].selected.add(e):stateStore[prefix].selected.delete(e);updateTodayProgress()};
+     row.appendChild(b)});
+   groups.appendChild(row)
+ });
+ if(after)$(prefix+'NoChange').onclick=()=>{stateStore[prefix].noChange=!stateStore[prefix].noChange;$(prefix+'NoChange').classList.toggle('selected',stateStore[prefix].noChange)};
+ document.querySelectorAll(`[data-prefix="${prefix}"]`).forEach(b=>b.onclick=()=>{const p=$(prefix+b.dataset.mode+'Panel');p.classList.toggle('hidden');b.classList.toggle('open');if(b.dataset.mode==='draw'&&!stateStore[prefix].canvasReady)initCanvas(prefix)});
+ $(prefix+'VoiceBtn').onclick=()=>recordStateVoice(prefix);
+ $(prefix+'CameraBtn').onclick=()=>openCamera(prefix);
+ $(prefix+'VideoRecordBtn').onclick=()=>recordVideo(prefix);
+ $(prefix+'VideoFallback').onchange=e=>{const f=e.target.files?.[0];stateStore[prefix].videoFile=f||null;if(f){const u=URL.createObjectURL(f);const v=$(prefix+'VideoPreview');v.src=u;v.classList.remove('hidden')}};
+ $(prefix+'Custom').oninput=updateTodayProgress;
+ const w=$(prefix+'Words'); if(w)w.oninput=updateTodayProgress;
+}
+
+function initCanvas(prefix){
+ const c=$(prefix+'Canvas'),ctx=c.getContext('2d');
+ function size(){
+   const rect=c.getBoundingClientRect(),dpr=Math.max(1,devicePixelRatio||1);
+   c.width=Math.round(rect.width*dpr);c.height=Math.round(260*dpr);
+   ctx.setTransform(dpr,0,0,dpr,0,0);ctx.lineCap='round';ctx.lineJoin='round';ctx.lineWidth=5;
+ }
+ size();
+ let down=false;
+ const pt=e=>{const r=c.getBoundingClientRect();return{x:e.clientX-r.left,y:e.clientY-r.top}};
+ c.onpointerdown=e=>{down=true;c.setPointerCapture(e.pointerId);const p=pt(e);ctx.beginPath();ctx.moveTo(p.x,p.y)};
+ c.onpointermove=e=>{if(!down)return;const p=pt(e);ctx.strokeStyle=$(prefix+'Color').value;ctx.lineTo(p.x,p.y);ctx.stroke();stateStore[prefix].drawn=true;updateTodayProgress()};
+ c.onpointerup=()=>down=false;c.onpointercancel=()=>down=false;
+ $(prefix+'Clear').onclick=()=>{ctx.clearRect(0,0,c.width,c.height);stateStore[prefix].drawn=false};
+ document.querySelectorAll(`#${prefix}drawPanel [data-color]`).forEach(b=>b.onclick=()=>{$(prefix+'Color').value=b.dataset.color});
+ stateStore[prefix].canvasReady=true;
+}
+
+async function openCamera(prefix){
+ try{
+   if(stateStore[prefix].cameraStream){stateStore[prefix].cameraStream.getTracks().forEach(t=>t.stop());stateStore[prefix].cameraStream=null}
+   const stream=await navigator.mediaDevices.getUserMedia({video:{facingMode:'user'},audio:true});
+   stateStore[prefix].cameraStream=stream;
+   const v=$(prefix+'Camera');v.srcObject=stream;$(prefix+'CameraWrap').classList.remove('hidden');$(prefix+'VideoRecordBtn').classList.remove('hidden');
+   setText($(prefix+'VideoStatus'),'Камера готова. Можно начать движение.');
+ }catch(e){setText($(prefix+'VideoStatus'),'Не удалось открыть встроенную камеру. Используй выбор видео ниже.')}
+}
+
+function bestVideoMime(){
+ const types=['video/mp4','video/webm;codecs=vp8,opus','video/webm'];
+ return types.find(t=>window.MediaRecorder?.isTypeSupported?.(t))||'';
+}
+function recordVideo(prefix){
+ const st=stateStore[prefix],slot=videoRecorders[prefix];
+ if(slot?.recorder?.state==='recording'){slot.recorder.stop();return}
+ if(!st.cameraStream){openCamera(prefix);return}
+ try{
+   const chunks=[],mime=bestVideoMime();
+   const rec=mime?new MediaRecorder(st.cameraStream,{mimeType:mime}):new MediaRecorder(st.cameraStream);
+   videoRecorders[prefix]={recorder:rec};
+   rec.ondataavailable=e=>e.data.size&&chunks.push(e.data);
+   rec.onstop=()=>{
+     st.videoBlob=new Blob(chunks,{type:rec.mimeType||'video/webm'});
+     const u=URL.createObjectURL(st.videoBlob),p=$(prefix+'VideoPreview');p.src=u;p.classList.remove('hidden');
+     $(prefix+'VideoRecordBtn').textContent='● Записать заново';
+     setText($(prefix+'VideoStatus'),'Видео готово. Можно пересмотреть.');
+     st.cameraStream?.getTracks().forEach(t=>t.stop());st.cameraStream=null;
+   };
+   rec.start();$(prefix+'VideoRecordBtn').textContent='■ Остановить';setText($(prefix+'VideoStatus'),'Запись движения идёт…');
+ }catch(e){setText($(prefix+'VideoStatus'),'Не удалось начать запись: '+e.message)}
+}
+
+async function recordStateVoice(prefix){
+ const slot=voiceStateRecorders[prefix];
+ if(slot?.recorder?.state==='recording'){slot.recorder.stop();return}
+ try{
+   const stream=await navigator.mediaDevices.getUserMedia({audio:true}),chunks=[],rec=new MediaRecorder(stream);
+   voiceStateRecorders[prefix]={recorder:rec,stream};
+   rec.ondataavailable=e=>e.data.size&&chunks.push(e.data);
+   rec.onstop=()=>{
+     stream.getTracks().forEach(t=>t.stop());
+     const blob=new Blob(chunks,{type:rec.mimeType||'audio/webm'});stateStore[prefix].voiceBlob=blob;
+     const u=URL.createObjectURL(blob),p=$(prefix+'VoicePlayer');p.src=u;p.classList.remove('hidden');
+     $(prefix+'VoiceBtn').textContent='🎙 Записать заново';setText($(prefix+'VoiceStatus'),'Готово. Можно прослушать.');updateTodayProgress()
+   };
+   rec.start();$(prefix+'VoiceBtn').textContent='■ Остановить';setText($(prefix+'VoiceStatus'),'Запись идёт…');
+ }catch(e){setText($(prefix+'VoiceStatus'),'Не удалось включить микрофон: '+e.message)}
+}
+
+function canvasBlob(prefix){return new Promise(resolve=>{if(!stateStore[prefix].drawn||!stateStore[prefix].canvasReady)return resolve(null);$(prefix+'Canvas').toBlob(resolve,'image/png')})}
+function stateValues(prefix){return{emotions:[...stateStore[prefix].selected],custom:$(prefix+'Custom').value.trim()||null,words:$(prefix+'Words').value.trim()||null,noChange:!!stateStore[prefix].noChange}}
+function resetState(prefix){
+ const st=stateStore[prefix];st.selected.clear();st.noChange=false;st.voiceBlob=null;st.videoBlob=null;st.videoFile=null;st.drawn=false;
+ st.cameraStream?.getTracks().forEach(t=>t.stop());st.cameraStream=null;
+ document.querySelectorAll(`#${prefix}EmotionGroups .chip`).forEach(x=>x.classList.remove('selected'));
+ const nc=$(prefix+'NoChange');if(nc)nc.classList.remove('selected');
+ $(prefix+'Custom').value='';$(prefix+'Words').value='';
+ [prefix+'VoicePlayer',prefix+'VideoPreview'].forEach(id=>{const el=$(id);el.classList.add('hidden');el.removeAttribute('src')});
+ $(prefix+'VideoFallback').value='';
+ if(st.canvasReady){const c=$(prefix+'Canvas');const ctx=c.getContext('2d');ctx.save();ctx.setTransform(1,0,0,1,0,0);ctx.clearRect(0,0,c.width,c.height);ctx.restore()}
+}
+
+initState('todayBefore',false);initState('todayAfter',true);initState('practiceBefore',false);initState('practiceAfter',true);
+
+let recorder,blob,blobUrl,seconds=0,timerId;
+let practiceRecorder,practiceBlob,practiceBlobUrl,practiceSeconds=0,practiceTimerId;
+let reflectionRecorder,reflectionBlob,reflectionBlobUrl,todayReflectionRecorder,todayReflectionBlob,todayReflectionBlobUrl;
+let selectedPractice=null,practiceCache=[];
+
+function show(loggedIn){
+ $('authView').classList.toggle('hidden',loggedIn);$('appView').classList.toggle('hidden',!loggedIn);$('nav').classList.toggle('hidden',!loggedIn);$('logoutTop').classList.toggle('hidden',!loggedIn);
+ if(loggedIn){loadJournal();loadPractices();newTodayPrompt()}
+}
+$('loginBtn').onclick=async()=>{const{error}=await s.auth.signInWithPassword({email:$('email').value.trim(),password:$('password').value});setText($('authMsg'),error?error.message:'Готово')};
+$('signupBtn').onclick=async()=>{const{data,error}=await s.auth.signUp({email:$('email').value.trim(),password:$('password').value,options:{emailRedirectTo:location.origin}});setText($('authMsg'),error?error.message:(data.session?'Аккаунт создан.':'Проверь почту и подтверди email.'))};
+$('logoutTop').onclick=()=>s.auth.signOut();
+s.auth.onAuthStateChange((_e,session)=>show(!!session));show(!!(await s.auth.getSession()).data.session);
+
+function newTodayPrompt(){setText($('todayReflectionPrompt'),reflectionPrompts[Math.floor(Math.random()*reflectionPrompts.length)])}
+function updateTodayProgress(){
+ let n=1;
+ const before=stateValues('todayBefore');
+ if(before.emotions.length||before.custom||before.words||stateStore.todayBefore.drawn||stateStore.todayBefore.voiceBlob||stateStore.todayBefore.videoBlob||stateStore.todayBefore.videoFile)n=2;
+ if(blob)n=3;
+ const after=stateValues('todayAfter');
+ if(blob&&(after.emotions.length||after.custom||after.words||after.noChange||stateStore.todayAfter.drawn||stateStore.todayAfter.voiceBlob||stateStore.todayAfter.videoBlob||stateStore.todayAfter.videoFile))n=4;
+ $('todayProgress').style.width=(n*25)+'%';
+}
+
+async function startRecording(kind){
+ const isPractice=kind==='practice',active=isPractice?practiceRecorder:recorder;
+ if(active&&active.state==='recording'){active.stop();return}
+ try{
+   const media=await navigator.mediaDevices.getUserMedia({audio:true}),chunks=[],rec=new MediaRecorder(media);let local=0;
+   const timerEl=isPractice?$('practiceTimer'):$('timer'),statusEl=isPractice?$('practiceStatus'):$('status'),btn=isPractice?$('practiceRecordBtn'):$('recordBtn');
+   timerEl.textContent='00:00';
+   rec.ondataavailable=e=>e.data.size&&chunks.push(e.data);
+   rec.onstop=()=>{
+     media.getTracks().forEach(t=>t.stop());
+     if(isPractice){
+       clearInterval(practiceTimerId);practiceSeconds=local;practiceBlob=new Blob(chunks,{type:rec.mimeType||'audio/webm'});
+       if(practiceBlobUrl)URL.revokeObjectURL(practiceBlobUrl);practiceBlobUrl=URL.createObjectURL(practiceBlob);$('practicePlayer').src=practiceBlobUrl;$('practicePreview').classList.remove('hidden');btn.classList.remove('recording');btn.innerHTML='🎙<br>Ещё раз';
+     }else{
+       clearInterval(timerId);seconds=local;blob=new Blob(chunks,{type:rec.mimeType||'audio/webm'});
+       if(blobUrl)URL.revokeObjectURL(blobUrl);blobUrl=URL.createObjectURL(blob);$('player').src=blobUrl;$('preview').classList.remove('hidden');btn.classList.remove('recording');btn.innerHTML='🎙<br>Ещё раз';newTodayPrompt();updateTodayProgress();$('preview').scrollIntoView({behavior:'smooth',block:'start'})
+     }
+     setText(statusEl,'Готово. Можно послушать.');
+   };
+   rec.start();btn.classList.add('recording');btn.innerHTML='■<br>Закончить';setText(statusEl,'Запись идёт…');
+   const int=setInterval(()=>{local++;timerEl.textContent=fmt(local)},1000);
+   if(isPractice){practiceRecorder=rec;practiceTimerId=int}else{recorder=rec;timerId=int}
+ }catch(e){setText(isPractice?$('practiceStatus'):$('status'),'Микрофон: '+e.message)}
+}
+$('recordBtn').onclick=()=>startRecording('basic');
+$('practiceRecordBtn').onclick=()=>startRecording('practice');
+$('rerecordBtn').onclick=()=>{resetPractice();startRecording('practice')};
+
+async function reflectionVoice(kind){
+ const isToday=kind==='today';let rec=isToday?todayReflectionRecorder:reflectionRecorder;
+ if(rec&&rec.state==='recording'){rec.stop();return}
+ try{
+   const stream=await navigator.mediaDevices.getUserMedia({audio:true}),chunks=[];
+   rec=new MediaRecorder(stream);if(isToday)todayReflectionRecorder=rec;else reflectionRecorder=rec;
+   const btn=isToday?$('todayReflectionVoiceBtn'):$('reflectionVoiceBtn'),status=isToday?$('todayReflectionStatus'):$('reflectionStatus'),player=isToday?$('todayReflectionPlayer'):$('reflectionPlayer');
+   rec.ondataavailable=e=>e.data.size&&chunks.push(e.data);
+   rec.onstop=()=>{
+     stream.getTracks().forEach(t=>t.stop());const b=new Blob(chunks,{type:rec.mimeType||'audio/webm'});
+     if(isToday){todayReflectionBlob=b;if(todayReflectionBlobUrl)URL.revokeObjectURL(todayReflectionBlobUrl);todayReflectionBlobUrl=URL.createObjectURL(b)}
+     else{reflectionBlob=b;if(reflectionBlobUrl)URL.revokeObjectURL(reflectionBlobUrl);reflectionBlobUrl=URL.createObjectURL(b)}
+     player.src=isToday?todayReflectionBlobUrl:reflectionBlobUrl;player.classList.remove('hidden');setText(status,'Готово.');btn.textContent='🎙 Записать заново'
+   };
+   rec.start();setText(status,'Запись идёт…');btn.textContent='■ Остановить';
+ }catch(e){setText(isToday?$('todayReflectionStatus'):$('reflectionStatus'),'Микрофон: '+e.message)}
+}
+$('reflectionVoiceBtn').onclick=()=>reflectionVoice('practice');
+$('todayReflectionVoiceBtn').onclick=()=>reflectionVoice('today');
+
+async function uploadBlob(userId,rowId,name,b){
+ if(!b)return null;
+ let ext='webm';if(b.type.includes('png'))ext='png';else if(b.type.includes('jpeg'))ext='jpg';else if(b.type.includes('mp4'))ext='mp4';else if(b.type.includes('quicktime'))ext='mov';else if(b.type.includes('mpeg'))ext='mp3';
+ const path=`${userId}/${rowId}/${name}.${ext}`;
+ const up=await s.storage.from('voice-recordings').upload(path,b,{contentType:b.type||'application/octet-stream',upsert:true});if(up.error)throw up.error;return path
+}
+async function collectState(prefix,userId,rowId,side){
+ const vals=stateValues(prefix),drawing=await canvasBlob(prefix),video=stateStore[prefix].videoBlob||stateStore[prefix].videoFile;
+ return{vals,paths:{
+   [`drawing_${side}_path`]:await uploadBlob(userId,rowId,`state-${side}-drawing`,drawing),
+   [`state_voice_${side}_path`]:await uploadBlob(userId,rowId,`state-${side}-voice`,stateStore[prefix].voiceBlob),
+   [`state_video_${side}_path`]:await uploadBlob(userId,rowId,`state-${side}-video`,video)
+ }}
+}
+
+$('saveBtn').onclick=async()=>{
+ if(!blob)return;const user=(await s.auth.getUser()).data.user;if(!user)return;
+ setText($('status'),'Сохраняю…');
+ const before=stateValues('todayBefore'),after=stateValues('todayAfter'),prompt=$('todayReflectionPrompt').textContent;
+ const payload={user_id:user.id,title:$('title').value.trim()||'Мой звук сегодня',duration_before:seconds,
+ emotions_before:before.emotions,emotions_after:after.emotions,state_custom_before:[before.custom,before.words].filter(Boolean).join(' · ')||null,
+ state_custom_after:[after.custom,after.words].filter(Boolean).join(' · ')||null,no_change:after.noChange,word_before:before.custom,word_after:after.custom,
+ reflection_prompt:prompt,reflection_text:$('todayReflectionText').value.trim()||null};
+ const{data:row,error}=await s.from('voice_entries').insert(payload).select().single();if(error){setText($('status'),error.message);return}
+ try{
+   const main=await uploadBlob(user.id,row.id,'before',blob),b=await collectState('todayBefore',user.id,row.id,'before'),a=await collectState('todayAfter',user.id,row.id,'after'),
+   ref=await uploadBlob(user.id,row.id,'reflection',todayReflectionBlob);
+   await s.from('voice_entries').update({audio_path_before:main,...b.paths,...a.paths,reflection_audio_path:ref}).eq('id',row.id);
+   toast('Сохранено в дневник');setText($('status'),'Сохранено.');
+   $('preview').classList.add('hidden');$('timer').textContent='00:00';$('recordBtn').innerHTML='🎙<br>Звучать';blob=null;resetState('todayBefore');resetState('todayAfter');$('todayReflectionText').value='';todayReflectionBlob=null;updateTodayProgress();loadJournal()
+ }catch(e){setText($('status'),'Сохранено частично: '+e.message)}
+};
+
+async function signed(path){if(!path)return null;const r=await s.storage.from('voice-recordings').createSignedUrl(path,3600);return r.data?.signedUrl||null}
+async function loadJournal(){
+ loadMixHistory();
+ const{data,error}=await s.from('voice_entries').select('*').order('created_at',{ascending:false}).limit(40);
+ const list=$('journalList');list.replaceChildren();
+ if(error){list.innerHTML='<div class="empty">Не удалось загрузить дневник.</div>';return}
+ if(!data?.length){list.innerHTML='<div class="empty">Здесь появятся твои первые следы.</div>';return}
+ for(const e of data){
+   const d=document.createElement('div');d.className='entry';
+   const head=document.createElement('div');head.className='entry-head';
+   const tt=document.createElement('div');tt.className='entry-title';tt.textContent=e.title||'Моя запись';
+   const date=document.createElement('div');date.className='entry-date';date.textContent=new Date(e.created_at).toLocaleDateString('ru-RU',{day:'numeric',month:'short'});
+   head.append(tt,date);d.appendChild(head);
+   const before=[...(e.emotions_before||[]),e.state_custom_before].filter(Boolean).join(', ');
+   const after=e.no_change?'ничего не изменилось':[...(e.emotions_after||[]),e.state_custom_after].filter(Boolean).join(', ');
+   if(before||after){
+     const comp=document.createElement('div');comp.className='compare';comp.style.marginTop='12px';
+     comp.innerHTML=`<div class="comparebox"><b>До</b><span class="small">${before||'—'}</span></div><div class="comparebox"><b>После</b><span class="small">${after||'—'}</span></div>`;
+     d.appendChild(comp)
+   }
+   const mediaPairs=[[e.audio_path_before,'audio'],[e.state_voice_before_path,'audio'],[e.state_voice_after_path,'audio'],[e.reflection_audio_path,'audio'],[e.state_video_before_path,'video'],[e.state_video_after_path,'video'],[e.drawing_before_path,'img'],[e.drawing_after_path,'img']];
+   for(const [path,type] of mediaPairs){
+     const u=await signed(path);if(!u)continue;let el;
+     if(type==='audio'){el=document.createElement('audio');el.controls=true}
+     else if(type==='video'){el=document.createElement('video');el.controls=true;el.playsInline=true}
+     else{el=document.createElement('img');el.style.width='100%';el.style.borderRadius='16px';el.style.marginTop='10px'}
+     el.src=u;d.appendChild(el)
+   }
+   if(e.reflection_prompt){const q=document.createElement('div');q.className='small';q.style.marginTop='12px';q.style.fontWeight='800';q.textContent=e.reflection_prompt;d.appendChild(q)}
+   if(e.reflection_text){const p=document.createElement('p');p.textContent=e.reflection_text;d.appendChild(p)}
+   list.appendChild(d)
+ }
+}
+
+
+let generatedMix=null;
+
+function periodRange(type){
+ const now=new Date();
+ let start,end,title;
+ if(type==='week'){
+   start=new Date(now);start.setHours(0,0,0,0);
+   const day=(start.getDay()+6)%7;start.setDate(start.getDate()-day);
+   end=new Date(start);end.setDate(end.getDate()+7);
+   const fmtDate=d=>d.toLocaleDateString('ru-RU',{day:'numeric',month:'short'});
+   title=`Моя неделя · ${fmtDate(start)} — ${fmtDate(new Date(end.getTime()-86400000))}`;
+ }else{
+   start=new Date(now.getFullYear(),now.getMonth(),1);
+   end=new Date(now.getFullYear(),now.getMonth()+1,1);
+   title=`Мой месяц · ${start.toLocaleDateString('ru-RU',{month:'long',year:'numeric'})}`;
+ }
+ return{start,end,title};
+}
+
+function writeWav(samples,sampleRate,channels=1){
+ const frames=samples[0].length,bytesPerSample=2,blockAlign=channels*bytesPerSample;
+ const buffer=new ArrayBuffer(44+frames*blockAlign),view=new DataView(buffer);
+ const str=(o,s)=>{for(let i=0;i<s.length;i++)view.setUint8(o+i,s.charCodeAt(i))};
+ str(0,'RIFF');view.setUint32(4,36+frames*blockAlign,true);str(8,'WAVE');str(12,'fmt ');
+ view.setUint32(16,16,true);view.setUint16(20,1,true);view.setUint16(22,channels,true);
+ view.setUint32(24,sampleRate,true);view.setUint32(28,sampleRate*blockAlign,true);view.setUint16(32,blockAlign,true);view.setUint16(34,16,true);
+ str(36,'data');view.setUint32(40,frames*blockAlign,true);
+ let off=44;
+ for(let i=0;i<frames;i++){
+   for(let ch=0;ch<channels;ch++){
+     let v=Math.max(-1,Math.min(1,samples[ch][i]||0));
+     view.setInt16(off,v<0?v*0x8000:v*0x7fff,true);off+=2;
+   }
+ }
+ return new Blob([buffer],{type:'audio/wav'});
+}
+
+async function fetchAudioBuffer(ctx,path){
+ const url=await signed(path);if(!url)throw new Error('Не удалось открыть одну из записей');
+ const r=await fetch(url);if(!r.ok)throw new Error('Не удалось загрузить запись');
+ const arr=await r.arrayBuffer();
+ return await ctx.decodeAudioData(arr.slice(0));
+}
+
+
+function mostCommon(arr){
+ const counts={};
+ for(const x of arr.filter(Boolean)) counts[x]=(counts[x]||0)+1;
+ return Object.entries(counts).sort((a,b)=>b[1]-a[1])[0]?.[0]||null;
+}
+
+function prettifyEmotion(word){
+ const map={
+  'тревога':'тревоги','страх':'страха','злость':'злости','раздражение':'раздражения',
+  'напряжение':'напряжения','нетерпение':'нетерпения','грусть':'грусти','обида':'обиды',
+  'одиночество':'одиночества','усталость':'усталости','бессилие':'бессилия','тоска':'тоски',
+  'растерянность':'растерянности','стыд':'стыда','вина':'вины','скука':'скуки','пустота':'пустоты',
+  'перегруз':'перегруза','радость':'радости','нежность':'нежности','благодарность':'благодарности',
+  'любовь':'любви','спокойствие':'спокойствия','надежда':'надежды','интерес':'интереса',
+  'вдохновение':'вдохновения','любопытство':'любопытства','возбуждение':'возбуждения',
+  'свобода':'свободы','уверенность':'уверенности'
+ };
+ return map[word]||word;
+}
+
+function suggestMixTitle(entries,type){
+ const before=[],after=[];
+ for(const e of entries){
+   if(Array.isArray(e.emotions_before)) before.push(...e.emotions_before);
+   if(Array.isArray(e.emotions_after)) after.push(...e.emotions_after);
+ }
+ const b=mostCommon(before),a=mostCommon(after);
+ const period=type==='week'?'Неделя':'Месяц';
+
+ if(b && a && b!==a) return `${period}: от ${prettifyEmotion(b)} к ${prettifyEmotion(a)}`;
+ if(a) return `${period} в звучании: ${a}`;
+ if(b) return `${period}: голос ${prettifyEmotion(b)}`;
+ return type==='week'?'Как звучала моя неделя':'Как звучал мой месяц';
+}
+
+async function buildPeriodMix(type){
+ const btn=type==='week'?$('makeWeekMixBtn'):$('makeMonthMixBtn');
+ btn.disabled=true;$('mixResult').classList.add('hidden');setText($('mixStatus'),'Собираю твои импровизации…');
+ try{
+   const {start,end,title}=periodRange(type);
+   const {data:entries,error}=await s.from('voice_entries')
+     .select('id,title,audio_path_before,created_at,emotions_before,emotions_after,state_custom_before,state_custom_after,no_change')
+     .gte('created_at',start.toISOString()).lt('created_at',end.toISOString())
+     .not('audio_path_before','is',null).order('created_at',{ascending:true});
+   if(error)throw error;
+   if(!entries?.length){setText($('mixStatus'),type==='week'?'За эту неделю пока нет сохранённых голосовых импровизаций.':'За этот месяц пока нет сохранённых голосовых импровизаций.');return}
+   const ctx=new (window.AudioContext||window.webkitAudioContext)();
+   const buffers=[];
+   for(let i=0;i<entries.length;i++){
+     setText($('mixStatus'),`Собираю фрагмент ${i+1} из ${entries.length}…`);
+     try{buffers.push({entry:entries[i],buf:await fetchAudioBuffer(ctx,entries[i].audio_path_before)})}catch(e){}
+   }
+   if(!buffers.length)throw new Error('Не удалось прочитать аудиозаписи');
+   const targetSec=type==='week'?75:120;
+   const perClip=Math.max(type==='week'?5:3,Math.min(type==='week'?12:7,targetSec/buffers.length));
+   const gap=.22,fade=.18,sr=ctx.sampleRate;
+   const channelCount=Math.min(2,Math.max(...buffers.map(x=>x.buf.numberOfChannels)));
+   const pieces=[];
+   for(const {buf} of buffers){
+     const dur=Math.min(perClip,buf.duration);
+     const frames=Math.max(1,Math.floor(dur*sr));
+     const chans=Array.from({length:channelCount},(_,ch)=>{
+       const source=buf.getChannelData(Math.min(ch,buf.numberOfChannels-1));
+       const out=new Float32Array(frames);
+       const maxStart=Math.max(0,source.length-frames);
+       const startFrame=Math.floor(maxStart*.32); // not always the very beginning
+       for(let i=0;i<frames;i++){
+         let g=1;
+         const t=i/sr,remain=(frames-i-1)/sr;
+         if(t<fade)g=t/fade;if(remain<fade)g=Math.min(g,remain/fade);
+         out[i]=(source[startFrame+i]||0)*g*.92;
+       }
+       return out;
+     });
+     pieces.push(chans);
+   }
+   const gapFrames=Math.floor(gap*sr);
+   const total=pieces.reduce((a,p)=>a+p[0].length,0)+gapFrames*Math.max(0,pieces.length-1);
+   const mix=Array.from({length:channelCount},()=>new Float32Array(total));
+   let cursor=0;
+   pieces.forEach((p,idx)=>{for(let ch=0;ch<channelCount;ch++)mix[ch].set(p[ch],cursor);cursor+=p[0].length+(idx<pieces.length-1?gapFrames:0)});
+   const wav=writeWav(mix,sr,channelCount);
+   const url=URL.createObjectURL(wav);$('mixPlayer').src=url;
+   generatedMix={blob:wav,type,start,end,title:suggestMixTitle(entries,type),entryIds:buffers.map(x=>x.entry.id),count:buffers.length,duration:Math.round(total/sr)};
+   const suggestedTitle=suggestMixTitle(entries,type); $('mixTitleInput').value=suggestedTitle;
+   setText($('mixResultMeta'),`${buffers.length} ${buffers.length===1?'импровизация':'импровизаций'} · ${fmt(Math.round(total/sr))}`);
+   $('mixResult').classList.remove('hidden');setText($('mixStatus'),'Готово. Послушай, как звучал этот период.');
+   $('mixResult').scrollIntoView({behavior:'smooth',block:'nearest'});
+   await ctx.close();
+ }catch(e){setText($('mixStatus'),'Не удалось собрать трек: '+e.message)}
+ finally{btn.disabled=false}
+}
+
+$('makeWeekMixBtn').onclick=()=>buildPeriodMix('week');
+$('makeMonthMixBtn').onclick=()=>buildPeriodMix('month');
+
+$('saveMixBtn').onclick=async()=>{
+ if(!generatedMix)return;
+ const user=(await s.auth.getUser()).data.user;if(!user)return;
+ $('saveMixBtn').disabled=true;setText($('mixStatus'),'Сохраняю трек…');
+ try{
+   const id=crypto.randomUUID(),path=`${user.id}/mixes/${id}.wav`;
+   const up=await s.storage.from('voice-recordings').upload(path,generatedMix.blob,{contentType:'audio/wav',upsert:true});
+   if(up.error)throw up.error;
+   const payload={user_id:user.id,period_type:generatedMix.type,period_start:generatedMix.start.toISOString().slice(0,10),
+     period_end:new Date(generatedMix.end.getTime()-86400000).toISOString().slice(0,10),title:($('mixTitleInput').value.trim()||generatedMix.title),audio_path:path,
+     source_entry_ids:generatedMix.entryIds,source_count:generatedMix.count,duration_seconds:generatedMix.duration};
+   const {error}=await s.from('creative_audio_mixes').insert(payload);if(error)throw error;
+   toast('Трек сохранён');setText($('mixStatus'),'Сохранено в твоём звуковом архиве.');loadMixHistory();
+ }catch(e){setText($('mixStatus'),'Не удалось сохранить трек: '+e.message)}
+ finally{$('saveMixBtn').disabled=false}
+};
+
+async function loadMixHistory(){
+ const box=$('mixHistory');if(!box)return;
+ const {data,error}=await s.from('creative_audio_mixes').select('*').order('created_at',{ascending:false}).limit(12);
+ box.replaceChildren();
+ if(error){box.textContent='Не удалось загрузить сохранённые треки.';return}
+ if(!data?.length){box.textContent='Здесь появятся треки недели и месяца.';return}
+ for(const m of data){
+   const row=document.createElement('div');row.className='mix-item';
+   const head=document.createElement('div');head.className='entry-head';
+   const t=document.createElement('div');t.className='entry-title';t.textContent=m.title||(m.period_type==='week'?'Трек недели':'Трек месяца');
+   const meta=document.createElement('div');meta.className='entry-date';meta.textContent=`${m.source_count||0} фрагм. · ${fmt(m.duration_seconds||0)}`;
+   head.append(t,meta);row.appendChild(head);
+   const u=await signed(m.audio_path);
+   if(u){const a=document.createElement('audio');a.controls=true;a.src=u;row.appendChild(a)}
+   box.appendChild(row)
+ }
+}
+
+async function loadPractices(){
+ const{data}=await s.from('practices').select('*').eq('is_active',true).limit(50);practiceCache=data||[];
+ const list=$('practiceList');list.replaceChildren();
+ if(!practiceCache.length){list.innerHTML='<div class="card"><div class="empty">Игры скоро появятся.</div></div>';return}
+ practiceCache.forEach(p=>{
+   const card=document.createElement('button');card.type='button';card.className='practice';
+   const tag=document.createElement('div');tag.className='tag';tag.textContent=p.category||'Практика';
+   const h=document.createElement('h3');h.textContent=p.title;
+   const i=document.createElement('p');i.className='small';i.textContent=p.instruction;
+   card.append(tag,h,i);card.onclick=()=>openPractice(p);list.appendChild(card)
+ })
+}
+function openPractice(p){
+ selectedPractice=p;$('playList').classList.add('hidden');$('practiceView').classList.remove('hidden');setText($('practiceCategory'),p.category||'Практика');setText($('practiceTitle'),p.title);setText($('practiceInstruction'),p.instruction);
+ resetPractice();resetReflection();resetState('practiceBefore');resetState('practiceAfter');window.scrollTo({top:0,behavior:'smooth'})
+}
+function resetPractice(){practiceBlob=null;practiceSeconds=0;$('practiceTimer').textContent='00:00';$('practicePreview').classList.add('hidden');$('reflection').classList.add('hidden');$('practiceRecordBtn').innerHTML='🎙<br>Начать';setText($('practiceStatus'),'Нажми, чтобы начать')}
+function resetReflection(){$('reflectionText').value='';reflectionBlob=null;$('reflectionPlayer').classList.add('hidden');$('reflectionPlayer').removeAttribute('src');setText($('reflectionStatus'),'');setText($('reflectionPrompt'),reflectionPrompts[Math.floor(Math.random()*reflectionPrompts.length)])}
+$('nextBtn').onclick=()=>{$('reflection').classList.remove('hidden');$('reflection').scrollIntoView({behavior:'smooth',block:'start'})};
+
+$('savePracticeBtn').onclick=async()=>{
+ if(!practiceBlob||!selectedPractice)return;const user=(await s.auth.getUser()).data.user;if(!user)return;
+ setText($('practiceStatus'),'Сохраняю…');const before=stateValues('practiceBefore'),after=stateValues('practiceAfter'),prompt=$('reflectionPrompt').textContent;
+ const payload={user_id:user.id,practice_id:selectedPractice.id,title:selectedPractice.title,duration_before:practiceSeconds,
+ emotions_before:before.emotions,emotions_after:after.emotions,state_custom_before:[before.custom,before.words].filter(Boolean).join(' · ')||null,
+ state_custom_after:[after.custom,after.words].filter(Boolean).join(' · ')||null,no_change:after.noChange,word_before:before.custom,word_after:after.custom,
+ reflection_prompt:prompt,reflection_text:$('reflectionText').value.trim()||null};
+ const{data:row,error}=await s.from('voice_entries').insert(payload).select().single();if(error){setText($('practiceStatus'),error.message);return}
+ try{
+   const main=await uploadBlob(user.id,row.id,'before',practiceBlob),b=await collectState('practiceBefore',user.id,row.id,'before'),a=await collectState('practiceAfter',user.id,row.id,'after'),
+   ref=await uploadBlob(user.id,row.id,'reflection',reflectionBlob);
+   await s.from('voice_entries').update({audio_path_before:main,...b.paths,...a.paths,reflection_audio_path:ref}).eq('id',row.id);
+   toast('Практика сохранена');setText($('practiceStatus'),'Сохранено в дневник.');loadJournal()
+ }catch(e){setText($('practiceStatus'),'Сохранено частично: '+e.message)}
+};
+
+$('againBtn').onclick=()=>{resetPractice();resetReflection();resetState('practiceBefore');resetState('practiceAfter')};
+const randomPractice=()=>{if(practiceCache.length)openPractice(practiceCache[Math.floor(Math.random()*practiceCache.length)])};
+$('surpriseBtn').onclick=randomPractice;$('randomAgainBtn').onclick=randomPractice;
+$('backBtn').onclick=()=>{$('practiceView').classList.add('hidden');$('playList').classList.remove('hidden')};
+
+document.querySelectorAll('.nav button').forEach(b=>b.onclick=()=>{
+ document.querySelectorAll('.nav button').forEach(x=>x.classList.toggle('active',x===b));
+ ['today','journal','play'].forEach(x=>$(x+'Tab').classList.toggle('hidden',x!==b.dataset.tab));
+ if(b.dataset.tab==='journal')loadJournal();window.scrollTo({top:0,behavior:'smooth'})
+});
+
+window.addEventListener('beforeunload',()=>Object.values(stateStore).forEach(st=>st.cameraStream?.getTracks().forEach(t=>t.stop())));
+updateTodayProgress();
+</script>
+</body>
+</html>
