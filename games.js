@@ -57,9 +57,7 @@ async function playSeq(notes,beat=.38,type='triangle'){
     gamePlayer.src=currentAudioUrl;
     gamePlayer.volume=1;
     await gamePlayer.play();
-    return new Promise(resolve=>{
-      gamePlayer.onended=()=>{resolve();};
-    });
+    return new Promise(resolve=>{gamePlayer.onended=()=>resolve();});
   }catch(e){
     console.error(e);
     alert('Не удалось включить звук. Проверь громкость телефона и убедись, что звук для Safari не выключен.');
@@ -73,7 +71,28 @@ document.querySelectorAll('[data-back]').forEach(b=>b.onclick=()=>{pitchGame.cla
 
 let pitchLevel=1,pitchRound=1,pitchScore=0,pitchAnswer='',pitchNotes=[],pitchLocked=false;
 document.querySelectorAll('.level').forEach(b=>b.onclick=()=>{pitchLevel=+b.dataset.level;document.querySelectorAll('.level').forEach(x=>x.classList.toggle('on',x===b));resetPitch()});
-function newPitch(){pitchLocked=false;$('pitchFeedback').textContent='';$('nextPitch').classList.add('hidden');document.querySelectorAll('[data-pitch]').forEach(b=>b.classList.remove('correct','wrong'));const choices=['up','down','same'];pitchAnswer=choices[Math.floor(Math.random()*choices.length)];const count=pitchLevel===1?2:pitchLevel===2?3:4;let start=55+Math.floor(Math.random()*12);pitchNotes=[start];if(pitchAnswer==='same'){for(let i=1;i<count;i++)pitchNotes.push(start)}else{const dir=pitchAnswer==='up'?1:-1;for(let i=1;i<count;i++){const step=pitchLevel===1?(2+Math.floor(Math.random()*4)):(1+Math.floor(Math.random()*3));start+=dir*step;pitchNotes.push(start)}}$('pitchRound').textContent=`${pitchRound}/10`}
+function newPitch(){
+ pitchLocked=false;$('pitchFeedback').textContent='';$('nextPitch').classList.add('hidden');document.querySelectorAll('[data-pitch]').forEach(b=>b.classList.remove('correct','wrong'));
+ const choices=['up','down','same'];pitchAnswer=choices[Math.floor(Math.random()*choices.length)];
+ let start=55+Math.floor(Math.random()*12);
+ if(pitchLevel===1){
+   if(pitchAnswer==='same')pitchNotes=[start,start];
+   else{const dir=pitchAnswer==='up'?1:-1;const step=2+Math.floor(Math.random()*4);pitchNotes=[start,start+dir*step]}
+ }else if(pitchLevel===2){
+   if(pitchAnswer==='same')pitchNotes=[start,start,start];
+   else{
+     const dir=pitchAnswer==='up'?1:-1,step=2+Math.floor(Math.random()*4),moved=start+dir*step;
+     // Three sounds: either the first two are equal and the third moves,
+     // or the first moves and the last two are equal.
+     pitchNotes=Math.random()<.5?[start,start,moved]:[start,moved,moved];
+   }
+ }else{
+   const count=4;
+   if(pitchAnswer==='same'){pitchNotes=Array(count).fill(start)}
+   else{const dir=pitchAnswer==='up'?1:-1;pitchNotes=[start];for(let i=1;i<count;i++){start+=dir*(1+Math.floor(Math.random()*3));pitchNotes.push(start)}}
+ }
+ $('pitchRound').textContent=`${pitchRound}/10`;
+}
 function resetPitch(){pitchRound=1;pitchScore=0;$('pitchScore').textContent='0';$('pitchFinish').classList.add('hidden');$('playPitch').classList.remove('hidden');document.querySelector('.answers.three').classList.remove('hidden');newPitch()}
 $('playPitch').onclick=async()=>{await playSeq(pitchNotes,.42,'sine')};
 document.querySelectorAll('[data-pitch]').forEach(b=>b.onclick=()=>{if(pitchLocked)return;pitchLocked=true;const guess=b.dataset.pitch,correct=guess===pitchAnswer;b.classList.add(correct?'correct':'wrong');document.querySelector(`[data-pitch="${pitchAnswer}"]`).classList.add('correct');if(correct){pitchScore++;$('pitchScore').textContent=pitchScore;$('pitchFeedback').textContent='Верно!'}else $('pitchFeedback').textContent=pitchAnswer==='up'?'Правильный ответ: вверх.':pitchAnswer==='down'?'Правильный ответ: вниз.':'Правильный ответ: на месте.';$('nextPitch').classList.remove('hidden')});
