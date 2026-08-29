@@ -1,0 +1,86 @@
+{
+  "embedded_img_tags_found": 10,
+  "unique_files_written": 8,
+  "images": [
+    {
+      "source_order": 1,
+      "file": "photo-01.webp",
+      "alt": "Мария Красилова",
+      "bytes": 43064,
+      "sha256": "642fe70e3d7a4f875623ffc6f45fda7a5ab878835c876725ae88ae96c44aa467",
+      "duplicate_of": null
+    },
+    {
+      "source_order": 2,
+      "file": "photo-02.webp",
+      "alt": "Мария Красилова в культурном пространстве",
+      "bytes": 42034,
+      "sha256": "734c3e69e08f550d38ec1fe768814f6aba4d5d04d3dcb6ab071f326849d1db26",
+      "duplicate_of": null
+    },
+    {
+      "source_order": 3,
+      "file": "photo-03.webp",
+      "alt": "Мария за клавиатурой на фоне природы",
+      "bytes": 41368,
+      "sha256": "a1ee152e69c5c5a981bb43beb7af979cdf3450d26e74ca3a2059c76c285d1683",
+      "duplicate_of": null
+    },
+    {
+      "source_order": 4,
+      "file": "photo-04.webp",
+      "alt": "Мария за фортепиано в наушниках",
+      "bytes": 91458,
+      "sha256": "a2e1c3328ac128d7b1cec79fafcd6b65017e82888862201e50ca38dbc2633271",
+      "duplicate_of": null
+    },
+    {
+      "source_order": 5,
+      "file": "photo-05.webp",
+      "alt": "Мария за чаем",
+      "bytes": 63072,
+      "sha256": "5ea9e74c9c0937d790ccd8370e4e5a01151c61339d605e3c0b4d4b8b5b4ce57a",
+      "duplicate_of": null
+    },
+    {
+      "source_order": 6,
+      "file": "photo-06.webp",
+      "alt": "Мария на фоне неба",
+      "bytes": 56726,
+      "sha256": "ec947c7841a7307bb820cb6592bcd03ffd0153d8131b0deeba6ae27cc161708a",
+      "duplicate_of": null
+    },
+    {
+      "source_order": 7,
+      "file": "photo-07.webp",
+      "alt": "Мария в городе",
+      "bytes": 110844,
+      "sha256": "4feb3eeb462ed49965f608cf4c24cb49a212e4cb0af355deb06d55d66a5e5964",
+      "duplicate_of": null
+    },
+    {
+      "source_order": 8,
+      "file": "photo-03.webp",
+      "alt": "Мария улыбается у клавиш",
+      "bytes": 41368,
+      "sha256": "a1ee152e69c5c5a981bb43beb7af979cdf3450d26e74ca3a2059c76c285d1683",
+      "duplicate_of": "photo-03.webp"
+    },
+    {
+      "source_order": 9,
+      "file": "photo-08.webp",
+      "alt": "Мария в библиотеке",
+      "bytes": 62960,
+      "sha256": "bfde53fa30da6e57325a8fac22ef1553f3b937586ca41e4ef4f78185adf47184",
+      "duplicate_of": null
+    },
+    {
+      "source_order": 10,
+      "file": "photo-04.webp",
+      "alt": "Мария за фортепиано",
+      "bytes": 91458,
+      "sha256": "a2e1c3328ac128d7b1cec79fafcd6b65017e82888862201e50ca38dbc2633271",
+      "duplicate_of": "photo-04.webp"
+    }
+  ]
+}
