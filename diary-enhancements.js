@@ -61,3 +61,48 @@ if(history){
   s.auth.onAuthStateChange((_e,session)=>{if(session?.user)setTimeout(loadWeek,0)});
   loadWeek();
 }
+
+// Friendly authentication layer. Always sends confirmation/reset links back to the public app,
+// never to localhost or a preview origin.
+const APP_URL='https://mariakrasilovacom.vercel.app/app';
+const authText=e=>{
+  const m=(e?.message||'').toLowerCase();
+  if(m.includes('email not confirmed'))return 'Почта ещё не подтверждена. Открой письмо от сервиса, нажми подтверждение и возвращайся сюда.';
+  if(m.includes('invalid login credentials'))return 'Email или пароль не подошли. Проверь их или нажми «Забыли пароль?». ';
+  if(m.includes('already registered')||m.includes('already been registered'))return 'Такой email уже зарегистрирован. Нажми «У меня уже есть аккаунт — войти».';
+  if(m.includes('password'))return 'Проверь пароль: нужно минимум 8 символов.';
+  if(m.includes('email'))return 'Проверь, правильно ли указан email.';
+  return e?.message||'Не получилось. Попробуй ещё раз.';
+};
+setTimeout(()=>{
+  const email=document.getElementById('email'),password=document.getElementById('password'),msg=document.getElementById('authMsg');
+  const signup=document.getElementById('signupBtn'),login=document.getElementById('loginBtn'),forgot=document.getElementById('forgotBtn');
+  if(!email||!password||!signup||!login)return;
+  signup.onclick=async()=>{
+    const mail=email.value.trim(),pass=password.value;
+    if(!mail){msg.textContent='Напиши email — только для входа и восстановления доступа.';email.focus();return}
+    if(pass.length<8){msg.textContent='Придумай пароль минимум из 8 символов.';password.focus();return}
+    if(!document.getElementById('acceptTerms')?.checked){msg.textContent='Для личного дневника нужно принять Политику конфиденциальности и Условия.';return}
+    signup.disabled=true;msg.textContent='Создаю личное пространство…';
+    const {data,error}=await s.auth.signUp({email:mail,password:pass,options:{emailRedirectTo:APP_URL,data:{privacy_accepted:true,terms_accepted:true,privacy_version:'2026-08-29',terms_version:'2026-08-29',marketing_consent:!!document.getElementById('marketingConsent')?.checked,research_consent:!!document.getElementById('researchConsent')?.checked}}});
+    signup.disabled=false;
+    if(error){msg.textContent=authText(error);return}
+    if(data.session){location.replace('/app');return}
+    msg.innerHTML='Готово. Я отправила письмо для подтверждения. <b>Нажми ссылку в письме</b> — после неё должен открыться дневник. Если браузер поведёт себя странно, просто вернись на эту страницу и нажми «Войти».';
+  };
+  login.onclick=async()=>{
+    const mail=email.value.trim(),pass=password.value;
+    if(!mail||!pass){msg.textContent='Введи email и пароль.';return}
+    login.disabled=true;msg.textContent='Вхожу…';
+    const {error}=await s.auth.signInWithPassword({email:mail,password:pass});login.disabled=false;
+    if(error){msg.textContent=authText(error);return}
+    location.replace('/app');
+  };
+  if(forgot)forgot.onclick=async()=>{
+    const mail=email.value.trim();if(!mail){msg.textContent='Сначала напиши email, к которому привязан дневник.';email.focus();return}
+    forgot.disabled=true;const {error}=await s.auth.resetPasswordForEmail(mail,{redirectTo:APP_URL+'?reset=1'});forgot.disabled=false;
+    msg.textContent=error?authText(error):'Письмо для восстановления отправлено. Проверь почту.';
+  };
+},0);
+
+if('serviceWorker' in navigator){window.addEventListener('load',()=>navigator.serviceWorker.register('/sw.js').catch(()=>{}))}
