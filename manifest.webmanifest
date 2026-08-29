@@ -1,0 +1,14 @@
+{
+  "name": "Эмоциональный дневник",
+  "short_name": "Мой дневник",
+  "description": "Личное пространство для голоса, движения, рисунка и текста.",
+  "start_url": "/app",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#f6f0ea",
+  "theme_color": "#8f5961",
+  "lang": "ru",
+  "icons": [
+    {"src":"/assets/icon.svg","sizes":"any","type":"image/svg+xml","purpose":"any maskable"}
+  ]
+}
