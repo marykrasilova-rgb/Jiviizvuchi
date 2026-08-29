@@ -1,28 +1,32 @@
 import {createClient} from 'https://esm.sh/@supabase/supabase-js@2.57.4';
 
 const s=createClient('https://uecdlqlwsrqmocbpgiwj.supabase.co','sb_publishable_QJ_4e8-BHl0gOZifGqdv1w_doFwpTlb');
-const panel=document.getElementById('voicePanel');
-const recordButton=document.getElementById('voiceRecord');
+const modes=document.querySelector('.modes');
+const voiceButton=document.querySelector('.mode[data-mode="voice"]');
 
-if(panel&&recordButton){
+if(modes&&voiceButton){
   const wrap=document.createElement('div');
-  wrap.className='notice';
+  wrap.className='card';
+  wrap.style.margin='14px 0 18px';
   const label=document.createElement('div');
   label.className='label';
-  label.textContent='Карточка для голоса';
+  label.textContent='Карточки для голоса';
   const title=document.createElement('h3');
-  title.textContent='Хочешь импульс для импровизации?';
+  title.textContent='Нужен импульс для импровизации?';
   const description=document.createElement('p');
   description.className='small';
-  description.textContent='Можно вытянуть карточку или просто начать звучать без неё.';
+  description.textContent='Вытяни случайную карточку — или выбери «Голос» и импровизируй свободно.';
   const instruction=document.createElement('p');
   instruction.className='small';
+  const actions=document.createElement('div');
+  actions.className='canvasbar';
   const button=document.createElement('button');
   button.type='button';
   button.className='btn secondary';
   button.textContent='Вытянуть карточку';
-  wrap.append(label,title,description,instruction,button);
-  recordButton.before(wrap);
+  actions.append(button);
+  wrap.append(label,title,description,instruction,actions);
+  modes.after(wrap);
 
   let cards=[];
   let lastId=null;
@@ -31,7 +35,7 @@ if(panel&&recordButton){
     if(cards.length)return cards;
     const {data,error}=await s.from('practices').select('id,title,description,instruction,duration_seconds').eq('is_active',true);
     if(error){
-      description.textContent='Не удалось загрузить карточки. Можно начать импровизацию без них.';
+      description.textContent='Не удалось загрузить карточки. Можно выбрать «Голос» и начать без неё.';
       return [];
     }
     cards=data||[];
@@ -50,6 +54,8 @@ if(panel&&recordButton){
     description.textContent=card.description||'';
     instruction.textContent=card.instruction||'';
     button.textContent='Ещё карточку';
+    voiceButton.click();
+    wrap.scrollIntoView({behavior:'smooth',block:'center'});
   }
 
   button.addEventListener('click',drawCard);
