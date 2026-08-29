@@ -18,6 +18,20 @@ const naturalWorks=[
  {id:'borodin-steppes',composer:'Александр Бородин',work:'В Средней Азии',url:'https://commons.wikimedia.org/wiki/Special:Redirect/file/Alexander%20Borodin%20-%20In%20The%20Steppes%20Of%20Central%20Asia.ogg',start:0,durationByLevel:[15,12,9,6],level:3},
  {id:'chopin-nocturne48',composer:'Фредерик Шопен',work:'Ноктюрн до минор, op. 48 №1',url:'https://commons.wikimedia.org/wiki/Special:Redirect/file/Chopin%20Nocturne%20in%20C%20minor%20Op.%2048%20no.%201%20Luke%20Faulkner.ogg',start:0,durationByLevel:[15,12,9,6],level:4}
 ];
+const composerPortraits={
+ 'Людвиг ван Бетховен':'https://commons.wikimedia.org/wiki/Special:FilePath/Beethoven%201820.jpg?width=420',
+ 'Эдвард Григ':'https://commons.wikimedia.org/wiki/Special:FilePath/Edvard%20Grieg%20portrait.jpg?width=420',
+ 'Вольфганг Амадей Моцарт':'https://commons.wikimedia.org/wiki/Special:FilePath/Barbara%20Krafft%20-%20Portr%C3%A4t%20Wolfgang%20Amadeus%20Mozart%20%281819%29.jpg?width=420',
+ 'Пётр Чайковский':'https://commons.wikimedia.org/wiki/Special:FilePath/Tchaikovsky%20by%20Reutlinger.jpg?width=420',
+ 'Антонио Вивальди':'https://commons.wikimedia.org/wiki/Special:FilePath/Antonio%20Vivaldi%20portrait.jpg?width=420',
+ 'Иоганн Себастьян Бах':'https://commons.wikimedia.org/wiki/Special:FilePath/Johann%20Sebastian%20Bach.jpg?width=420',
+ 'Антонин Дворжак':'https://commons.wikimedia.org/wiki/Special:FilePath/Anton%C3%ADn%20Dvo%C5%99%C3%A1k%2C%20portrait.jpg?width=420',
+ 'Бедржих Сметана':'https://commons.wikimedia.org/wiki/Special:FilePath/Bedrich%20Smetana.jpg?width=420',
+ 'Феликс Мендельсон':'https://commons.wikimedia.org/wiki/Special:FilePath/Mendelssohn%20Bartholdy.jpg?width=420',
+ 'Фредерик Шопен':'https://commons.wikimedia.org/wiki/Special:FilePath/Chopin%20portrait%201847.jpg?width=420',
+ 'Иоганнес Брамс':'https://commons.wikimedia.org/wiki/Special:FilePath/Johannes%20Brahms%20portrait.jpg?width=420',
+ 'Александр Бородин':'https://commons.wikimedia.org/wiki/Special:FilePath/Borodin.jpg?width=420'
+};
 const naturalComposers=[...new Set(naturalWorks.map(x=>x.composer))];
 const naturalPlayer=new Audio();naturalPlayer.preload='metadata';naturalPlayer.playsInline=true;
 let naturalTimer=null,quizLevel=1,quizSeen=[],recentComposers=[];
@@ -28,7 +42,8 @@ function availableWorks(){const pool=naturalWorks.filter(w=>w.level<=quizLevel);
 function availableComposers(){return [...new Set(availableWorks().map(x=>x.composer))]}
 function naturalAnswers(correct){const count=quizLevel===1?3:4;let others=shuffled(availableComposers().filter(x=>x!==correct));if(others.length<count-1)others=others.concat(shuffled(naturalComposers.filter(x=>x!==correct&&!others.includes(x))));return shuffled([correct,...others.slice(0,count-1)])}
 function chooseWork(){const pool=availableWorks();let source=pool.filter(w=>!quizSeen.includes(w.id));if(!source.length){quizSeen=[];source=pool}const lastTwo=recentComposers.slice(-2);let diverse=source.filter(w=>!lastTwo.includes(w.composer));if(!diverse.length)diverse=source.filter(w=>w.composer!==recentComposers.at(-1));if(diverse.length)source=diverse;const w=source[Math.floor(Math.random()*source.length)];quizSeen.push(w.id);recentComposers.push(w.composer);if(recentComposers.length>2)recentComposers=recentComposers.slice(-2);return w}
-function naturalNewQuiz(){stopNatural();quizLocked=false;$('quizFeedback').textContent='';$('nextQuiz').classList.add('hidden');currentWork=chooseWork();$('quizRound').textContent=`${quizRound}/10`;const box=$('composerAnswers');box.replaceChildren();for(const name of naturalAnswers(currentWork.composer)){const b=document.createElement('button');b.textContent=name;b.onclick=()=>answerComposer(b,name);box.append(b)}}
+function composerButton(name){const b=document.createElement('button');b.className='composer-card';b.dataset.composer=name;const img=document.createElement('img');img.src=composerPortraits[name]||'';img.alt='';img.loading='lazy';img.decoding='async';img.onerror=()=>{img.classList.add('portrait-fallback');img.removeAttribute('src')};const label=document.createElement('span');label.textContent=name;b.append(img,label);b.onclick=()=>answerComposer(b,name);return b}
+function naturalNewQuiz(){stopNatural();quizLocked=false;$('quizFeedback').textContent='';$('nextQuiz').classList.add('hidden');currentWork=chooseWork();$('quizRound').textContent=`${quizRound}/10`;const box=$('composerAnswers');box.replaceChildren();for(const name of naturalAnswers(currentWork.composer))box.append(composerButton(name))}
 function setQuizLevel(level){quizLevel=level;document.querySelectorAll('[data-quiz-level]').forEach(b=>b.classList.toggle('on',+b.dataset.quizLevel===level));$('quizLevelDescription').textContent=levelDescriptions[level];quizSeen=[];recentComposers=[];resetQuiz()}
 document.querySelectorAll('[data-quiz-level]').forEach(b=>b.onclick=()=>setQuizLevel(+b.dataset.quizLevel));
 newQuiz=naturalNewQuiz;
