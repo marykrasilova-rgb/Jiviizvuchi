@@ -70,7 +70,8 @@ footer{padding:40px 0 70px;color:var(--muted);font-size:14px}
 .splitFeature{display:grid;grid-template-columns:.92fr 1.08fr;gap:18px;align-items:center}
 .banner{padding:28px;border-radius:28px;background:linear-gradient(135deg,#f2e6df,#f8f2ed);border:1px solid var(--line);box-shadow:var(--shadow)}
 .banner h3{font-size:28px;margin-bottom:10px}
-@media(max-width:920px){.grid,.grid2,.grid4,.heroGrid,.mosaic,.splitFeature{grid-template-columns:1fr}.navlinks a:not(.btn){display:none}.hero{padding-top:52px}.section{padding:42px 0}.band{padding:24px}.heroPhoto{min-height:420px}}
+.gamePreview{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:18px}.gamePreview .card{position:relative;overflow:hidden}.gameIcon{display:grid;place-items:center;width:54px;height:54px;border-radius:16px;background:var(--soft);color:var(--accent);font-size:28px;font-weight:800;margin-bottom:18px}
+@media(max-width:920px){.grid,.grid2,.grid4,.heroGrid,.mosaic,.splitFeature,.gamePreview{grid-template-columns:1fr}.navlinks a:not(.btn){display:none}.hero{padding-top:52px}.section{padding:42px 0}.band{padding:24px}.heroPhoto{min-height:420px}}
 </style>
 <script type="application/ld+json">
 {
@@ -114,7 +115,7 @@ footer{padding:40px 0 70px;color:var(--muted);font-size:14px}
  <div class="navin">
   <div class="brand">Мария Красилова</div>
   <div class="navlinks">
-   <a href="#online">Онлайн</a><a href="#group">Группа</a><a href="#personal">Лично</a><a href="/gallery">Галерея</a><a href="#story">Обо мне</a>
+   <a href="#online">Онлайн</a><a href="#group">Группа</a><a href="#personal">Лично</a><a href="/games">Игры</a><a href="/gallery">Галерея</a><a href="#story">Обо мне</a>
    <a class="btn primary" href="https://wa.me/message/KQMCQYKAVSL7J1" target="_blank" rel="noopener">Написать</a>
   </div>
  </div>
@@ -222,6 +223,29 @@ footer{padding:40px 0 70px;color:var(--muted);font-size:14px}
     </div>
    </div>
   </div>
+ </div>
+</section>
+
+<section class="section" id="games">
+ <div class="wrap">
+  <div class="eyebrow">Музыкальные тренажёры</div>
+  <h2>Игры для слуха и музыкальной памяти</h2>
+  <p class="lead">Можно использовать между занятиями: коротко, понятно и с постепенным ростом сложности.</p>
+  <div class="gamePreview">
+   <div class="card">
+    <div class="gameIcon">↗</div>
+    <span class="kicker">Слух</span>
+    <h3>Звуковысотное движение</h3>
+    <p>Определи на слух, куда движется звук: вверх, вниз или остаётся на месте. Несколько уровней сложности.</p>
+   </div>
+   <div class="card">
+    <div class="gameIcon">♫</div>
+    <span class="kicker">Музыкальная память</span>
+    <h3>Угадай композитора</h3>
+    <p>Настоящие фрагменты классической музыки, портреты композиторов, уровни сложности и интерфейс на русском, иврите и английском.</p>
+   </div>
+  </div>
+  <div class="cta"><a class="btn primary" href="/games">Открыть музыкальные игры</a></div>
  </div>
 </section>
 
