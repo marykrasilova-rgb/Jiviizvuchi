@@ -1,31 +1,68 @@
 const $=id=>document.getElementById(id);
-let ctx=null;
-async function audio(){
-  const AC=window.AudioContext||window.webkitAudioContext;
-  if(!AC)throw new Error('Web Audio не поддерживается этим браузером.');
-  if(!ctx)ctx=new AC();
-  if(ctx.state==='suspended')await ctx.resume();
-  return ctx;
-}
+
 function hz(m){return 440*Math.pow(2,(m-69)/12)}
-async function tone(m,start,dur,type='sine',gain=.2){
-  const a=await audio(),o=a.createOscillator(),g=a.createGain();
-  o.type=type;o.frequency.value=hz(m);
-  g.gain.setValueAtTime(.0001,start);
-  g.gain.exponentialRampToValueAtTime(gain,start+.02);
-  g.gain.setValueAtTime(gain,start+Math.max(.03,dur-.06));
-  g.gain.exponentialRampToValueAtTime(.0001,start+dur);
-  o.connect(g).connect(a.destination);o.start(start);o.stop(start+dur+.03)
+const gamePlayer=new Audio();
+gamePlayer.preload='auto';
+gamePlayer.playsInline=true;
+let currentAudioUrl=null;
+
+function writeText(view,offset,text){for(let i=0;i<text.length;i++)view.setUint8(offset+i,text.charCodeAt(i))}
+function makeWav(notes,beat=.38,wave='sine'){
+  const sampleRate=44100;
+  const noteDur=beat*.82;
+  const totalDur=Math.max(.2,notes.length*beat+.08);
+  const samples=Math.ceil(totalDur*sampleRate);
+  const buffer=new ArrayBuffer(44+samples*2);
+  const view=new DataView(buffer);
+  writeText(view,0,'RIFF');
+  view.setUint32(4,36+samples*2,true);
+  writeText(view,8,'WAVE');
+  writeText(view,12,'fmt ');
+  view.setUint32(16,16,true);
+  view.setUint16(20,1,true);
+  view.setUint16(22,1,true);
+  view.setUint32(24,sampleRate,true);
+  view.setUint32(28,sampleRate*2,true);
+  view.setUint16(32,2,true);
+  view.setUint16(34,16,true);
+  writeText(view,36,'data');
+  view.setUint32(40,samples*2,true);
+  const attack=.018,release=.06,level=.78;
+  for(let i=0;i<samples;i++){
+    const t=i/sampleRate;
+    const idx=Math.floor(t/beat);
+    let sample=0;
+    if(idx<notes.length){
+      const local=t-idx*beat;
+      if(local<noteDur){
+        const f=hz(notes[idx]);
+        const env=Math.min(1,local/attack,Math.max(0,(noteDur-local)/release));
+        const phase=2*Math.PI*f*local;
+        let raw=Math.sin(phase);
+        if(wave==='triangle')raw=2/Math.PI*Math.asin(Math.sin(phase));
+        sample=raw*env*level;
+      }
+    }
+    view.setInt16(44+i*2,Math.max(-1,Math.min(1,sample))*32767,true);
+  }
+  return new Blob([buffer],{type:'audio/wav'});
 }
+
 async function playSeq(notes,beat=.38,type='triangle'){
   try{
-    const a=await audio();
-    const t0=a.currentTime+.04;
-    notes.forEach((n,i)=>tone(n,t0+i*beat,beat*.84,type,.2));
-    return new Promise(r=>setTimeout(r,(notes.length*beat+.12)*1000));
+    gamePlayer.pause();
+    gamePlayer.currentTime=0;
+    if(currentAudioUrl)URL.revokeObjectURL(currentAudioUrl);
+    currentAudioUrl=URL.createObjectURL(makeWav(notes,beat,type));
+    gamePlayer.src=currentAudioUrl;
+    gamePlayer.volume=1;
+    await gamePlayer.play();
+    return new Promise(resolve=>{
+      gamePlayer.onended=()=>{resolve();};
+    });
   }catch(e){
     console.error(e);
-    alert('Не удалось включить звук. Проверь громкость телефона и разрешение браузера на воспроизведение аудио.');
+    alert('Не удалось включить звук. Проверь громкость телефона и убедись, что звук для Safari не выключен.');
   }
 }
 
