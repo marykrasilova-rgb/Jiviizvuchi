@@ -1,0 +1,63 @@
+import {createClient} from 'https://esm.sh/@supabase/supabase-js@2.57.4';
+const s=createClient('https://uecdlqlwsrqmocbpgiwj.supabase.co','sb_publishable_QJ_4e8-BHl0gOZifGqdv1w_doFwpTlb');
+
+const modes=document.querySelector('.modes');
+if(modes){
+  const guide=document.createElement('button');
+  guide.type='button';
+  guide.className='surprise-choice';
+  guide.innerHTML='<span class="surprise-icon">✦</span><span><strong>Не знаю, что выбрать</strong><small>Дневник предложит способ начать</small></span>';
+  modes.before(guide);
+  const options=[
+    {mode:'voice',text:'Попробуй голос. Не ищи мелодию — начни с одного звука или выдоха.'},
+    {mode:'movement',text:'Попробуй движение. Начни с одного жеста и позволь телу продолжить.'},
+    {mode:'drawing',text:'Попробуй рисунок. Выбери цвет без объяснений и проведи первую линию.'},
+    {mode:'text',text:'Попробуй текст. Начни со слов «Сейчас во мне…» и не редактируй.'}
+  ];
+  let last=null;
+  guide.addEventListener('click',()=>{
+    const pool=options.filter(x=>x.mode!==last);
+    const pick=pool[Math.floor(Math.random()*pool.length)];
+    last=pick.mode;
+    const target=document.querySelector(`.mode[data-mode="${pick.mode}"]`);
+    target?.click();
+    guide.querySelector('strong').textContent='Попробуй: '+target?.querySelector('strong')?.textContent;
+    guide.querySelector('small').textContent=pick.text;
+    target?.scrollIntoView({behavior:'smooth',block:'center'});
+  });
+}
+
+const history=document.getElementById('historyView');
+if(history){
+  const weekly=document.createElement('div');
+  weekly.className='card weekly-voice';
+  weekly.innerHTML='<div class="label">Неделя в голосе</div><h2>Услышать себя во времени</h2><p class="small">Голосовые следы последних 7 дней — один за другим. Без анализа и оценок.</p><div id="weeklyVoiceList" class="weekly-list"><span class="small">Загружаю…</span></div>';
+  const stats=document.getElementById('stats');
+  stats?.after(weekly);
+
+  async function loadWeek(){
+    const box=document.getElementById('weeklyVoiceList');
+    if(!box)return;
+    const {data:{user}}=await s.auth.getUser();
+    if(!user)return;
+    const since=new Date(Date.now()-7*86400000).toISOString();
+    const {data,error}=await s.from('voice_entries').select('id,created_at,expression_media_path,audio_path_before,modality').eq('user_id',user.id).gte('created_at',since).order('created_at',{ascending:true});
+    if(error){box.innerHTML='<span class="small">Не удалось собрать неделю.</span>';return}
+    const voices=(data||[]).filter(x=>(x.modality==='voice'||x.audio_path_before)&&(x.expression_media_path||x.audio_path_before));
+    box.replaceChildren();
+    if(!voices.length){box.innerHTML='<span class="small">Когда появятся голосовые записи, здесь сложится твоя первая звуковая неделя.</span>';return}
+    for(const [i,x] of voices.entries()){
+      const path=x.expression_media_path||x.audio_path_before;
+      const {data:u}=await s.storage.from('voice-recordings').createSignedUrl(path,1800);
+      if(!u?.signedUrl)continue;
+      const item=document.createElement('div');item.className='weekly-item';
+      const meta=document.createElement('div');meta.className='weekly-meta';meta.textContent=`${i+1}. ${new Date(x.created_at).toLocaleDateString('ru-RU',{weekday:'short',day:'numeric',month:'short'})}`;
+      const audio=document.createElement('audio');audio.controls=true;audio.preload='metadata';audio.src=u.signedUrl;
+      item.append(meta,audio);box.appendChild(item);
+    }
+    const players=[...box.querySelectorAll('audio')];
+    players.forEach((p,i)=>p.addEventListener('ended',()=>players[i+1]?.play().catch(()=>{})));
+  }
+  s.auth.onAuthStateChange((_e,session)=>{if(session?.user)setTimeout(loadWeek,0)});
+  loadWeek();
+}
