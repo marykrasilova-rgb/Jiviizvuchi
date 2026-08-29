@@ -1,6 +1,7 @@
 {
   "rewrites": [
     { "source": "/diary", "destination": "/diary.html" },
+    { "source": "/app.html", "destination": "/diary.html" },
     { "source": "/evidence", "destination": "/evidence.html" }
   ],
   "headers": [
