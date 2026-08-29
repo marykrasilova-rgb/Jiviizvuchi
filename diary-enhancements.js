@@ -62,47 +62,70 @@ if(history){
   loadWeek();
 }
 
-// Friendly authentication layer. Always sends confirmation/reset links back to the public app,
-// never to localhost or a preview origin.
+// Passwordless authentication: one flow for new and returning users.
 const APP_URL='https://mariakrasilovacom.vercel.app/app';
-const authText=e=>{
+const friendlyAuthError=e=>{
   const m=(e?.message||'').toLowerCase();
-  if(m.includes('email not confirmed'))return 'Почта ещё не подтверждена. Открой письмо от сервиса, нажми подтверждение и возвращайся сюда.';
-  if(m.includes('invalid login credentials'))return 'Email или пароль не подошли. Проверь их или нажми «Забыли пароль?». ';
-  if(m.includes('already registered')||m.includes('already been registered'))return 'Такой email уже зарегистрирован. Нажми «У меня уже есть аккаунт — войти».';
-  if(m.includes('password'))return 'Проверь пароль: нужно минимум 8 символов.';
-  if(m.includes('email'))return 'Проверь, правильно ли указан email.';
-  return e?.message||'Не получилось. Попробуй ещё раз.';
+  if(m.includes('rate limit'))return 'Слишком много попыток подряд. Подожди немного и попробуй ещё раз.';
+  if(m.includes('expired'))return 'Код уже устарел. Нажми «Отправить новый код».';
+  if(m.includes('invalid')||m.includes('token'))return 'Код не подошёл. Проверь цифры или запроси новый.';
+  if(m.includes('email'))return 'Проверь, правильно ли написан email.';
+  return 'Не получилось войти. Попробуй ещё раз.';
 };
+
 setTimeout(()=>{
-  const email=document.getElementById('email'),password=document.getElementById('password'),msg=document.getElementById('authMsg');
-  const signup=document.getElementById('signupBtn'),login=document.getElementById('loginBtn'),forgot=document.getElementById('forgotBtn');
-  if(!email||!password||!signup||!login)return;
-  signup.onclick=async()=>{
-    const mail=email.value.trim(),pass=password.value;
-    if(!mail){msg.textContent='Напиши email — только для входа и восстановления доступа.';email.focus();return}
-    if(pass.length<8){msg.textContent='Придумай пароль минимум из 8 символов.';password.focus();return}
-    if(!document.getElementById('acceptTerms')?.checked){msg.textContent='Для личного дневника нужно принять Политику конфиденциальности и Условия.';return}
-    signup.disabled=true;msg.textContent='Создаю личное пространство…';
-    const {data,error}=await s.auth.signUp({email:mail,password:pass,options:{emailRedirectTo:APP_URL,data:{privacy_accepted:true,terms_accepted:true,privacy_version:'2026-08-29',terms_version:'2026-08-29',marketing_consent:!!document.getElementById('marketingConsent')?.checked,research_consent:!!document.getElementById('researchConsent')?.checked}}});
-    signup.disabled=false;
-    if(error){msg.textContent=authText(error);return}
-    if(data.session){location.replace('/app');return}
-    msg.innerHTML='Готово. Я отправила письмо для подтверждения. <b>Нажми ссылку в письме</b> — после неё должен открыться дневник. Если браузер поведёт себя странно, просто вернись на эту страницу и нажми «Войти».';
+  const email=document.getElementById('email');
+  const password=document.getElementById('password');
+  const signup=document.getElementById('signupBtn');
+  const login=document.getElementById('loginBtn');
+  const forgot=document.getElementById('forgotBtn');
+  const terms=document.getElementById('acceptTerms');
+  const msg=document.getElementById('authMsg');
+  if(!email||!signup||!login||!msg)return;
+
+  if(password)password.classList.add('hidden');
+  signup.classList.add('hidden');
+  login.classList.add('hidden');
+  forgot?.classList.add('hidden');
+
+  if(terms&&localStorage.getItem('diaryTermsAccepted')==='1')terms.checked=true;
+
+  const send=document.createElement('button');
+  send.id='sendOtpBtn';send.type='button';send.className='btn';send.textContent='Получить код для входа';
+  const otpBox=document.createElement('div');otpBox.id='otpBox';otpBox.className='hidden';
+  otpBox.innerHTML='<div class="small" style="margin-top:14px">Мы отправили письмо. Введи 6-значный код из письма.</div><input id="otpCode" type="text" inputmode="numeric" autocomplete="one-time-code" maxlength="6" pattern="[0-9]*" placeholder="Код из 6 цифр" style="font-size:24px;text-align:center;letter-spacing:.22em"><button id="verifyOtpBtn" type="button" class="btn">Войти в дневник</button><button id="resendOtpBtn" type="button" class="btn secondary">Отправить новый код</button><div class="small" style="margin-top:10px">Если в письме пока пришла кнопка или ссылка вместо цифр — нажми её. Она тоже автоматически откроет дневник.</div>';
+  const anchor=terms?.closest('label')||email;
+  anchor.after(send,otpBox);
+
+  async function sendCode(){
+    const mail=email.value.trim();
+    if(!mail||!mail.includes('@')){msg.textContent='Напиши свой email.';email.focus();return}
+    if(terms&&!terms.checked){msg.textContent='Чтобы хранить личный дневник, нужно принять Политику конфиденциальности и Условия.';return}
+    if(terms?.checked)localStorage.setItem('diaryTermsAccepted','1');
+    send.disabled=true;msg.textContent='Отправляю код…';
+    const {error}=await s.auth.signInWithOtp({email:mail,options:{shouldCreateUser:true,emailRedirectTo:APP_URL,data:{privacy_accepted:true,terms_accepted:true,privacy_version:'2026-08-29',terms_version:'2026-08-29',marketing_consent:!!document.getElementById('marketingConsent')?.checked,research_consent:!!document.getElementById('researchConsent')?.checked}}});
+    send.disabled=false;
+    if(error){msg.textContent=friendlyAuthError(error);return}
+    localStorage.setItem('diaryLastEmail',mail);
+    msg.textContent='Письмо отправлено.';
+    otpBox.classList.remove('hidden');
+    const code=document.getElementById('otpCode');code?.focus();
+  }
+
+  send.onclick=sendCode;
+  document.getElementById('resendOtpBtn').onclick=sendCode;
+  document.getElementById('verifyOtpBtn').onclick=async()=>{
+    const mail=email.value.trim()||localStorage.getItem('diaryLastEmail')||'';
+    const code=(document.getElementById('otpCode')?.value||'').replace(/\D/g,'').slice(0,6);
+    if(code.length!==6){msg.textContent='Введи 6 цифр из письма.';return}
+    const verify=document.getElementById('verifyOtpBtn');verify.disabled=true;msg.textContent='Проверяю код…';
+    const {error}=await s.auth.verifyOtp({email:mail,token:code,type:'email'});
+    verify.disabled=false;
+    if(error){msg.textContent=friendlyAuthError(error);return}
+    msg.textContent='Готово.';location.replace('/app');
   };
-  login.onclick=async()=>{
-    const mail=email.value.trim(),pass=password.value;
-    if(!mail||!pass){msg.textContent='Введи email и пароль.';return}
-    login.disabled=true;msg.textContent='Вхожу…';
-    const {error}=await s.auth.signInWithPassword({email:mail,password:pass});login.disabled=false;
-    if(error){msg.textContent=authText(error);return}
-    location.replace('/app');
-  };
-  if(forgot)forgot.onclick=async()=>{
-    const mail=email.value.trim();if(!mail){msg.textContent='Сначала напиши email, к которому привязан дневник.';email.focus();return}
-    forgot.disabled=true;const {error}=await s.auth.resetPasswordForEmail(mail,{redirectTo:APP_URL+'?reset=1'});forgot.disabled=false;
-    msg.textContent=error?authText(error):'Письмо для восстановления отправлено. Проверь почту.';
-  };
+  document.getElementById('otpCode')?.addEventListener('input',e=>{e.target.value=e.target.value.replace(/\D/g,'').slice(0,6);if(e.target.value.length===6)document.getElementById('verifyOtpBtn')?.focus()});
+  const remembered=localStorage.getItem('diaryLastEmail');if(remembered&&!email.value)email.value=remembered;
 },0);
 
 if('serviceWorker' in navigator){window.addEventListener('load',()=>navigator.serviceWorker.register('/sw.js').catch(()=>{}))}
