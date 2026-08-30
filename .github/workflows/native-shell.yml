@@ -1,0 +1,56 @@
+name: Generate native mobile projects
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - 'package.json'
+      - 'capacitor.config.ts'
+      - 'native-placeholder/**'
+      - '.github/workflows/native-shell.yml'
+
+jobs:
+  native-projects:
+    runs-on: macos-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Generate iOS and Android projects
+        run: |
+          npx cap add ios
+          npx cap add android
+          npx cap sync
+
+      - name: Add iOS privacy usage descriptions
+        run: |
+          /usr/libexec/PlistBuddy -c "Add :NSMicrophoneUsageDescription string Голосовые записи сохраняются только в вашем личном дневнике." ios/App/App/Info.plist || true
+          /usr/libexec/PlistBuddy -c "Add :NSCameraUsageDescription string Камера используется только для личной записи движения в дневнике." ios/App/App/Info.plist || true
+
+      - name: Package native projects
+        run: |
+          ditto -c -k --sequesterRsrc --keepParent ios ios-project.zip
+          ditto -c -k --sequesterRsrc --keepParent android android-project.zip
+
+      - name: Upload iOS project
+        uses: actions/upload-artifact@v4
+        with:
+          name: ios-project
+          path: ios-project.zip
+          retention-days: 14
+
+      - name: Upload Android project
+        uses: actions/upload-artifact@v4
+        with:
+          name: android-project
+          path: android-project.zip
+          retention-days: 14
