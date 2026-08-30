@@ -1,0 +1,25 @@
+{
+  "name": "maria-music-diary-app",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Native mobile shell for Maria Krasilova's emotional music diary",
+  "scripts": {
+    "mobile:sync": "npx cap sync",
+    "mobile:ios": "npx cap open ios",
+    "mobile:android": "npx cap open android",
+    "mobile:add": "npx cap add ios && npx cap add android"
+  },
+  "dependencies": {
+    "@capacitor/core": "^7.4.3",
+    "@capacitor/app": "^7.0.2",
+    "@capacitor/haptics": "^7.0.2",
+    "@capacitor/keyboard": "^7.0.3",
+    "@capacitor/status-bar": "^7.0.3"
+  },
+  "devDependencies": {
+    "@capacitor/cli": "^7.4.3",
+    "@capacitor/ios": "^7.4.3",
+    "@capacitor/android": "^7.4.3",
+    "typescript": "^5.9.2"
+  }
+}
