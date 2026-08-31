@@ -5,7 +5,8 @@
     { "source": "/app.html", "destination": "/diary.html" },
     { "source": "/evidence", "destination": "/evidence.html" },
     { "source": "/gallery", "destination": "/gallery.html" },
-    { "source": "/games", "destination": "/games.html" }
+    { "source": "/games", "destination": "/games.html" },
+    { "source": "/maria-krasilova", "destination": "/maria-krasilova.html" }
   ],
   "headers": [
     {
