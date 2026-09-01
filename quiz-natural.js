@@ -1,15 +1,26 @@
 // Curated real-recording composer quiz: recognizable themes, 18-second excerpts, automatic flow.
 const naturalWorks=[
- {id:'beethoven5',composer:'Людввиг ван Бетховен'.replace('ввиг','виг'),work:'Симфония №5',url:'https://upload.wikimedia.org/wikipedia/commons/e/e6/Ludwig_van_Beethoven_-_symphony_no._5_in_c_minor%2C_op._67_-_i._allegro_con_brio.ogg',start:.4,level:1},
+ {id:'beethoven5',composer:'Людвиг ван Бетховен',work:'Симфония №5',url:'https://upload.wikimedia.org/wikipedia/commons/e/e6/Ludwig_van_Beethoven_-_symphony_no._5_in_c_minor%2C_op._67_-_i._allegro_con_brio.ogg',start:.4,level:1},
  {id:'grieg-mountain',composer:'Эдвард Григ',work:'В пещере горного короля',url:'https://upload.wikimedia.org/wikipedia/commons/b/bb/Musopen_-_In_the_Hall_Of_The_Mountain_King.ogg',start:1.5,level:1},
  {id:'vivaldi-spring',composer:'Антонио Вивальди',work:'Времена года — Весна',url:'https://commons.wikimedia.org/wiki/Special:Redirect/file/The%20Modena%20Chamber%20Orchestra%20-%20Vivaldi%27s%20Spring%2C%20RV%20269%20-%20I.%20Allegro.ogg',start:.6,level:1},
  {id:'dvorak-newworld',composer:'Антонин Дворжак',work:'Симфония №9 «Из Нового Света» — IV часть',url:'https://commons.wikimedia.org/wiki/Special:Redirect/file/Antonin%20Dvorak%20-%20symphony%20no.%209%20in%20e%20minor%20%27from%20the%20new%20world%27%2C%20op.%2095%20-%20iv.%20allegro%20con%20fuoco.ogg',start:18,level:1},
  {id:'smetana-vltava',composer:'Бедржих Сметана',work:'Влтава',url:'https://commons.wikimedia.org/wiki/Special:Redirect/file/Bedrich%20Smetana%20-%20ma%20vlast%20-%20i.%20vltava%20%27the%20moldau%27.ogg',start:52,level:1},
+ {id:'beethoven-elise',composer:'Людвиг ван Бетховен',work:'К Элизе',url:'https://commons.wikimedia.org/wiki/Special:Redirect/file/Fur%20Elise.ogg',start:.2,level:1},
+ {id:'mozart-einekleine',composer:'Вольфганг Амадей Моцарт',work:'Маленькая ночная серенада — I часть',url:'https://commons.wikimedia.org/wiki/Special:Redirect/file/Mozart%20-%20Eine%20kleine%20Nachtmusik%20-%201.%20Allegro.ogg',start:.4,level:1},
+ {id:'grieg-morning',composer:'Эдвард Григ',work:'Утро',url:'https://commons.wikimedia.org/wiki/Special:Redirect/file/Musopen%20-%20Morning.ogg',start:1.2,level:1},
+
  {id:'mozart-turkish',composer:'Вольфганг Амадей Моцарт',work:'Турецкий марш',url:'https://commons.wikimedia.org/wiki/Special:Redirect/file/Mozart%20-%20Piano%20Sonata%20No.%2011%20in%20A%20major%20-%20III.%20Allegro%20%28Turkish%20March%29.ogg',start:.5,level:2},
  {id:'bach-toccata',composer:'Иоганн Себастьян Бах',work:'Токката и фуга ре минор',url:'https://commons.wikimedia.org/wiki/Special:Redirect/file/Kevin%20MacLeod%20-%20J%20S%20Bach%20Toccata%20and%20Fugue%20in%20D%20Minor.ogg',start:.2,level:2},
  {id:'mendelssohn-wedding',composer:'Феликс Мендельсон',work:'Свадебный марш',url:'https://commons.wikimedia.org/wiki/Special:Redirect/file/A%20Midsummer%20Night%27s%20Dream%20Op.%2061%20Wedding%20March%20%28Mendelssohn%29%20European%20Archive.ogg',start:.5,level:2},
  {id:'tchaikovsky-sugar',composer:'Пётр Чайковский',work:'Щелкунчик — Танец феи Драже',url:'https://commons.wikimedia.org/wiki/Special:Redirect/file/Tchaikovsky%20-%20Dance%20of%20the%20Sugar%20Plum%20Fairy%20-%20The%20Nutcracker.ogg',start:4,level:2},
- {id:'tchaikovsky-swan',composer:'Пётр Чайковский',work:'Лебединое озеро',url:'https://commons.wikimedia.org/wiki/Special:Redirect/file/Tchaikovsky%20-%20Swan%20Lake%20Op.20%20-%20Act%20II%20Pt.1.ogg',start:14,level:2}
+ {id:'tchaikovsky-swan',composer:'Пётр Чайковский',work:'Лебединое озеро',url:'https://commons.wikimedia.org/wiki/Special:Redirect/file/Tchaikovsky%20-%20Swan%20Lake%20Op.20%20-%20Act%20II%20Pt.1.ogg',start:14,level:2},
+ {id:'pachelbel-canon',composer:'Иоганн Пахельбель',work:'Канон ре мажор',url:'https://commons.wikimedia.org/wiki/Special:Redirect/file/Pachelbel%27s%20Canon.ogg',start:.5,level:2},
+ {id:'rimsky-bumblebee',composer:'Николай Римский-Корсаков',work:'Полёт шмеля',url:'https://commons.wikimedia.org/wiki/Special:Redirect/file/Rimsky-Korsakov%20-%20flight%20of%20the%20bumblebee.oga',start:.4,level:2},
+ {id:'saintsaens-swan',composer:'Камиль Сен-Санс',work:'Карнавал животных — Лебедь',url:'https://commons.wikimedia.org/wiki/Special:Redirect/file/JOHN%20MICHEL%20CELLO-SAINT%20SAENS%20CARNIVAL%20OF%20ANIMALS%20THE%20SWAN.ogg',start:1,level:2},
+ {id:'bizet-habanera',composer:'Жорж Бизе',work:'Кармен — Хабанера',url:'https://commons.wikimedia.org/wiki/Special:Redirect/file/Kevin%20MacLeod%20-%20Georges%20Bizet%20Habanera.ogg',start:1,level:2},
+ {id:'debussy-clair',composer:'Клод Дебюсси',work:'Лунный свет',url:'https://commons.wikimedia.org/wiki/Special:Redirect/file/Clair%20de%20lune%20%28Claude%20Debussy%29%20Suite%20bergamasque.ogg',start:1,level:2},
+ {id:'strauss-radetzky',composer:'Иоганн Штраус-отец',work:'Марш Радецкого',url:'https://commons.wikimedia.org/wiki/Special:Redirect/file/Radetzky%20March.ogg',start:1,level:2},
+ {id:'beethoven-moonlight',composer:'Людвиг ван Бетховен',work:'Лунная соната — I часть',url:'https://commons.wikimedia.org/wiki/Special:Redirect/file/Beethoven%20Moonlight%201st%20movement.ogg',start:.5,level:2}
 ];
 
 const composerPortraits={
@@ -21,7 +32,12 @@ const composerPortraits={
  'Иоганн Себастьян Бах':'https://commons.wikimedia.org/wiki/Special:FilePath/Johann%20Sebastian%20Bach.jpg?width=420',
  'Антонин Дворжак':'https://commons.wikimedia.org/wiki/Special:FilePath/Anton%C3%ADn%20Dvo%C5%99%C3%A1k%2C%20portrait.jpg?width=420',
  'Бедржих Сметана':'https://commons.wikimedia.org/wiki/Special:FilePath/Bedrich%20Smetana.jpg?width=420',
- 'Феликс Мендельсон':'https://commons.wikimedia.org/wiki/Special:FilePath/Mendelssohn%20Bartholdy.jpg?width=420'
+ 'Феликс Мендельсон':'https://commons.wikimedia.org/wiki/Special:FilePath/Mendelssohn%20Bartholdy.jpg?width=420',
+ 'Николай Римский-Корсаков':'https://commons.wikimedia.org/wiki/Special:FilePath/Nikolai%20Rimsky-Korsakov%201897.jpg?width=420',
+ 'Камиль Сен-Санс':'https://commons.wikimedia.org/wiki/Special:FilePath/Camille%20Saint-Sa%C3%ABns%20portrait.jpg?width=420',
+ 'Жорж Бизе':'https://commons.wikimedia.org/wiki/Special:FilePath/Georges%20Bizet%20portrait%20early%20career.jpg?width=420',
+ 'Клод Дебюсси':'https://commons.wikimedia.org/wiki/Special:FilePath/Claude%20Debussy%20portrait.jpg?width=420',
+ 'Иоганн Штраус-отец':'https://commons.wikimedia.org/wiki/Special:FilePath/Johann%20Strauss%20I%20%282%29.jpg?width=420'
 };
 
 const naturalComposers=[...new Set(naturalWorks.map(x=>x.composer))];
@@ -32,10 +48,10 @@ let naturalTimer=null,quizLevel=1,quizSeen=[],recentComposers=[],autoAdvanceTime
 const CLIP_SECONDS=18;
 const answerCounts={1:3,2:4,3:5,4:6};
 const levelDescriptions={
- 1:'Знакомство: только самые узнаваемые темы, 3 варианта ответа. Каждый фрагмент — 18 секунд.',
- 2:'Начинающий: весь основной набор узнаваемых тем, 4 варианта ответа. Каждый фрагмент — 18 секунд.',
- 3:'Продвинутый: те же узнаваемые темы, но уже 5 вариантов ответа. Каждый фрагмент — 18 секунд.',
- 4:'Эксперт: полный набор и 6 вариантов ответа. Фрагменты остаются длинными — 18 секунд.'
+ 1:'Знакомство: 8 очень узнаваемых тем, 3 варианта ответа. Каждый фрагмент — 18 секунд.',
+ 2:'Начинающий: большой набор знакомой классики разных эпох и характеров, 4 варианта. Фрагменты — 18 секунд.',
+ 3:'Продвинутый: весь разнообразный каталог, 5 вариантов ответа. Фрагменты — 18 секунд.',
+ 4:'Эксперт: весь каталог и 6 вариантов ответа. Фрагменты остаются длинными — 18 секунд.'
 };
 
 function stopNatural(){clearTimeout(naturalTimer);naturalTimer=null;naturalPlayer.pause()}
