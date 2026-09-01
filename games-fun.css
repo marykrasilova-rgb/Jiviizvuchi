@@ -23,4 +23,19 @@ body{background:linear-gradient(180deg,#fff4cf 0%,#f6f0ff 42%,#e8f8ff 100%)}
 .level-three-card.wrong{box-shadow:0 0 0 4px #ff9b9b,0 12px 28px rgba(190,90,90,.16)!important}
 #pitchFeedback{font-weight:800;color:#6b4a7e;font-size:19px}
 #nextPitch{background:linear-gradient(90deg,#ff6fae,#8d70ff);box-shadow:0 9px 20px rgba(125,84,168,.2)}
-@media(max-width:700px){.level-three-patterns{grid-template-columns:repeat(2,1fr);gap:9px}.level-three-card{min-height:96px!important;padding:5px!important}.level-three-card svg{height:82px!important}#pitchGame .play-zone{padding-top:28px}}
+@media(max-width:700px){
+ #pitchGame .pitch-patterns{grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}
+ #pitchGame .pitch-pattern{min-width:0;min-height:68px!important;padding:3px!important;border-radius:12px!important}
+ #pitchGame .pitch-pattern svg{display:block;width:100%;height:58px!important}
+ #pitchGame .level-three-patterns{grid-template-columns:repeat(2,minmax(0,1fr));gap:7px}
+ #pitchGame .level-three-card{min-height:74px!important;padding:3px!important}
+ #pitchGame .level-three-card svg{height:64px!important}
+ #pitchGame .play-zone{padding-top:28px}
+}
+@media(max-width:390px){
+ #pitchGame .pitch-patterns{gap:5px}
+ #pitchGame .pitch-pattern{min-height:62px!important;padding:2px!important}
+ #pitchGame .pitch-pattern svg{height:52px!important}
+ #pitchGame .level-three-patterns{grid-template-columns:repeat(2,minmax(0,1fr))}
+ #pitchGame .level-three-card svg{height:58px!important}
+}
