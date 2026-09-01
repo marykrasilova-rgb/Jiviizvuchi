@@ -20,7 +20,23 @@ const naturalWorks=[
  {id:'bizet-habanera',composer:'Жорж Бизе',work:'Кармен — Хабанера',url:'https://commons.wikimedia.org/wiki/Special:Redirect/file/Kevin%20MacLeod%20-%20Georges%20Bizet%20Habanera.ogg',start:1,level:2},
  {id:'debussy-clair',composer:'Клод Дебюсси',work:'Лунный свет',url:'https://commons.wikimedia.org/wiki/Special:Redirect/file/Clair%20de%20lune%20%28Claude%20Debussy%29%20Suite%20bergamasque.ogg',start:1,level:2},
  {id:'strauss-radetzky',composer:'Иоганн Штраус-отец',work:'Марш Радецкого',url:'https://commons.wikimedia.org/wiki/Special:Redirect/file/Radetzky%20March.ogg',start:1,level:2},
- {id:'beethoven-moonlight',composer:'Людвиг ван Бетховен',work:'Лунная соната — I часть',url:'https://commons.wikimedia.org/wiki/Special:Redirect/file/Beethoven%20Moonlight%201st%20movement.ogg',start:.5,level:2}
+ {id:'beethoven-moonlight',composer:'Людвиг ван Бетховен',work:'Лунная соната — I часть',url:'https://commons.wikimedia.org/wiki/Special:Redirect/file/Beethoven%20Moonlight%201st%20movement.ogg',start:.5,level:2},
+ {id:'chopin-nocturne2',composer:'Фредерик Шопен',work:'Ноктюрн ми-бемоль мажор, op. 9 №2',url:'https://commons.wikimedia.org/wiki/Special:Redirect/file/Chopin%20Nocturne%20Op%209%20No%202.ogg',start:.5,level:2},
+ {id:'chopin-minute',composer:'Фредерик Шопен',work:'Вальс ре-бемоль мажор «Минутный»',url:'https://commons.wikimedia.org/wiki/Special:Redirect/file/Chopin%20Minute%20Waltz.ogg',start:.3,level:2},
+ {id:'mozart40',composer:'Вольфганг Амадей Моцарт',work:'Симфония №40 — I часть',url:'https://commons.wikimedia.org/wiki/Special:Redirect/file/Mozart%20Symphony%2040%20G%20minor%20-%201%20Molto%20allegro.oga',start:.5,level:2},
+ {id:'beethoven-ode',composer:'Людвиг ван Бетховен',work:'Ода к радости',url:'https://commons.wikimedia.org/wiki/Special:Redirect/file/Ode%20to%20Joy.ogg',start:.2,level:2},
+ {id:'bizet-toreador',composer:'Жорж Бизе',work:'Кармен — Куплеты Тореадора',url:'https://commons.wikimedia.org/wiki/Special:Redirect/file/Bizet%20-%20Carmen%20-%20Toreador%20Song%20%28French%2C%20Musopen%29.ogg',start:6,level:2},
+ {id:'strauss-blue-danube',composer:'Иоганн Штраус-сын',work:'На прекрасном голубом Дунае',url:'https://commons.wikimedia.org/wiki/Special:Redirect/file/Strauss%2C%20An%20der%20sch%C3%B6nen%20blauen%20Donau.ogg',start:55,level:2},
+
+ {id:'rach-prelude',composer:'Сергей Рахманинов',work:'Прелюдия до-диез минор, op. 3 №2',url:'https://commons.wikimedia.org/wiki/Special:Redirect/file/Sergei%20Rachmaninoff%20performs%20Rachmaninoff%27s%20Prelude%20in%20C%20sharp%20minor%2C%20Op.%203.ogg',start:.3,level:3},
+ {id:'handel-hallelujah',composer:'Георг Фридрих Гендель',work:'Мессия — Hallelujah',url:'https://commons.wikimedia.org/wiki/Special:Redirect/file/Handel%20Messiah%20Hallelujah%20by%20Oratorio%20Chorus.ogg',start:1,level:3},
+ {id:'schubert-ave',composer:'Франц Шуберт',work:'Ave Maria',url:'https://commons.wikimedia.org/wiki/Special:Redirect/file/Schubert%20Ave%20Maria%20ukr.oga',start:14,level:3},
+ {id:'chopin-waltz69',composer:'Фредерик Шопен',work:'Вальс си минор, op. 69 №2',url:'https://commons.wikimedia.org/wiki/Special:Redirect/file/Chopin-waltz-op-69-no-2-in-b-minor.ogg',start:.5,level:3},
+ {id:'rimsky-scheherazade',composer:'Николай Римский-Корсаков',work:'Шехеразада',url:'https://commons.wikimedia.org/wiki/Special:Redirect/file/Rimsky-Korsakov.%20Scheherazade%2C%20Symphonic%20Suite%2C%20Op.%2035%20-%2002%20The%20Story%20Of%20The%20Kalandar%20Prince.ogg',start:2,level:3},
+
+ {id:'chopin-nocturne1',composer:'Фредерик Шопен',work:'Ноктюрн си-бемоль минор, op. 9 №1',url:'https://commons.wikimedia.org/wiki/Special:Redirect/file/Chopin%2C%20Nocturne%20No.%201%20in%20B%20Flat%20Minor%2C%20Op.%209.ogg',start:.5,level:4},
+ {id:'brahms3',composer:'Иоганнес Брамс',work:'Симфония №3 — I часть',url:'https://commons.wikimedia.org/wiki/Special:Redirect/file/Johannes%20Brahms%20-%20symphony%20no.%203%20in%20f%20major%2C%20op.%2090%20-%20i.%20allegro%20con%20brio.ogg',start:.5,level:4},
+ {id:'borodin-steppes',composer:'Александр Бородин',work:'В Средней Азии',url:'https://commons.wikimedia.org/wiki/Special:Redirect/file/Alexander%20Borodin%20-%20In%20The%20Steppes%20Of%20Central%20Asia.ogg',start:4,level:4}
 ];
 
 const composerPortraits={
@@ -37,7 +53,14 @@ const composerPortraits={
  'Камиль Сен-Санс':'https://commons.wikimedia.org/wiki/Special:FilePath/Camille%20Saint-Sa%C3%ABns%20portrait.jpg?width=420',
  'Жорж Бизе':'https://commons.wikimedia.org/wiki/Special:FilePath/Georges%20Bizet%20portrait%20early%20career.jpg?width=420',
  'Клод Дебюсси':'https://commons.wikimedia.org/wiki/Special:FilePath/Claude%20Debussy%20portrait.jpg?width=420',
- 'Иоганн Штраус-отец':'https://commons.wikimedia.org/wiki/Special:FilePath/Johann%20Strauss%20I%20%282%29.jpg?width=420'
+ 'Иоганн Штраус-отец':'https://commons.wikimedia.org/wiki/Special:FilePath/Johann%20Strauss%20I%20%282%29.jpg?width=420',
+ 'Фредерик Шопен':'https://commons.wikimedia.org/wiki/Special:FilePath/Frederic%20Chopin%20photo.jpeg?width=420',
+ 'Сергей Рахманинов':'https://commons.wikimedia.org/wiki/Special:FilePath/Sergei%20Rachmaninoff%20cph.3a40575.jpg?width=420',
+ 'Георг Фридрих Гендель':'https://commons.wikimedia.org/wiki/Special:FilePath/George%20Frideric%20Handel%20by%20Balthasar%20Denner.jpg?width=420',
+ 'Франц Шуберт':'https://commons.wikimedia.org/wiki/Special:FilePath/Franz%20Schubert%20by%20Wilhelm%20August%20Rieder%201875.jpg?width=420',
+ 'Иоганн Штраус-сын':'https://commons.wikimedia.org/wiki/Special:FilePath/Johann%20Strauss%20II%20by%20Fritz%20Luckhardt.jpg?width=420',
+ 'Иоганнес Брамс':'https://commons.wikimedia.org/wiki/Special:FilePath/Johannes%20Brahms%20portrait.jpg?width=420',
+ 'Александр Бородин':'https://commons.wikimedia.org/wiki/Special:FilePath/Borodin.jpg?width=420'
 };
 
 const naturalComposers=[...new Set(naturalWorks.map(x=>x.composer))];
@@ -49,14 +72,14 @@ const CLIP_SECONDS=18;
 const answerCounts={1:3,2:4,3:5,4:6};
 const levelDescriptions={
  1:'Знакомство: 8 очень узнаваемых тем, 3 варианта ответа. Каждый фрагмент — 18 секунд.',
- 2:'Начинающий: большой набор знакомой классики разных эпох и характеров, 4 варианта. Фрагменты — 18 секунд.',
- 3:'Продвинутый: весь разнообразный каталог, 5 вариантов ответа. Фрагменты — 18 секунд.',
- 4:'Эксперт: весь каталог и 6 вариантов ответа. Фрагменты остаются длинными — 18 секунд.'
+ 2:'Начинающий: большой набор очень знакомой классики разных эпох, жанров и тембров, 4 варианта. Фрагменты — 18 секунд.',
+ 3:'Продвинутый: более широкий репертуар, включая романтиков, вокальную и симфоническую музыку, 5 вариантов. Фрагменты — 18 секунд.',
+ 4:'Эксперт: весь каталог из 35 произведений и 6 вариантов ответа. Фрагменты остаются длинными — 18 секунд.'
 };
 
 function stopNatural(){clearTimeout(naturalTimer);naturalTimer=null;naturalPlayer.pause()}
 function shuffled(a){return [...a].sort(()=>Math.random()-.5)}
-function availableWorks(){return quizLevel===1?naturalWorks.filter(w=>w.level===1):naturalWorks}
+function availableWorks(){if(quizLevel===1)return naturalWorks.filter(w=>w.level===1);if(quizLevel===2)return naturalWorks.filter(w=>w.level<=2);if(quizLevel===3)return naturalWorks.filter(w=>w.level<=3);return naturalWorks}
 function availableComposers(){return [...new Set(availableWorks().map(x=>x.composer))]}
 function naturalAnswers(correct){const count=answerCounts[quizLevel]||4;let others=shuffled(availableComposers().filter(x=>x!==correct));if(others.length<count-1)others=others.concat(shuffled(naturalComposers.filter(x=>x!==correct&&!others.includes(x))));return shuffled([correct,...others.slice(0,count-1)])}
 function chooseWork(){const pool=availableWorks();let source=pool.filter(w=>!quizSeen.includes(w.id));if(!source.length){quizSeen=[];source=pool}const lastTwo=recentComposers.slice(-2);let diverse=source.filter(w=>!lastTwo.includes(w.composer));if(!diverse.length)diverse=source.filter(w=>w.composer!==recentComposers.at(-1));if(diverse.length)source=diverse;const w=source[Math.floor(Math.random()*source.length)];quizSeen.push(w.id);recentComposers.push(w.composer);if(recentComposers.length>2)recentComposers=recentComposers.slice(-2);return w}
