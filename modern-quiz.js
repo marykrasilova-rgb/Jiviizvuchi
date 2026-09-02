@@ -163,7 +163,7 @@ async function playModernClue(){
    if(feel==='swing'&&i%2)t+=step*.25;
    if(feel==='irregular'&&i%3===2)t+=step*.32;
    const variation=r%2===1&&mqGenre==='jazz'&&i===mqCurrent[2].length-1?2:0;
-   mqTone(ctx,m+variation,t,step*.78,leadType,mqGenre==='academic'?.09:.105);
+   mqTone(ctx,m+variation,t,step*.78,leadType,mqGenre==='academic' ? 0.09 : 0.105);
   });
  }
  setModernAudioStatus('Играет музыкальная подсказка','playing');
