@@ -5,17 +5,20 @@ const REAL_AUDIO_LIBRARY={
   {artist:'Scott Joplin',work:'Maple Leaf Rag',start:4,audio:'https://upload.wikimedia.org/wikipedia/commons/transcoded/d/db/Maple_leaf_rag_-_played_by_Scott_Joplin_1916_V2.ogg/Maple_leaf_rag_-_played_by_Scott_Joplin_1916_V2.ogg.mp3',wiki:'Scott Joplin'},
   {artist:'Mamie Smith',work:'Crazy Blues',start:8,audio:'https://upload.wikimedia.org/wikipedia/commons/transcoded/d/dc/Mamie_Smith%2C_Crazy_Blues.ogg/Mamie_Smith%2C_Crazy_Blues.ogg.mp3',wiki:'Mamie Smith'},
   {artist:'Bessie Smith',work:'Downhearted Blues',start:8,audio:'https://upload.wikimedia.org/wikipedia/commons/transcoded/2/27/Bessie_Smith_-_Downhearted_Blues_%281923%29.ogg/Bessie_Smith_-_Downhearted_Blues_%281923%29.ogg.mp3',wiki:'Bessie Smith'},
-  {artist:"Henderson's Club Alabam' Orchestra",work:'31st Street Blues',start:10,audio:"https://commons.wikimedia.org/wiki/Special:Redirect/file/31st%20Street%20Blues%20-%20Henderson%27s%20Club%20Alabam%27%20Orchestra%20%281923%29.mp3",wiki:'Fletcher Henderson'}
+  {artist:"Henderson's Club Alabam' Orchestra",work:'31st Street Blues',start:10,audio:"https://commons.wikimedia.org/wiki/Special:Redirect/file/31st%20Street%20Blues%20-%20Henderson%27s%20Club%20Alabam%27%20Orchestra%20%281923%29.mp3",wiki:'Fletcher Henderson'},
+  {artist:'Bessie Smith & Louis Armstrong',work:'St. Louis Blues',start:16,audio:'https://commons.wikimedia.org/wiki/Special:Redirect/file/Bessie%20Smith%20and%20Louis%20Armstrong%20-%20The%20St.%20Louis%20Blues%20%281925%29.mp3',wiki:'Bessie Smith'},
+  {artist:'The Knickerbockers',work:'Manhattan',start:10,audio:'https://commons.wikimedia.org/wiki/Special:Redirect/file/Manhattan%20%281925%29%20The%20Knickerbockers%20-%20Columbia%20422-D.mp3',wiki:'The Knickerbockers'}
  ],
  academic:[
   {artist:'Maurice Ravel',work:'Boléro',start:28,audio:'https://upload.wikimedia.org/wikipedia/commons/transcoded/c/c3/Bolero-Maurice_Ravel-1930.ogg/Bolero-Maurice_Ravel-1930.ogg.mp3',wiki:'Maurice Ravel'},
-  {artist:'George Gershwin',work:'Rhapsody in Blue',start:14,audio:"https://commons.wikimedia.org/wiki/Special:Redirect/file/George%20Gershwin%27s%20%22Rhapsody%20in%20Blue%22%20piano%20solo.mp3",wiki:'George Gershwin'}
+  {artist:'George Gershwin',work:'Rhapsody in Blue',start:14,audio:"https://commons.wikimedia.org/wiki/Special:Redirect/file/George%20Gershwin%27s%20%22Rhapsody%20in%20Blue%22%20piano%20solo.mp3",wiki:'George Gershwin'},
+  {artist:'Sergei Rachmaninoff',work:'Prelude in C-sharp minor, Op. 3 No. 2',start:9,audio:"https://commons.wikimedia.org/wiki/Special:Redirect/file/Sergei%20Rachmaninoff%20performs%20Rachmaninoff%27s%20Prelude%20in%20C%20sharp%20minor%2C%20Op.%203.ogg",wiki:'Sergei Rachmaninoff'}
  ]
 };
 const LOCKED_REAL_GENRES={
- rock:'Для рока я убрала синтез. Здесь нужны лицензированные оригинальные записи групп.',
- pop:'Для поп-музыки я убрала синтез. Здесь нужны лицензированные оригинальные записи исполнителей.',
- minimal:'Для современного минимализма я убрала синтез. Подключу только реальные записи с подходящей лицензией.'
+ rock:'Здесь будут только настоящие записи групп. Синтез я убрала; для рок-хитов нужен лицензированный аудиокаталог.',
+ pop:'Здесь будут только настоящие записи исполнителей. Синтез я убрала; для поп-хитов нужен лицензированный аудиокаталог.',
+ minimal:'Для современного минимализма оставлю только реальные записи с подходящей лицензией.'
 };
 const mqGenreTitles={academic:'Академическая музыка XX века',jazz:'Ранний джаз и блюз',rock:'Рок',pop:'Поп',minimal:'Минимализм'};
 let mqGenre='jazz',mqRound=0,mqScore=0,mqCurrent=null,mqQueue=[],mqAudio=null,mqStopTimer=null;
@@ -30,15 +33,16 @@ function playRealExcerpt(){
  mqAudio=new Audio(mqCurrent.audio);
  mqAudio.preload='auto';
  mqAudio.volume=1;
+ mqAudio.playsInline=true;
  const feedback=mqEl('modernFeedback');
  if(feedback)feedback.textContent='Загружаю реальную запись…';
  const begin=()=>{
   try{mqAudio.currentTime=mqCurrent.start||0}catch(e){}
   const p=mqAudio.play();
-  if(p&&p.then)p.then(()=>{if(feedback)feedback.textContent='Играет фрагмент · около 18 секунд';mqStopTimer=setTimeout(()=>{try{mqAudio.pause()}catch(e){}},18000)}).catch(()=>{if(feedback)feedback.textContent='Нажми «Слушать» ещё раз — iPhone иногда блокирует первый запуск звука.'});
+  if(p&&p.then)p.then(()=>{if(feedback)feedback.textContent='Играет настоящий фрагмент · около 18 секунд';mqStopTimer=setTimeout(()=>{try{mqAudio.pause()}catch(e){}},18000)}).catch(()=>{if(feedback)feedback.textContent='Нажми «Слушать фрагмент» — iPhone иногда блокирует первый запуск.'});
  };
  if(mqAudio.readyState>=1)begin(); else mqAudio.addEventListener('loadedmetadata',begin,{once:true});
- mqAudio.addEventListener('error',()=>{if(feedback)feedback.textContent='Не удалось загрузить эту запись. Переключаю вопрос.'},{once:true});
+ mqAudio.addEventListener('error',()=>{if(feedback)feedback.textContent='Эта запись сейчас не загрузилась. Нажми другой жанр и вернись или попробуй ещё раз.'},{once:true});
 }
 async function fetchPhoto(title){
  if(photoCache.has(title))return photoCache.get(title);
@@ -54,7 +58,7 @@ async function hydratePhotos(){
 }
 function answerPool(){
  const base=tracks().map(x=>({name:x.artist,wiki:x.wiki}));
- const fallback={jazz:[['Louis Armstrong','Louis Armstrong'],['Duke Ellington','Duke Ellington'],['King Oliver','King Oliver']],academic:[['Claude Debussy','Claude Debussy'],['Igor Stravinsky','Igor Stravinsky'],['Sergei Rachmaninoff','Sergei Rachmaninoff'],['Sergei Prokofiev','Sergei Prokofiev']]}[mqGenre]||[];
+ const fallback={jazz:[['Louis Armstrong','Louis Armstrong'],['Duke Ellington','Duke Ellington'],['King Oliver','King Oliver']],academic:[['Claude Debussy','Claude Debussy'],['Igor Stravinsky','Igor Stravinsky'],['Sergei Prokofiev','Sergei Prokofiev']]}[mqGenre]||[];
  fallback.forEach(x=>base.push({name:x[0],wiki:x[1]}));
  return base;
 }
@@ -66,10 +70,11 @@ function buildQuestion(){
  mqEl('modernScore').textContent=mqScore;
  mqEl('modernQuizTitle').textContent=mqGenreTitles[mqGenre]||'Угадай';
  mqEl('modernFeedback').textContent='';
+ const listenLabel=mqEl('modernListen')?.querySelector('span');if(listenLabel)listenLabel.textContent='Слушать фрагмент';
  const pool=answerPool();
  const wrong=mqShuffle(pool.filter(x=>x.name!==mqCurrent.artist)).slice(0,3);
  const choices=mqShuffle([{name:mqCurrent.artist,wiki:mqCurrent.wiki},...wrong]);
- mqEl('modernAnswers').innerHTML=choices.map(x=>`<button type="button" class="artist-answer-card" data-modern-answer="${x.name.replaceAll('&','&amp;').replaceAll('"','&quot;')}" data-photo-title="${x.wiki.replaceAll('&','&amp;').replaceAll('"','&quot;')}"><span class="artist-photo"><span class="artist-placeholder">♪</span><img hidden alt=""></span><b>${x.name}</b></button>`).join('');
+ mqEl('modernAnswers').innerHTML=choices.map(x=>`<button type="button" class="artist-answer-card" data-modern-answer="${x.name.replaceAll('&','&amp;').replaceAll('"','&quot;')}" data-photo-title="${x.wiki.replaceAll('&','&amp;').replaceAll('"','&quot;')}"><span class="artist-photo"><span class="artist-placeholder">♪</span><img hidden alt="${x.name.replaceAll('&','&amp;').replaceAll('"','&quot;')}"></span><b>${x.name}</b></button>`).join('');
  mqEl('modernAnswers').querySelectorAll('button').forEach(btn=>btn.addEventListener('click',()=>answerQuestion(btn,btn.dataset.modernAnswer)));
  hydratePhotos();
  return true;
@@ -77,16 +82,15 @@ function buildQuestion(){
 function nextQuestionAndPlay(){if(buildQuestion())playRealExcerpt()}
 function answerQuestion(btn,name){
  if(name!==mqCurrent.artist){btn.classList.add('wrong');btn.disabled=true;mqEl('modernFeedback').textContent='Не она. Попробуй ещё.';if(typeof recordGameAnswer==='function')recordGameAnswer('modern',false);return}
- btn.classList.add('correct');mqEl('modernAnswers').querySelectorAll('button').forEach(b=>b.disabled=true);mqScore++;mqEl('modernScore').textContent=mqScore;if(typeof recordGameAnswer==='function')recordGameAnswer('modern',true);mqRound++;
+ btn.classList.add('correct');mqEl('modernAnswers').querySelectorAll('button').forEach(b=>b.disabled=true);mqScore++;mqEl('modernScore').textContent=mqScore;mqEl('modernFeedback').innerHTML=`Верно! <b>${mqCurrent.artist}</b> — ${mqCurrent.work}`;if(typeof recordGameAnswer==='function')recordGameAnswer('modern',true);mqRound++;
  if(mqRound>=10){showFinish();return}
- // Start the next real recording inside the same user gesture so iPhone allows audio.
  nextQuestionAndPlay();
 }
 function showFinish(){stopRealAudio();mqEl('modernQuizPlay').classList.add('hidden');const f=mqEl('modernFinish');f.classList.remove('hidden');f.innerHTML=`<h3>${mqScore}/10</h3><p>${mqScore>=8?'Отлично!':mqScore>=5?'Очень хорошо.':'Ещё один раунд — и начнёшь узнавать увереннее.'}</p><button class="primary" id="modernAgain">Сыграть ещё</button>`;mqEl('modernAgain').onclick=()=>startModernQuiz(mqGenre)}
 function showLockedGenre(key){
  stopRealAudio();document.getElementById('modernHub')?.classList.remove('hidden');mqEl('modernQuizPlay')?.classList.add('hidden');mqEl('modernFinish')?.classList.add('hidden');
  let note=document.getElementById('genreNotice');if(!note){note=document.createElement('div');note.id='genreNotice';note.className='genre-notice';document.querySelector('#modernHub .genre-grid')?.after(note)}
- note.classList.remove('hidden');note.innerHTML=`<strong>${mqGenreTitles[key]}</strong><p>${LOCKED_REAL_GENRES[key]}</p><small>Синтетические «электрические» звуки больше не используются.</small>`;note.scrollIntoView({behavior:'smooth',block:'center'});
+ note.classList.remove('hidden');note.innerHTML=`<strong>${mqGenreTitles[key]}</strong><p>${LOCKED_REAL_GENRES[key]}</p><small>Электрические синтезированные подсказки больше не используются.</small>`;note.scrollIntoView({behavior:'smooth',block:'center'});
 }
 function startModernQuiz(key){
  if(LOCKED_REAL_GENRES[key]){showLockedGenre(key);return}
