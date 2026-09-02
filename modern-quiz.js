@@ -12,7 +12,14 @@ const REAL_AUDIO_LIBRARY={
  academic:[
   {artist:'Maurice Ravel',work:'Boléro',start:28,audio:'https://upload.wikimedia.org/wikipedia/commons/transcoded/c/c3/Bolero-Maurice_Ravel-1930.ogg/Bolero-Maurice_Ravel-1930.ogg.mp3',wiki:'Maurice Ravel'},
   {artist:'George Gershwin',work:'Rhapsody in Blue',start:14,audio:"https://commons.wikimedia.org/wiki/Special:Redirect/file/George%20Gershwin%27s%20%22Rhapsody%20in%20Blue%22%20piano%20solo.mp3",wiki:'George Gershwin'},
-  {artist:'Sergei Rachmaninoff',work:'Prelude in C-sharp minor, Op. 3 No. 2',start:9,audio:"https://commons.wikimedia.org/wiki/Special:Redirect/file/Sergei%20Rachmaninoff%20performs%20Rachmaninoff%27s%20Prelude%20in%20C%20sharp%20minor%2C%20Op.%203.ogg",wiki:'Sergei Rachmaninoff'}
+  {artist:'Sergei Rachmaninoff',work:'Prelude in C-sharp minor, Op. 3 No. 2',start:9,audio:"https://commons.wikimedia.org/wiki/Special:Redirect/file/Sergei%20Rachmaninoff%20performs%20Rachmaninoff%27s%20Prelude%20in%20C%20sharp%20minor%2C%20Op.%203.ogg",wiki:'Sergei Rachmaninoff'},
+  {artist:'Claude Debussy',work:'Clair de lune',start:12,audio:'https://commons.wikimedia.org/wiki/Special:Redirect/file/Clair%20de%20lune%20%28Claude%20Debussy%29%20Suite%20bergamasque.ogg',wiki:'Claude Debussy'},
+  {artist:'Gustav Holst',work:'Mars, The Bringer of War',start:18,audio:'https://commons.wikimedia.org/wiki/Special:Redirect/file/Holst-%20mars.ogg',wiki:'Gustav Holst'},
+  {artist:'Béla Bartók',work:'Sonatina',start:6,audio:'https://commons.wikimedia.org/wiki/Special:Redirect/file/Bartok%20-%20Sonatina.ogg',wiki:'Béla Bartók'},
+  {artist:'Igor Stravinsky',work:'The Rite of Spring',start:20,audio:'https://commons.wikimedia.org/wiki/Special:Redirect/file/Ostrowski%20The-Rite-of-Springs.ogg',wiki:'Igor Stravinsky'},
+  {artist:'Sergei Prokofiev',work:'Piano Sonata No. 2',start:18,audio:'https://commons.wikimedia.org/wiki/Special:Redirect/file/Prokofiev%20-%20Sonata%20No.%202%20%28E.M.%20Zinger%29.ogg',wiki:'Sergei Prokofiev'},
+  {artist:'Gustav Mahler',work:'Symphony No. 5 — Trauermarsch',start:8,audio:'https://commons.wikimedia.org/wiki/Special:Redirect/file/Mahler%20Symphony%20No.%205%2C%20I.%20Trauermarsch.ogg',wiki:'Gustav Mahler'},
+  {artist:'Arnold Schoenberg',work:'String Quartet No. 2 — IV',start:20,audio:'https://commons.wikimedia.org/wiki/Special:Redirect/file/Schoenberg%20Quartet%20No.%202%204th%20movement.OGG',wiki:'Arnold Schoenberg'}
  ]
 };
 const LOCKED_REAL_GENRES={
@@ -42,7 +49,7 @@ function playRealExcerpt(){
   if(p&&p.then)p.then(()=>{if(feedback)feedback.textContent='Играет настоящий фрагмент · около 18 секунд';mqStopTimer=setTimeout(()=>{try{mqAudio.pause()}catch(e){}},18000)}).catch(()=>{if(feedback)feedback.textContent='Нажми «Слушать фрагмент» — iPhone иногда блокирует первый запуск.'});
  };
  if(mqAudio.readyState>=1)begin(); else mqAudio.addEventListener('loadedmetadata',begin,{once:true});
- mqAudio.addEventListener('error',()=>{if(feedback)feedback.textContent='Эта запись сейчас не загрузилась. Нажми другой жанр и вернись или попробуй ещё раз.'},{once:true});
+ mqAudio.addEventListener('error',()=>{if(feedback)feedback.textContent='Эта запись сейчас не загрузилась. Нажми «Слушать фрагмент» ещё раз.'},{once:true});
 }
 async function fetchPhoto(title){
  if(photoCache.has(title))return photoCache.get(title);
@@ -58,7 +65,7 @@ async function hydratePhotos(){
 }
 function answerPool(){
  const base=tracks().map(x=>({name:x.artist,wiki:x.wiki}));
- const fallback={jazz:[['Louis Armstrong','Louis Armstrong'],['Duke Ellington','Duke Ellington'],['King Oliver','King Oliver']],academic:[['Claude Debussy','Claude Debussy'],['Igor Stravinsky','Igor Stravinsky'],['Sergei Prokofiev','Sergei Prokofiev']]}[mqGenre]||[];
+ const fallback={jazz:[['Louis Armstrong','Louis Armstrong'],['Duke Ellington','Duke Ellington'],['King Oliver','King Oliver']],academic:[['Erik Satie','Erik Satie'],['Alexander Scriabin','Alexander Scriabin']]}[mqGenre]||[];
  fallback.forEach(x=>base.push({name:x[0],wiki:x[1]}));
  return base;
 }
@@ -81,7 +88,7 @@ function buildQuestion(){
 }
 function nextQuestionAndPlay(){if(buildQuestion())playRealExcerpt()}
 function answerQuestion(btn,name){
- if(name!==mqCurrent.artist){btn.classList.add('wrong');btn.disabled=true;mqEl('modernFeedback').textContent='Не она. Попробуй ещё.';if(typeof recordGameAnswer==='function')recordGameAnswer('modern',false);return}
+ if(name!==mqCurrent.artist){btn.classList.add('wrong');btn.disabled=true;mqEl('modernFeedback').textContent='Не он. Попробуй ещё.';if(typeof recordGameAnswer==='function')recordGameAnswer('modern',false);return}
  btn.classList.add('correct');mqEl('modernAnswers').querySelectorAll('button').forEach(b=>b.disabled=true);mqScore++;mqEl('modernScore').textContent=mqScore;mqEl('modernFeedback').innerHTML=`Верно! <b>${mqCurrent.artist}</b> — ${mqCurrent.work}`;if(typeof recordGameAnswer==='function')recordGameAnswer('modern',true);mqRound++;
  if(mqRound>=10){showFinish();return}
  nextQuestionAndPlay();
