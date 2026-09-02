@@ -1,0 +1,21 @@
+// Persistent levels and achievements for the music games. Stored only on this device.
+const GAME_PROGRESS_KEY='mariaMusicGameProgressV1';
+const ACHIEVEMENTS=[
+ {id:'first',icon:'🎵',title:'Первая нотка',text:'Ответить на первый вопрос',test:p=>p.answers>=1},
+ {id:'ten',icon:'⭐',title:'Десять нот',text:'Ответить на 10 вопросов',test:p=>p.answers>=10},
+ {id:'listener',icon:'👂',title:'Чуткое ухо',text:'Дать 20 правильных ответов',test:p=>p.correct>=20},
+ {id:'pitch5',icon:'↗️',title:'Мелодический следопыт',text:'Набрать 5 правильных в игре про направление',test:p=>p.pitchCorrect>=5},
+ {id:'composer5',icon:'🎼',title:'Знаток композиторов',text:'Угадать 5 композиторов',test:p=>p.quizCorrect>=5},
+ {id:'fifty',icon:'🏆',title:'Музыкальный исследователь',text:'Ответить на 50 вопросов',test:p=>p.answers>=50}
+];
+function loadGameProgress(){try{return Object.assign({answers:0,correct:0,pitchCorrect:0,quizCorrect:0,unlocked:[]},JSON.parse(localStorage.getItem(GAME_PROGRESS_KEY)||'{}'))}catch(e){return{answers:0,correct:0,pitchCorrect:0,quizCorrect:0,unlocked:[]}}}
+let gameProgress=loadGameProgress();
+function playerLevel(){return Math.max(1,Math.floor(gameProgress.answers/10)+1)}
+function saveGameProgress(){localStorage.setItem(GAME_PROGRESS_KEY,JSON.stringify(gameProgress))}
+function progressForNext(){const n=gameProgress.answers%10;return{now:n,total:10,percent:n*10}}
+function ensureProgressPanel(){let box=document.getElementById('progressPanel');if(box)return box;box=document.createElement('section');box.id='progressPanel';box.className='progress-panel';const chooser=document.getElementById('chooser');chooser?.parentNode?.insertBefore(box,chooser);return box}
+function renderGameProgress(){const box=ensureProgressPanel(),p=progressForNext(),lvl=playerLevel();if(!box)return;box.innerHTML=`<div class="progress-top"><div><small>Твой музыкальный уровень</small><strong>Уровень ${lvl}</strong></div><div class="progress-count">${gameProgress.answers} заданий</div></div><div class="progress-track"><i style="width:${p.percent}%"></i></div><div class="progress-next">${p.now}/10 до уровня ${lvl+1}</div><div class="achievement-row">${ACHIEVEMENTS.map(a=>`<div class="achievement ${gameProgress.unlocked.includes(a.id)?'earned':'locked'}" title="${a.text}"><span>${a.icon}</span><b>${a.title}</b><small>${gameProgress.unlocked.includes(a.id)?'Получено':a.text}</small></div>`).join('')}</div>`}
+function showAchievement(a){let toast=document.getElementById('achievementToast');if(!toast){toast=document.createElement('div');toast.id='achievementToast';toast.className='achievement-toast';document.body.append(toast)}toast.innerHTML=`<span>${a.icon}</span><div><small>Новое достижение!</small><strong>${a.title}</strong></div>`;toast.classList.add('show');setTimeout(()=>toast.classList.remove('show'),2200)}
+function recordGameAnswer(game,correct){gameProgress.answers++;if(correct){gameProgress.correct++;if(game==='pitch')gameProgress.pitchCorrect++;if(game==='quiz')gameProgress.quizCorrect++}const fresh=[];ACHIEVEMENTS.forEach(a=>{if(!gameProgress.unlocked.includes(a.id)&&a.test(gameProgress)){gameProgress.unlocked.push(a.id);fresh.push(a)}});saveGameProgress();renderGameProgress();fresh.forEach((a,i)=>setTimeout(()=>showAchievement(a),i*2300))}
+// Observe score/round changes rather than replacing game logic, so it works with autoplay flows.
+document.addEventListener('DOMContentLoaded',()=>{renderGameProgress();let lastPitch='1/10|0',lastQuiz='1/10|0';const observer=new MutationObserver(()=>{const pr=document.getElementById('pitchRound')?.textContent||'',ps=document.getElementById('pitchScore')?.textContent||'0',qr=document.getElementById('quizRound')?.textContent||'',qs=document.getElementById('quizScore')?.textContent||'0';const pkey=pr+'|'+ps,qkey=qr+'|'+qs;if(pkey!==lastPitch){const old=lastPitch.split('|'),neu=pkey.split('|');if(+neu[1]>+old[1]||neu[0]!==old[0]&&old[0])recordGameAnswer('pitch',+neu[1]>+old[1]);lastPitch=pkey}if(qkey!==lastQuiz){const old=lastQuiz.split('|'),neu=qkey.split('|');if(+neu[1]>+old[1]||neu[0]!==old[0]&&old[0])recordGameAnswer('quiz',+neu[1]>+old[1]);lastQuiz=qkey}});observer.observe(document.body,{subtree:true,childList:true,characterData:true});});
