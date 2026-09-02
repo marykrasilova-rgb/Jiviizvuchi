@@ -20,7 +20,7 @@ const REAL_AUDIO_LIBRARY={
   {artist:'Claude Debussy',work:'Clair de lune',start:12,audio:'https://commons.wikimedia.org/wiki/Special:Redirect/file/Clair%20de%20lune%20%28Claude%20Debussy%29%20Suite%20bergamasque.ogg',wiki:'Claude Debussy'},
   {artist:'Gustav Holst',work:'Mars, The Bringer of War',start:18,audio:'https://commons.wikimedia.org/wiki/Special:Redirect/file/Holst-%20mars.ogg',wiki:'Gustav Holst'},
   {artist:'Béla Bartók',work:'Sonatina',start:6,audio:'https://commons.wikimedia.org/wiki/Special:Redirect/file/Bartok%20-%20Sonatina.ogg',wiki:'Béla Bartók'},
-  {artist:'Igor Stravinsky',work:'The Rite of Spring',start:20,audio:'https://commons.wikimedia.org/wiki/Special:Redirect/file/Ostrowski%20The-Rite-of-Springs.ogg',wiki:'Igor Stravinsky'},
+  {artist:'Igor Stravinsky',work:'The Firebird — Infernal Dance',start:8,audio:'https://commons.wikimedia.org/wiki/Special:Redirect/file/Infernal%20Dance%20from%20The%20Firebird%20by%20Stravinsky.ogg',wiki:'Igor Stravinsky'},
   {artist:'Sergei Prokofiev',work:'Piano Sonata No. 2',start:18,audio:'https://commons.wikimedia.org/wiki/Special:Redirect/file/Prokofiev%20-%20Sonata%20No.%202%20%28E.M.%20Zinger%29.ogg',wiki:'Sergei Prokofiev'},
   {artist:'Gustav Mahler',work:'Symphony No. 5 — Trauermarsch',start:8,audio:'https://commons.wikimedia.org/wiki/Special:Redirect/file/Mahler%20Symphony%20No.%205%2C%20I.%20Trauermarsch.ogg',wiki:'Gustav Mahler'},
   {artist:'Arnold Schoenberg',work:'String Quartet No. 2 — IV',start:20,audio:'https://commons.wikimedia.org/wiki/Special:Redirect/file/Schoenberg%20Quartet%20No.%202%204th%20movement.OGG',wiki:'Arnold Schoenberg'}
