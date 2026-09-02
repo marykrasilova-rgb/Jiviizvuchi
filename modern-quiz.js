@@ -2,12 +2,16 @@
 // Public-domain / CC audio is streamed from Wikimedia Commons.
 const REAL_AUDIO_LIBRARY={
  jazz:[
-  {artist:'Scott Joplin',work:'Maple Leaf Rag',start:4,audio:'https://upload.wikimedia.org/wikipedia/commons/transcoded/d/db/Maple_leaf_rag_-_played_by_Scott_Joplin_1916_V2.ogg/Maple_leaf_rag_-_played_by_Scott_Joplin_1916_V2.ogg.mp3',wiki:'Scott Joplin'},
-  {artist:'Mamie Smith',work:'Crazy Blues',start:8,audio:'https://upload.wikimedia.org/wikipedia/commons/transcoded/d/dc/Mamie_Smith%2C_Crazy_Blues.ogg/Mamie_Smith%2C_Crazy_Blues.ogg.mp3',wiki:'Mamie Smith'},
-  {artist:'Bessie Smith',work:'Downhearted Blues',start:8,audio:'https://upload.wikimedia.org/wikipedia/commons/transcoded/2/27/Bessie_Smith_-_Downhearted_Blues_%281923%29.ogg/Bessie_Smith_-_Downhearted_Blues_%281923%29.ogg.mp3',wiki:'Bessie Smith'},
-  {artist:"Henderson's Club Alabam' Orchestra",work:'31st Street Blues',start:10,audio:"https://commons.wikimedia.org/wiki/Special:Redirect/file/31st%20Street%20Blues%20-%20Henderson%27s%20Club%20Alabam%27%20Orchestra%20%281923%29.mp3",wiki:'Fletcher Henderson'},
-  {artist:'Bessie Smith & Louis Armstrong',work:'St. Louis Blues',start:16,audio:'https://commons.wikimedia.org/wiki/Special:Redirect/file/Bessie%20Smith%20and%20Louis%20Armstrong%20-%20The%20St.%20Louis%20Blues%20%281925%29.mp3',wiki:'Bessie Smith'},
-  {artist:'The Knickerbockers',work:'Manhattan',start:10,audio:'https://commons.wikimedia.org/wiki/Special:Redirect/file/Manhattan%20%281925%29%20The%20Knickerbockers%20-%20Columbia%20422-D.mp3',wiki:'The Knickerbockers'}
+  {artist:'Scott Joplin',work:'Maple Leaf Rag',year:1916,era:'Ragtime',start:4,audio:'https://upload.wikimedia.org/wikipedia/commons/transcoded/d/db/Maple_leaf_rag_-_played_by_Scott_Joplin_1916_V2.ogg/Maple_leaf_rag_-_played_by_Scott_Joplin_1916_V2.ogg.mp3',wiki:'Scott Joplin'},
+  {artist:'Mamie Smith',work:'Crazy Blues',year:1920,era:'Classic blues',start:8,audio:'https://upload.wikimedia.org/wikipedia/commons/transcoded/d/dc/Mamie_Smith%2C_Crazy_Blues.ogg/Mamie_Smith%2C_Crazy_Blues.ogg.mp3',wiki:'Mamie Smith'},
+  {artist:'Bessie Smith',work:'Downhearted Blues',year:1923,era:'Classic blues',start:8,audio:'https://upload.wikimedia.org/wikipedia/commons/transcoded/2/27/Bessie_Smith_-_Downhearted_Blues_%281923%29.ogg/Bessie_Smith_-_Downhearted_Blues_%281923%29.ogg.mp3',wiki:'Bessie Smith'},
+  {artist:"Henderson's Club Alabam' Orchestra",work:'31st Street Blues',year:1923,era:'Early big band',start:10,audio:"https://commons.wikimedia.org/wiki/Special:Redirect/file/31st%20Street%20Blues%20-%20Henderson%27s%20Club%20Alabam%27%20Orchestra%20%281923%29.mp3",wiki:'Fletcher Henderson'},
+  {artist:"King Oliver's Creole Jazz Band",work:'Dippermouth Blues',year:1923,era:'New Orleans jazz',start:8,audio:"https://commons.wikimedia.org/wiki/Special:Redirect/file/Dippermouth%20Blues%20-%20KING%20OLIVER%27S%20JAZZ%20BAND.flac",wiki:"King Oliver's Creole Jazz Band"},
+  {artist:"King Oliver's Creole Jazz Band",work:'Krooked Blues',year:1923,era:'New Orleans jazz',start:10,audio:"https://commons.wikimedia.org/wiki/Special:Redirect/file/King%20Oliver%27s%20Creole%20Jazz%20Band--%20%22Krooked%20Blues%22%20%281923%29.ogg",wiki:"King Oliver's Creole Jazz Band"},
+  {artist:'Bessie Smith & Louis Armstrong',work:'St. Louis Blues',year:1925,era:'Classic blues / jazz',start:16,audio:'https://commons.wikimedia.org/wiki/Special:Redirect/file/Bessie%20Smith%20and%20Louis%20Armstrong%20-%20The%20St.%20Louis%20Blues%20%281925%29.mp3',wiki:'Bessie Smith'},
+  {artist:'The Knickerbockers',work:'Manhattan',year:1925,era:'Jazz age',start:10,audio:'https://commons.wikimedia.org/wiki/Special:Redirect/file/Manhattan%20%281925%29%20The%20Knickerbockers%20-%20Columbia%20422-D.mp3',wiki:'The Knickerbockers'},
+  {artist:'St. Louis Rhythm Kings',work:"She's My Sheba, I'm Her Sheik",year:1925,era:'New Orleans-style jazz',start:12,audio:'https://commons.wikimedia.org/wiki/Special:Redirect/file/%22She%27s%20my%20Sheba%2C%20I%27m%20Her%20Sheik%22%20%281925%29%2C%20by%20the%20St.%20Louis%20Rhythm%20Kings.oga',wiki:'St. Louis Rhythm Kings'},
+  {artist:'Golden Gate Orchestra',work:'Charleston',year:1925,era:'Jazz age / dance band',start:12,audio:'https://commons.wikimedia.org/wiki/Special:Redirect/file/Charleston%20%281925%29%20-%20Edison%2051542-R.ogg',wiki:'Golden Gate Orchestra'}
  ],
  academic:[
   {artist:'Maurice Ravel',work:'Boléro',start:28,audio:'https://upload.wikimedia.org/wikipedia/commons/transcoded/c/c3/Bolero-Maurice_Ravel-1930.ogg/Bolero-Maurice_Ravel-1930.ogg.mp3',wiki:'Maurice Ravel'},
@@ -27,12 +31,13 @@ const LOCKED_REAL_GENRES={
  pop:'Здесь будут только настоящие записи исполнителей. Синтез я убрала; для поп-хитов нужен лицензированный аудиокаталог.',
  minimal:'Для современного минимализма оставлю только реальные записи с подходящей лицензией.'
 };
-const mqGenreTitles={academic:'Академическая музыка XX века',jazz:'Ранний джаз и блюз',rock:'Рок',pop:'Поп',minimal:'Минимализм'};
+const mqGenreTitles={academic:'Академическая музыка XX века',jazz:'Джаз',rock:'Рок',pop:'Поп',minimal:'Минимализм'};
 let mqGenre='jazz',mqRound=0,mqScore=0,mqCurrent=null,mqQueue=[],mqAudio=null,mqStopTimer=null;
 const mqEl=id=>document.getElementById(id);
 const mqShuffle=a=>[...a].sort(()=>Math.random()-.5);
 const photoCache=new Map();
 function tracks(){return REAL_AUDIO_LIBRARY[mqGenre]||[]}
+function roundTarget(){return Math.min(10,tracks().length)}
 function stopRealAudio(){if(mqStopTimer){clearTimeout(mqStopTimer);mqStopTimer=null}if(mqAudio){try{mqAudio.pause();mqAudio.currentTime=0}catch(e){}}}
 function playRealExcerpt(){
  if(!mqCurrent)return;
@@ -65,15 +70,15 @@ async function hydratePhotos(){
 }
 function answerPool(){
  const base=tracks().map(x=>({name:x.artist,wiki:x.wiki}));
- const fallback={jazz:[['Louis Armstrong','Louis Armstrong'],['Duke Ellington','Duke Ellington'],['King Oliver','King Oliver']],academic:[['Erik Satie','Erik Satie'],['Alexander Scriabin','Alexander Scriabin']]}[mqGenre]||[];
+ const fallback={jazz:[['Louis Armstrong','Louis Armstrong'],['Duke Ellington','Duke Ellington'],['Jelly Roll Morton','Jelly Roll Morton']],academic:[['Erik Satie','Erik Satie'],['Alexander Scriabin','Alexander Scriabin']]}[mqGenre]||[];
  fallback.forEach(x=>base.push({name:x[0],wiki:x[1]}));
- return base;
+ const seen=new Set();return base.filter(x=>{if(seen.has(x.name))return false;seen.add(x.name);return true});
 }
 function buildQuestion(){
  const list=tracks(); if(!list.length)return false;
  if(!mqQueue.length)mqQueue=mqShuffle(list);
  mqCurrent=mqQueue.shift();
- mqEl('modernRound').textContent=`${mqRound+1}/10`;
+ mqEl('modernRound').textContent=`${mqRound+1}/${roundTarget()}`;
  mqEl('modernScore').textContent=mqScore;
  mqEl('modernQuizTitle').textContent=mqGenreTitles[mqGenre]||'Угадай';
  mqEl('modernFeedback').textContent='';
@@ -89,11 +94,14 @@ function buildQuestion(){
 function nextQuestionAndPlay(){if(buildQuestion())playRealExcerpt()}
 function answerQuestion(btn,name){
  if(name!==mqCurrent.artist){btn.classList.add('wrong');btn.disabled=true;mqEl('modernFeedback').textContent='Не он. Попробуй ещё.';if(typeof recordGameAnswer==='function')recordGameAnswer('modern',false);return}
- btn.classList.add('correct');mqEl('modernAnswers').querySelectorAll('button').forEach(b=>b.disabled=true);mqScore++;mqEl('modernScore').textContent=mqScore;mqEl('modernFeedback').innerHTML=`Верно! <b>${mqCurrent.artist}</b> — ${mqCurrent.work}`;if(typeof recordGameAnswer==='function')recordGameAnswer('modern',true);mqRound++;
- if(mqRound>=10){showFinish();return}
+ btn.classList.add('correct');mqEl('modernAnswers').querySelectorAll('button').forEach(b=>b.disabled=true);mqScore++;mqEl('modernScore').textContent=mqScore;
+ const extra=mqGenre==='jazz'&&mqCurrent.year?` · ${mqCurrent.year} · ${mqCurrent.era}`:'';
+ mqEl('modernFeedback').innerHTML=`Верно! <b>${mqCurrent.artist}</b> — ${mqCurrent.work}${extra}`;
+ if(typeof recordGameAnswer==='function')recordGameAnswer('modern',true);mqRound++;
+ if(mqRound>=roundTarget()){showFinish();return}
  nextQuestionAndPlay();
 }
-function showFinish(){stopRealAudio();mqEl('modernQuizPlay').classList.add('hidden');const f=mqEl('modernFinish');f.classList.remove('hidden');f.innerHTML=`<h3>${mqScore}/10</h3><p>${mqScore>=8?'Отлично!':mqScore>=5?'Очень хорошо.':'Ещё один раунд — и начнёшь узнавать увереннее.'}</p><button class="primary" id="modernAgain">Сыграть ещё</button>`;mqEl('modernAgain').onclick=()=>startModernQuiz(mqGenre)}
+function showFinish(){stopRealAudio();mqEl('modernQuizPlay').classList.add('hidden');const f=mqEl('modernFinish');f.classList.remove('hidden');f.innerHTML=`<h3>${mqScore}/${roundTarget()}</h3><p>${mqScore>=8?'Отлично!':mqScore>=5?'Очень хорошо.':'Ещё один раунд — и начнёшь узнавать увереннее.'}</p><button class="primary" id="modernAgain">Сыграть ещё</button>`;mqEl('modernAgain').onclick=()=>startModernQuiz(mqGenre)}
 function showLockedGenre(key){
  stopRealAudio();document.getElementById('modernHub')?.classList.remove('hidden');mqEl('modernQuizPlay')?.classList.add('hidden');mqEl('modernFinish')?.classList.add('hidden');
  let note=document.getElementById('genreNotice');if(!note){note=document.createElement('div');note.id='genreNotice';note.className='genre-notice';document.querySelector('#modernHub .genre-grid')?.after(note)}
