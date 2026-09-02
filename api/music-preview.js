@@ -14,10 +14,19 @@ function countryFor(req){
   const raw=String(req.headers['x-vercel-ip-country']||req.query.country||'IL').toUpperCase();
   return /^[A-Z]{2}$/.test(raw)?raw:'IL';
 }
+function similar(a,b){return a===b||a.includes(b)||b.includes(a)}
 function bestResult(results,artist,work){
   const a=norm(artist),w=norm(work);
-  return [...results].sort((x,y)=>{
-    const score=r=>{const ra=norm(r.artist?.name||r.artistAppearsAs),rt=norm(r.title||r.name);return (ra===a?8:ra.includes(a)||a.includes(ra)?4:0)+(rt===w?8:rt.includes(w)||w.includes(rt)?4:0)+(Number(r.popularity)||0)};
+  const eligible=[...results].filter(r=>{
+    const ra=norm(r.artist?.name||r.artistAppearsAs),rt=norm(r.title||r.name);
+    return ra&&rt&&similar(ra,a)&&similar(rt,w);
+  });
+  if(!eligible.length)return null;
+  return eligible.sort((x,y)=>{
+    const score=r=>{
+      const ra=norm(r.artist?.name||r.artistAppearsAs),rt=norm(r.title||r.name);
+      return (ra===a?20:10)+(rt===w?20:10)+(Number(r.popularity)||0);
+    };
     return score(y)-score(x);
   })[0];
 }
@@ -31,17 +40,17 @@ export default async function handler(req,res){
   const country=countryFor(req);
   try{
     const search=new URL('https://api.7digital.com/track/search');
-    search.searchParams.set('q',`"${artist} ${work}"`);
+    search.searchParams.set('q',`${artist} ${work}`);
     search.searchParams.set('oauth_consumer_key',key);
     search.searchParams.set('country',country);
-    search.searchParams.set('pagesize','10');
+    search.searchParams.set('pagesize','20');
     search.searchParams.set('usageTypes','download,subscriptionstreaming,adsupportedstreaming');
     search.searchParams.set('excludeExplicitContent','true');
     const r=await fetch(search,{headers:{Accept:'application/json'}});
     const data=await r.json().catch(()=>({}));
     if(!r.ok)return res.status(r.status).json({error:'Music catalogue search failed',detail:data?.error?.message||null});
     const found=bestResult(Array.isArray(data.results)?data.results:[],artist,work);
-    if(!found?.id)return res.status(404).json({error:'Track is not available in the licensed catalogue for this territory.'});
+    if(!found?.id)return res.status(404).json({error:'Exact track is not available in the licensed catalogue for this territory.'});
     const base=`https://previews.7digital.com/clip/${found.id}`;
     const audioUrl=oauthSignedUrl(base,{country},key,secret,'GET');
     return res.status(200).json({configured:true,provider:'MassiveMusic / 7digital',trackId:found.id,country,audioUrl,artist:found.artist?.name||artist,work:found.title||work});
