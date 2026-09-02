@@ -1,0 +1,23 @@
+.seo-footer{
+  max-width:980px;
+  margin:10px auto 0;
+  padding:26px 20px 54px;
+  border-top:1px solid #dfd2c8;
+  color:#665b5a;
+  line-height:1.6;
+}
+.seo-footer strong{display:block;color:#302828;margin-bottom:8px}
+.seo-footer nav{display:flex;gap:10px;flex-wrap:wrap}
+.seo-footer a{
+  color:#704752;
+  background:#fffaf6;
+  border:1px solid #dfd2c8;
+  border-radius:999px;
+  padding:7px 12px;
+  text-decoration:none;
+  font-weight:700;
+}
+@media(max-width:700px){
+  .seo-footer nav{display:grid}
+  .seo-footer a{text-align:center}
+}
