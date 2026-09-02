@@ -14,5 +14,14 @@
 .modern-answer-name{display:block;padding:12px 13px 14px;font-size:16px;font-weight:800;line-height:1.18;min-height:52px}
 .modern-photo-credit{margin:8px 0 0;text-align:right;font-size:10px;color:#91837e}
 #modernFeedback{margin-top:14px;min-height:28px}
-@media(max-width:700px){#modernAnswers.modern-photo-answers{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:8px!important}.modern-answer-name{font-size:14px;padding:9px 9px 11px;min-height:47px}.modern-answer-photo{aspect-ratio:1.25/1}.modern-answer-fallback{font-size:30px}}
+#modernListen:disabled{opacity:.58;cursor:default;filter:saturate(.65)}
+#modernListen.is-loading span::after{content:'…'}
+#modernAnswers .artist-answer-card.awaiting-audio{opacity:.92;cursor:default}
+.quiz-hint,.quiz-ready,.quiz-playing{display:inline-block;padding:9px 12px;border-radius:12px;background:#f6f0eb;color:#5f5350;font-weight:700;line-height:1.35}
+.quiz-ready{background:#eef7ef;color:#39774b}.quiz-playing{background:#f0ecfb;color:#5f4ca5}
+.music-unavailable{display:grid;gap:8px;padding:14px;border:1px solid #eadbd2;border-radius:16px;background:#fffaf7;box-shadow:0 7px 18px rgba(74,54,50,.06)}
+.music-unavailable b{font-size:15px}.music-unavailable span{font-size:13px;line-height:1.4;color:#6e605b}.music-unavailable .secondary{justify-self:start;margin-top:2px}
+.answer-reveal{display:grid;gap:4px;padding:14px;border-radius:16px;background:#eef8f0;border:1px solid #cce7d1}
+.answer-reveal>b{font-size:16px;color:#347447}.answer-reveal>span{font-weight:800}.answer-reveal small{color:#6c746d}.answer-reveal a{margin-top:4px;font-weight:800}
+@media(max-width:700px){#modernAnswers.modern-photo-answers{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:8px!important}.modern-answer-name{font-size:14px;padding:9px 9px 11px;min-height:47px}.modern-answer-photo{aspect-ratio:1.25/1}.modern-answer-fallback{font-size:30px}.music-unavailable,.answer-reveal{padding:12px}}
 @media(max-width:370px){#modernAnswers.modern-photo-answers{gap:6px!important}.modern-answer-name{font-size:13px;padding:8px;min-height:44px}}
