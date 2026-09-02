@@ -1,5 +1,50 @@
 // Real-audio genre quiz. No synthesized imitation clues.
 // Public-domain / CC audio is streamed from Wikimedia Commons.
+// The full jazz canon below is the target licensed bank; only tracks with a real audio URL are played.
+const JAZZ_CANON=[
+ {artist:'Louis Armstrong',work:'West End Blues',era:'New Orleans / early swing',wiki:'Louis Armstrong'},
+ {artist:'Duke Ellington',work:'Take the “A” Train',era:'Swing / big band',wiki:'Duke Ellington'},
+ {artist:'Count Basie',work:'One O’Clock Jump',era:'Swing / big band',wiki:'Count Basie'},
+ {artist:'Billie Holiday',work:'God Bless the Child',era:'Vocal jazz',wiki:'Billie Holiday'},
+ {artist:'Ella Fitzgerald',work:'How High the Moon',era:'Vocal jazz / bebop',wiki:'Ella Fitzgerald'},
+ {artist:'Charlie Parker',work:'Ornithology',era:'Bebop',wiki:'Charlie Parker'},
+ {artist:'Dizzy Gillespie',work:'A Night in Tunisia',era:'Bebop',wiki:'Dizzy Gillespie'},
+ {artist:'Thelonious Monk',work:'Round Midnight',era:'Bebop / modern jazz',wiki:'Thelonious Monk'},
+ {artist:'Bud Powell',work:'Un Poco Loco',era:'Bebop',wiki:'Bud Powell'},
+ {artist:'Lennie Tristano',work:'Line Up',era:'Cool / modern jazz',wiki:'Lennie Tristano'},
+ {artist:'Miles Davis',work:'So What',era:'Modal jazz',wiki:'Miles Davis'},
+ {artist:'John Coltrane',work:'My Favorite Things',era:'Modal jazz',wiki:'John Coltrane'},
+ {artist:'Dave Brubeck Quartet',work:'Take Five',era:'Cool jazz / odd meter',wiki:'Dave Brubeck Quartet'},
+ {artist:'Chet Baker',work:'My Funny Valentine',era:'Cool jazz',wiki:'Chet Baker'},
+ {artist:'Gerry Mulligan',work:'Bernie’s Tune',era:'Cool jazz',wiki:'Gerry Mulligan'},
+ {artist:'Art Blakey & The Jazz Messengers',work:'Moanin’',era:'Hard bop',wiki:'Art Blakey'},
+ {artist:'Horace Silver',work:'Song for My Father',era:'Hard bop',wiki:'Horace Silver'},
+ {artist:'Cannonball Adderley',work:'Mercy, Mercy, Mercy',era:'Soul jazz',wiki:'Cannonball Adderley'},
+ {artist:'Sonny Rollins',work:'St. Thomas',era:'Hard bop / calypso jazz',wiki:'Sonny Rollins'},
+ {artist:'Charles Mingus',work:'Goodbye Pork Pie Hat',era:'Post-bop',wiki:'Charles Mingus'},
+ {artist:'Ornette Coleman',work:'Lonely Woman',era:'Free jazz',wiki:'Ornette Coleman'},
+ {artist:'Cecil Taylor',work:'Unit Structures',era:'Free jazz / avant-garde',wiki:'Cecil Taylor'},
+ {artist:'Eric Dolphy',work:'Out to Lunch!',era:'Avant-garde jazz',wiki:'Eric Dolphy'},
+ {artist:'Sun Ra',work:'Space Is the Place',era:'Avant-garde / cosmic jazz',wiki:'Sun Ra'},
+ {artist:'Herbie Hancock',work:'Cantaloupe Island',era:'Post-bop / funk',wiki:'Herbie Hancock'},
+ {artist:'Wayne Shorter',work:'Footprints',era:'Post-bop',wiki:'Wayne Shorter'},
+ {artist:'McCoy Tyner',work:'Passion Dance',era:'Post-bop / modal',wiki:'McCoy Tyner'},
+ {artist:'Keith Jarrett',work:'The Köln Concert',era:'Solo / contemporary jazz',wiki:'Keith Jarrett'},
+ {artist:'Chick Corea',work:'Spain',era:'Fusion',wiki:'Chick Corea'},
+ {artist:'Weather Report',work:'Birdland',era:'Fusion',wiki:'Weather Report'},
+ {artist:'Mahavishnu Orchestra',work:'Meeting of the Spirits',era:'Jazz fusion',wiki:'Mahavishnu Orchestra'},
+ {artist:'Pat Metheny Group',work:'Last Train Home',era:'Fusion / contemporary jazz',wiki:'Pat Metheny Group'},
+ {artist:'Jaco Pastorius',work:'Portrait of Tracy',era:'Fusion',wiki:'Jaco Pastorius'},
+ {artist:'Wynton Marsalis',work:'Black Codes (From the Underground)',era:'Neo-bop',wiki:'Wynton Marsalis'},
+ {artist:'Brad Mehldau',work:'Exit Music (For a Film)',era:'Contemporary jazz',wiki:'Brad Mehldau'},
+ {artist:'Esbjörn Svensson Trio',work:'From Gagarin’s Point of View',era:'European contemporary jazz',wiki:'Esbjörn Svensson Trio'},
+ {artist:'Robert Glasper',work:'Afro Blue',era:'Jazz / hip-hop / R&B',wiki:'Robert Glasper'},
+ {artist:'Kamasi Washington',work:'Change of the Guard',era:'Contemporary spiritual jazz',wiki:'Kamasi Washington'},
+ {artist:'Hiromi Uehara',work:'Return of Kung-Fu World Champion',era:'Contemporary / fusion',wiki:'Hiromi Uehara'},
+ {artist:'Esperanza Spalding',work:'I Know You Know',era:'Contemporary jazz',wiki:'Esperanza Spalding'},
+ {artist:'Snarky Puppy',work:'Lingus',era:'Contemporary fusion',wiki:'Snarky Puppy'}
+];
+
 const REAL_AUDIO_LIBRARY={
  jazz:[
   {artist:'Scott Joplin',work:'Maple Leaf Rag',year:1916,era:'Ragtime',start:4,audio:'https://upload.wikimedia.org/wikipedia/commons/transcoded/d/db/Maple_leaf_rag_-_played_by_Scott_Joplin_1916_V2.ogg/Maple_leaf_rag_-_played_by_Scott_Joplin_1916_V2.ogg.mp3',wiki:'Scott Joplin'},
@@ -26,91 +71,21 @@ const REAL_AUDIO_LIBRARY={
   {artist:'Arnold Schoenberg',work:'String Quartet No. 2 — IV',start:20,audio:'https://commons.wikimedia.org/wiki/Special:Redirect/file/Schoenberg%20Quartet%20No.%202%204th%20movement.OGG',wiki:'Arnold Schoenberg'}
  ]
 };
-const LOCKED_REAL_GENRES={
- rock:'Здесь будут только настоящие записи групп. Синтез я убрала; для рок-хитов нужен лицензированный аудиокаталог.',
- pop:'Здесь будут только настоящие записи исполнителей. Синтез я убрала; для поп-хитов нужен лицензированный аудиокаталог.',
- minimal:'Для современного минимализма оставлю только реальные записи с подходящей лицензией.'
-};
+const LOCKED_REAL_GENRES={rock:'Здесь будут только настоящие записи групп. Синтез я убрала; для рок-хитов нужен лицензированный аудиокаталог.',pop:'Здесь будут только настоящие записи исполнителей. Синтез я убрала; для поп-хитов нужен лицензированный аудиокаталог.',minimal:'Для современного минимализма оставлю только реальные записи с подходящей лицензией.'};
 const mqGenreTitles={academic:'Академическая музыка XX века',jazz:'Джаз',rock:'Рок',pop:'Поп',minimal:'Минимализм'};
 let mqGenre='jazz',mqRound=0,mqScore=0,mqCurrent=null,mqQueue=[],mqAudio=null,mqStopTimer=null;
-const mqEl=id=>document.getElementById(id);
-const mqShuffle=a=>[...a].sort(()=>Math.random()-.5);
-const photoCache=new Map();
-function tracks(){return REAL_AUDIO_LIBRARY[mqGenre]||[]}
-function roundTarget(){return Math.min(10,tracks().length)}
+const mqEl=id=>document.getElementById(id),mqShuffle=a=>[...a].sort(()=>Math.random()-.5),photoCache=new Map();
+function tracks(){return REAL_AUDIO_LIBRARY[mqGenre]||[]}function roundTarget(){return Math.min(10,tracks().length)}
 function stopRealAudio(){if(mqStopTimer){clearTimeout(mqStopTimer);mqStopTimer=null}if(mqAudio){try{mqAudio.pause();mqAudio.currentTime=0}catch(e){}}}
-function playRealExcerpt(){
- if(!mqCurrent)return;
- stopRealAudio();
- mqAudio=new Audio(mqCurrent.audio);
- mqAudio.preload='auto';
- mqAudio.volume=1;
- mqAudio.playsInline=true;
- const feedback=mqEl('modernFeedback');
- if(feedback)feedback.textContent='Загружаю реальную запись…';
- const begin=()=>{
-  try{mqAudio.currentTime=mqCurrent.start||0}catch(e){}
-  const p=mqAudio.play();
-  if(p&&p.then)p.then(()=>{if(feedback)feedback.textContent='Играет настоящий фрагмент · около 18 секунд';mqStopTimer=setTimeout(()=>{try{mqAudio.pause()}catch(e){}},18000)}).catch(()=>{if(feedback)feedback.textContent='Нажми «Слушать фрагмент» — iPhone иногда блокирует первый запуск.'});
- };
- if(mqAudio.readyState>=1)begin(); else mqAudio.addEventListener('loadedmetadata',begin,{once:true});
- mqAudio.addEventListener('error',()=>{if(feedback)feedback.textContent='Эта запись сейчас не загрузилась. Нажми «Слушать фрагмент» ещё раз.'},{once:true});
-}
-async function fetchPhoto(title){
- if(photoCache.has(title))return photoCache.get(title);
- try{
-  const url='https://en.wikipedia.org/api/rest_v1/page/summary/'+encodeURIComponent(title);
-  const r=await fetch(url); if(!r.ok)throw new Error('photo');
-  const j=await r.json(); const src=j.thumbnail?.source||''; photoCache.set(title,src); return src;
- }catch(e){photoCache.set(title,'');return ''}
-}
-async function hydratePhotos(){
- const cards=[...document.querySelectorAll('#modernAnswers [data-photo-title]')];
- await Promise.all(cards.map(async card=>{const src=await fetchPhoto(card.dataset.photoTitle);const img=card.querySelector('img');if(img&&src){img.src=src;img.hidden=false;card.querySelector('.artist-placeholder')?.remove()}}));
-}
-function answerPool(){
- const base=tracks().map(x=>({name:x.artist,wiki:x.wiki}));
- const fallback={jazz:[['Louis Armstrong','Louis Armstrong'],['Duke Ellington','Duke Ellington'],['Jelly Roll Morton','Jelly Roll Morton']],academic:[['Erik Satie','Erik Satie'],['Alexander Scriabin','Alexander Scriabin']]}[mqGenre]||[];
- fallback.forEach(x=>base.push({name:x[0],wiki:x[1]}));
- const seen=new Set();return base.filter(x=>{if(seen.has(x.name))return false;seen.add(x.name);return true});
-}
-function buildQuestion(){
- const list=tracks(); if(!list.length)return false;
- if(!mqQueue.length)mqQueue=mqShuffle(list);
- mqCurrent=mqQueue.shift();
- mqEl('modernRound').textContent=`${mqRound+1}/${roundTarget()}`;
- mqEl('modernScore').textContent=mqScore;
- mqEl('modernQuizTitle').textContent=mqGenreTitles[mqGenre]||'Угадай';
- mqEl('modernFeedback').textContent='';
- const listenLabel=mqEl('modernListen')?.querySelector('span');if(listenLabel)listenLabel.textContent='Слушать фрагмент';
- const pool=answerPool();
- const wrong=mqShuffle(pool.filter(x=>x.name!==mqCurrent.artist)).slice(0,3);
- const choices=mqShuffle([{name:mqCurrent.artist,wiki:mqCurrent.wiki},...wrong]);
- mqEl('modernAnswers').innerHTML=choices.map(x=>`<button type="button" class="artist-answer-card" data-modern-answer="${x.name.replaceAll('&','&amp;').replaceAll('"','&quot;')}" data-photo-title="${x.wiki.replaceAll('&','&amp;').replaceAll('"','&quot;')}"><span class="artist-photo"><span class="artist-placeholder">♪</span><img hidden alt="${x.name.replaceAll('&','&amp;').replaceAll('"','&quot;')}"></span><b>${x.name}</b></button>`).join('');
- mqEl('modernAnswers').querySelectorAll('button').forEach(btn=>btn.addEventListener('click',()=>answerQuestion(btn,btn.dataset.modernAnswer)));
- hydratePhotos();
- return true;
-}
+function playRealExcerpt(){if(!mqCurrent)return;stopRealAudio();mqAudio=new Audio(mqCurrent.audio);mqAudio.preload='auto';mqAudio.volume=1;mqAudio.playsInline=true;const feedback=mqEl('modernFeedback');if(feedback)feedback.textContent='Загружаю реальную запись…';const begin=()=>{try{mqAudio.currentTime=mqCurrent.start||0}catch(e){}const p=mqAudio.play();if(p&&p.then)p.then(()=>{if(feedback)feedback.textContent='Играет настоящий фрагмент · около 18 секунд';mqStopTimer=setTimeout(()=>{try{mqAudio.pause()}catch(e){}},18000)}).catch(()=>{if(feedback)feedback.textContent='Нажми «Слушать фрагмент» — iPhone иногда блокирует первый запуск.'})};if(mqAudio.readyState>=1)begin();else mqAudio.addEventListener('loadedmetadata',begin,{once:true});mqAudio.addEventListener('error',()=>{if(feedback)feedback.textContent='Эта запись сейчас не загрузилась. Нажми «Слушать фрагмент» ещё раз.'},{once:true})}
+async function fetchPhoto(title){if(photoCache.has(title))return photoCache.get(title);try{const r=await fetch('https://en.wikipedia.org/api/rest_v1/page/summary/'+encodeURIComponent(title));if(!r.ok)throw new Error('photo');const j=await r.json(),src=j.thumbnail?.source||'';photoCache.set(title,src);return src}catch(e){photoCache.set(title,'');return ''}}
+async function hydratePhotos(){const cards=[...document.querySelectorAll('#modernAnswers [data-photo-title]')];await Promise.all(cards.map(async card=>{const src=await fetchPhoto(card.dataset.photoTitle),img=card.querySelector('img');if(img&&src){img.src=src;img.hidden=false;card.querySelector('.artist-placeholder')?.remove()}}))}
+function answerPool(){const base=(mqGenre==='jazz'?JAZZ_CANON:tracks()).map(x=>({name:x.artist,wiki:x.wiki}));tracks().forEach(x=>base.push({name:x.artist,wiki:x.wiki}));const fallback={academic:[['Erik Satie','Erik Satie'],['Alexander Scriabin','Alexander Scriabin']]}[mqGenre]||[];fallback.forEach(x=>base.push({name:x[0],wiki:x[1]}));const seen=new Set();return base.filter(x=>{if(seen.has(x.name))return false;seen.add(x.name);return true})}
+function buildQuestion(){const list=tracks();if(!list.length)return false;if(!mqQueue.length)mqQueue=mqShuffle(list);mqCurrent=mqQueue.shift();mqEl('modernRound').textContent=`${mqRound+1}/${roundTarget()}`;mqEl('modernScore').textContent=mqScore;mqEl('modernQuizTitle').textContent=mqGenreTitles[mqGenre]||'Угадай';mqEl('modernFeedback').textContent='';const listenLabel=mqEl('modernListen')?.querySelector('span');if(listenLabel)listenLabel.textContent='Слушать фрагмент';const pool=answerPool(),wrong=mqShuffle(pool.filter(x=>x.name!==mqCurrent.artist)).slice(0,3),choices=mqShuffle([{name:mqCurrent.artist,wiki:mqCurrent.wiki},...wrong]);mqEl('modernAnswers').innerHTML=choices.map(x=>`<button type="button" class="artist-answer-card" data-modern-answer="${x.name.replaceAll('&','&amp;').replaceAll('"','&quot;')}" data-photo-title="${x.wiki.replaceAll('&','&amp;').replaceAll('"','&quot;')}"><span class="artist-photo"><span class="artist-placeholder">♪</span><img hidden alt="${x.name.replaceAll('&','&amp;').replaceAll('"','&quot;')}"></span><b>${x.name}</b></button>`).join('');mqEl('modernAnswers').querySelectorAll('button').forEach(btn=>btn.addEventListener('click',()=>answerQuestion(btn,btn.dataset.modernAnswer)));hydratePhotos();return true}
 function nextQuestionAndPlay(){if(buildQuestion())playRealExcerpt()}
-function answerQuestion(btn,name){
- if(name!==mqCurrent.artist){btn.classList.add('wrong');btn.disabled=true;mqEl('modernFeedback').textContent='Не он. Попробуй ещё.';if(typeof recordGameAnswer==='function')recordGameAnswer('modern',false);return}
- btn.classList.add('correct');mqEl('modernAnswers').querySelectorAll('button').forEach(b=>b.disabled=true);mqScore++;mqEl('modernScore').textContent=mqScore;
- const extra=mqGenre==='jazz'&&mqCurrent.year?` · ${mqCurrent.year} · ${mqCurrent.era}`:'';
- mqEl('modernFeedback').innerHTML=`Верно! <b>${mqCurrent.artist}</b> — ${mqCurrent.work}${extra}`;
- if(typeof recordGameAnswer==='function')recordGameAnswer('modern',true);mqRound++;
- if(mqRound>=roundTarget()){showFinish();return}
- nextQuestionAndPlay();
-}
+function answerQuestion(btn,name){if(name!==mqCurrent.artist){btn.classList.add('wrong');btn.disabled=true;mqEl('modernFeedback').textContent='Не он. Попробуй ещё.';if(typeof recordGameAnswer==='function')recordGameAnswer('modern',false);return}btn.classList.add('correct');mqEl('modernAnswers').querySelectorAll('button').forEach(b=>b.disabled=true);mqScore++;mqEl('modernScore').textContent=mqScore;const extra=mqGenre==='jazz'&&mqCurrent.year?` · ${mqCurrent.year} · ${mqCurrent.era}`:'';mqEl('modernFeedback').innerHTML=`Верно! <b>${mqCurrent.artist}</b> — ${mqCurrent.work}${extra}`;if(typeof recordGameAnswer==='function')recordGameAnswer('modern',true);mqRound++;if(mqRound>=roundTarget()){showFinish();return}nextQuestionAndPlay()}
 function showFinish(){stopRealAudio();mqEl('modernQuizPlay').classList.add('hidden');const f=mqEl('modernFinish');f.classList.remove('hidden');f.innerHTML=`<h3>${mqScore}/${roundTarget()}</h3><p>${mqScore>=8?'Отлично!':mqScore>=5?'Очень хорошо.':'Ещё один раунд — и начнёшь узнавать увереннее.'}</p><button class="primary" id="modernAgain">Сыграть ещё</button>`;mqEl('modernAgain').onclick=()=>startModernQuiz(mqGenre)}
-function showLockedGenre(key){
- stopRealAudio();document.getElementById('modernHub')?.classList.remove('hidden');mqEl('modernQuizPlay')?.classList.add('hidden');mqEl('modernFinish')?.classList.add('hidden');
- let note=document.getElementById('genreNotice');if(!note){note=document.createElement('div');note.id='genreNotice';note.className='genre-notice';document.querySelector('#modernHub .genre-grid')?.after(note)}
- note.classList.remove('hidden');note.innerHTML=`<strong>${mqGenreTitles[key]}</strong><p>${LOCKED_REAL_GENRES[key]}</p><small>Электрические синтезированные подсказки больше не используются.</small>`;note.scrollIntoView({behavior:'smooth',block:'center'});
-}
-function startModernQuiz(key){
- if(LOCKED_REAL_GENRES[key]){showLockedGenre(key);return}
- mqGenre=key;mqRound=0;mqScore=0;mqQueue=mqShuffle(tracks());document.getElementById('modernHub')?.classList.add('hidden');mqEl('modernFinish')?.classList.add('hidden');mqEl('modernQuizPlay')?.classList.remove('hidden');nextQuestionAndPlay();window.scrollTo({top:0,behavior:'smooth'});
-}
+function showLockedGenre(key){stopRealAudio();document.getElementById('modernHub')?.classList.remove('hidden');mqEl('modernQuizPlay')?.classList.add('hidden');mqEl('modernFinish')?.classList.add('hidden');let note=document.getElementById('genreNotice');if(!note){note=document.createElement('div');note.id='genreNotice';note.className='genre-notice';document.querySelector('#modernHub .genre-grid')?.after(note)}note.classList.remove('hidden');note.innerHTML=`<strong>${mqGenreTitles[key]}</strong><p>${LOCKED_REAL_GENRES[key]}</p><small>Электрические синтезированные подсказки больше не используются.</small>`;note.scrollIntoView({behavior:'smooth',block:'center'})}
+function startModernQuiz(key){if(LOCKED_REAL_GENRES[key]){showLockedGenre(key);return}mqGenre=key;mqRound=0;mqScore=0;mqQueue=mqShuffle(tracks()).slice(0,10);document.getElementById('modernHub')?.classList.add('hidden');mqEl('modernFinish')?.classList.add('hidden');mqEl('modernQuizPlay')?.classList.remove('hidden');nextQuestionAndPlay();window.scrollTo({top:0,behavior:'smooth'})}
 function closeModernQuiz(){stopRealAudio();mqEl('modernQuizPlay')?.classList.add('hidden');mqEl('modernFinish')?.classList.add('hidden');document.getElementById('modernHub')?.classList.remove('hidden');window.scrollTo({top:0,behavior:'smooth'})}
-function initModernQuiz(){mqEl('modernListen')?.addEventListener('click',playRealExcerpt);mqEl('modernQuizBack')?.addEventListener('click',closeModernQuiz);document.querySelectorAll('#modernHub [data-genre]').forEach(btn=>btn.addEventListener('click',()=>startModernQuiz(btn.dataset.genre)))}
-if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',initModernQuiz);else initModernQuiz();
+function initModernQuiz(){mqEl('modernListen')?.addEventListener('click',playRealExcerpt);mqEl('modernQuizBack')?.addEventListener('click',closeModernQuiz);document.querySelectorAll('#modernHub [data-genre]').forEach(btn=>btn.addEventListener('click',()=>startModernQuiz(btn.dataset.genre)))}if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',initModernQuiz);else initModernQuiz();
