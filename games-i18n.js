@@ -9,7 +9,8 @@ const COMPOSER_I18N={
 const WORK_I18N={
  beethoven5:{en:'Symphony No. 5',he:'סימפוניה מס׳ 5'},'grieg-mountain':{en:'In the Hall of the Mountain King',he:'במערת מלך ההר'},'mozart-k525':{en:'Eine kleine Nachtmusik — Minuet',he:'מוזיקת לילה זעירה — מינואט'},'tchaikovsky-swan':{en:'Swan Lake',he:'אגם הברבורים'},'vivaldi-spring':{en:'The Four Seasons — Spring',he:'ארבע העונות — אביב'},'bach-joy':{en:'Jesu, Joy of Man’s Desiring',he:'ישו, משאת נפש האדם'},'dvorak-newworld':{en:'Symphony No. 9 “From the New World” — IV',he:'סימפוניה מס׳ 9 „מן העולם החדש” — פרק רביעי'},'smetana-vltava':{en:'The Moldau (Vltava)',he:'המולדבה (ולטאבה)'},'tchaikovsky-sugar':{en:'The Nutcracker — Dance of the Sugar Plum Fairy',he:'מפצח האגוזים — ריקוד פיית שזיף הסוכר'},'mozart-turkish':{en:'Rondo Alla Turca',he:'רונדו אלה טורקה'},'bach-toccata':{en:'Toccata and Fugue in D minor',he:'טוקטה ופוגה ברה מינור'},'mendelssohn-wedding':{en:'Wedding March',he:'מארש החתונה'},'chopin-waltz69':{en:'Waltz in B minor, Op. 69 No. 2',he:'ואלס בסי מינור, אופ׳ 69 מס׳ 2'},'chopin-nocturne9':{en:'Nocturne in B-flat minor, Op. 9 No. 1',he:'נוקטורן בסי־במול מינור, אופ׳ 9 מס׳ 1'},brahms3:{en:'Symphony No. 3',he:'סימפוניה מס׳ 3'},'borodin-steppes':{en:'In the Steppes of Central Asia',he:'בערבות מרכז אסיה'},'chopin-nocturne48':{en:'Nocturne in C minor, Op. 48 No. 1',he:'נוקטורן בדו מינור, אופ׳ 48 מס׳ 1'}
 };
-let gameLang=localStorage.getItem('musicGameLang')||'ru';
+let gameLang='ru';try{gameLang=localStorage.getItem('mariaSiteLang')||localStorage.getItem('musicGameLang')||'ru'}catch(e){}
+function saveGameLanguage(){try{localStorage.setItem('musicGameLang',gameLang);localStorage.setItem('mariaSiteLang',gameLang)}catch(e){}}
 function gt(key){return (GAME_I18N[gameLang]&&GAME_I18N[gameLang][key])||GAME_I18N.ru[key]||key}
 function composerLabel(name){return gameLang==='ru'?name:(COMPOSER_I18N[name]?.[gameLang]||name)}
 function workLabel(work){return gameLang==='ru'?work.work:(WORK_I18N[work.id]?.[gameLang]||work.work)}
@@ -20,7 +21,8 @@ function applyGameLanguage(){
  if(typeof quizLevel!=='undefined'&&document.getElementById('quizLevelDescription'))$('quizLevelDescription').textContent=gt('levels')[quizLevel];
  if(typeof currentWork!=='undefined'&&currentWork&&document.getElementById('composerAnswers')&&!$('composerAnswers').classList.contains('hidden')) naturalNewQuiz();
 }
-document.querySelectorAll('[data-lang]').forEach(b=>b.onclick=()=>{gameLang=b.dataset.lang;localStorage.setItem('musicGameLang',gameLang);applyGameLanguage()});
+document.querySelectorAll('[data-lang]').forEach(b=>b.onclick=()=>{gameLang=b.dataset.lang;saveGameLanguage();applyGameLanguage()});
+window.addEventListener('maria:languagechange',event=>{gameLang=event.detail.language;saveGameLanguage();applyGameLanguage()});
 
 // Localized pitch answers and result messages.
 document.querySelectorAll('[data-pitch]').forEach(b=>b.onclick=()=>{if(pitchLocked)return;pitchLocked=true;const guess=b.dataset.pitch,correct=guess===pitchAnswer;b.classList.add(correct?'correct':'wrong');document.querySelector(`[data-pitch="${pitchAnswer}"]`).classList.add('correct');if(correct){pitchScore++;$('pitchScore').textContent=pitchScore;$('pitchFeedback').textContent=gt('correct')}else{$('pitchFeedback').textContent=`${gt('correctAnswer')}: ${gt(pitchAnswer)}.`}$('nextPitch').classList.remove('hidden')});

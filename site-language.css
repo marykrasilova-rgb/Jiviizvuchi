@@ -1,0 +1,73 @@
+.maria-language-switch {
+  position: fixed;
+  z-index: 1000;
+  inset-block-end: max(10px, env(safe-area-inset-bottom));
+  inset-inline-end: max(10px, env(safe-area-inset-right));
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  padding: 4px;
+  border: 1px solid rgba(118, 88, 82, .24);
+  border-radius: 999px;
+  background: rgba(255, 253, 249, .94);
+  box-shadow: 0 8px 24px rgba(55, 40, 37, .13);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  direction: ltr;
+  font: 750 12px/1.1 -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
+}
+
+.maria-language-switch.has-bottom-nav {
+  inset-block-end: calc(76px + env(safe-area-inset-bottom));
+}
+
+.maria-language-switch button {
+  min-width: 36px;
+  min-height: 34px;
+  margin: 0;
+  padding: 7px 9px;
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+  color: #554746;
+  font: inherit;
+  letter-spacing: .01em;
+  cursor: pointer;
+  box-shadow: none;
+}
+
+.maria-language-switch button[aria-pressed="true"] {
+  background: #7b4050;
+  color: #fff;
+}
+
+.maria-language-switch button:focus-visible {
+  outline: 3px solid rgba(123, 64, 80, .28);
+  outline-offset: 2px;
+}
+
+html[dir="rtl"] body { text-align: right; }
+html[dir="rtl"] input[type="email"],
+html[dir="rtl"] input[type="tel"],
+html[dir="rtl"] a[href^="mailto:"],
+html[dir="rtl"] a[href^="tel:"] {
+  direction: ltr;
+  text-align: left;
+}
+html[lang="en"] .top .wrap::after { content: "Maria Krasilova"; }
+html[lang="he"] .top .wrap::after { content: "מריה קרסילובה"; }
+
+@media (max-width: 640px) {
+  .maria-language-switch {
+    inset-block-end: max(7px, env(safe-area-inset-bottom));
+    inset-inline-end: max(7px, env(safe-area-inset-right));
+  }
+  .maria-language-switch.has-bottom-nav {
+    inset-block-end: calc(72px + env(safe-area-inset-bottom));
+  }
+  .maria-language-switch button {
+    min-width: 33px;
+    min-height: 32px;
+    padding: 6px 8px;
+  }
+}

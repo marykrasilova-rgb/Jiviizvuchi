@@ -27,3 +27,4 @@ document.addEventListener('DOMContentLoaded',()=>{
 });
 // Language switch also refreshes character names immediately.
 document.querySelectorAll('[data-lang]').forEach(b=>b.addEventListener('click',()=>setTimeout(renderStudentProfile,0)));
+window.addEventListener('maria:languagechange',()=>setTimeout(renderStudentProfile,0));
