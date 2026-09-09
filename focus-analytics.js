@@ -6,6 +6,7 @@ const FIRST_KEY='maria_diary_first_seen';
 const LAST_KEY='maria_diary_last_seen';
 const STARTED_KEY='maria_diary_practice_started';
 const CAMPAIGN_KEY='maria_diary_campaign';
+let signedInHandled=false;
 
 function campaign(){
   const p=new URLSearchParams(location.search);
@@ -28,24 +29,27 @@ async function track(event_name,extra={}){
 
 function addWelcome(){
   if(localStorage.getItem(FIRST_KEY))return;
+  if(document.getElementById('focusWelcome'))return;
   const app=$('appView');
   if(!app)return;
   const box=document.createElement('div');
   box.id='focusWelcome';
-  box.className='card';
-  box.style.marginBottom='18px';
-  box.innerHTML='<div class="label">Первый раз здесь?</div><h2 style="margin-top:6px">Одна практика — примерно 3–7 минут</h2><p class="small">1. Заметьте состояние. 2. Выберите голос, движение, рисунок или текст. 3. Снова отметьте состояние и сохраните запись. Здесь нет правильного результата.</p><button id="focusStart" class="btn">Начать первую практику</button>';
-  app.insertBefore(box,app.firstChild);
+  box.className='card focus-welcome';
+  box.innerHTML='<div class="label">Первый раз здесь?</div><h2>Одна практика — примерно 3–7 минут</h2><p class="small"><b>Заметь → Создай → Заметь снова → Различи → Выбери.</b><br>Сначала отметь состояние, затем дай ему форму голосом, движением, рисунком или текстом. После — посмотри, что изменилось, что здесь твоё и какой маленький выбор хочется сделать. Здесь нет правильного результата.</p><button id="focusStart" class="btn">Начать первую практику</button>';
+  const practice=document.getElementById('practiceView');
+  app.insertBefore(box,practice||app.firstChild);
   $('focusStart')?.addEventListener('click',()=>{
-    box.remove();
-    document.getElementById('practiceView')?.scrollIntoView({behavior:'smooth',block:'start'});
-    track('onboarding_completed');
     localStorage.setItem(FIRST_KEY,new Date().toISOString());
+    box.remove();
+    practice?.scrollIntoView({behavior:'smooth',block:'start'});
+    track('onboarding_completed');
   });
   track('onboarding_shown');
 }
 
 async function onSignedIn(){
+  if(signedInHandled)return;
+  signedInHandled=true;
   const now=new Date();
   const last=localStorage.getItem(LAST_KEY);
   await track('focus_session_open');
