@@ -4,9 +4,32 @@ const s=createClient('https://uecdlqlwsrqmocbpgiwj.supabase.co','sb_publishable_
 const modes=document.querySelector('.modes');
 const voiceButton=document.querySelector('.mode[data-mode="voice"]');
 
+// Keep the safety information prominent but compact on mobile.
+const safetyCard=document.querySelector('#appView > .card.flat');
+const safetyNotice=safetyCard?.querySelector('.notice');
+if(safetyCard&&safetyNotice){
+  const details=document.createElement('details');
+  details.className='safety-details';
+  const summary=document.createElement('summary');
+  summary.textContent='Важно о безопасности';
+  const body=document.createElement('div');
+  body.className='notice';
+  body.innerHTML=safetyNotice.innerHTML;
+  details.append(summary,body);
+  safetyCard.replaceChildren(details);
+  safetyCard.classList.add('safety-card');
+}
+
+const polish=document.createElement('style');
+polish.textContent=`
+.safety-details summary{font-weight:850;color:var(--rose);cursor:pointer;list-style:none;padding:2px 0}.safety-details summary::-webkit-details-marker{display:none}.safety-details summary::after{content:'＋';float:right;color:var(--muted)}.safety-details[open] summary::after{content:'−'}.safety-details .notice{margin-top:10px}.focus-welcome h2{margin-top:6px}.focus-welcome{margin-bottom:16px}
+@media(max-width:640px){.safety-card{padding:11px 13px;margin:8px 0 18px;border-radius:18px}.safety-details .notice{font-size:12px;line-height:1.5}.nav{padding:5px 8px calc(5px + env(safe-area-inset-bottom))}.nav button{padding:8px 4px;font-size:13px}.shell{padding-bottom:96px}.focus-welcome{padding:16px;margin:8px 0 16px}.focus-welcome h2{font-size:22px}.focus-welcome .small{font-size:12.5px}}
+`;
+document.head.appendChild(polish);
+
 if(modes&&voiceButton){
   const wrap=document.createElement('div');
-  wrap.className='card';
+  wrap.className='card voice-card-helper hidden';
   wrap.style.margin='14px 0 18px';
   const label=document.createElement('div');
   label.className='label';
@@ -15,7 +38,7 @@ if(modes&&voiceButton){
   title.textContent='Нужен импульс для импровизации?';
   const description=document.createElement('p');
   description.className='small';
-  description.textContent='Вытяни случайную карточку — или выбери «Голос» и импровизируй свободно.';
+  description.textContent='Вытяни случайную карточку — или импровизируй свободно.';
   const instruction=document.createElement('p');
   instruction.className='small';
   const actions=document.createElement('div');
@@ -28,6 +51,10 @@ if(modes&&voiceButton){
   wrap.append(label,title,description,instruction,actions);
   modes.after(wrap);
 
+  document.querySelectorAll('.mode').forEach(modeButton=>modeButton.addEventListener('click',()=>{
+    wrap.classList.toggle('hidden',modeButton.dataset.mode!=='voice');
+  }));
+
   let cards=[];
   let lastId=null;
 
@@ -35,7 +62,7 @@ if(modes&&voiceButton){
     if(cards.length)return cards;
     const {data,error}=await s.from('practices').select('id,title,description,instruction,duration_seconds').eq('is_active',true);
     if(error){
-      description.textContent='Не удалось загрузить карточки. Можно выбрать «Голос» и начать без неё.';
+      description.textContent='Не удалось загрузить карточки. Можно начать голосом без неё.';
       return [];
     }
     cards=data||[];
@@ -54,7 +81,7 @@ if(modes&&voiceButton){
     description.textContent=card.description||'';
     instruction.textContent=card.instruction||'';
     button.textContent='Ещё карточку';
-    voiceButton.click();
+    if(!voiceButton.classList.contains('on'))voiceButton.click();
     wrap.scrollIntoView({behavior:'smooth',block:'center'});
   }
 
