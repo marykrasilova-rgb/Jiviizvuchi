@@ -23,9 +23,24 @@ if(safetyCard&&safetyNotice){
 const polish=document.createElement('style');
 polish.textContent=`
 .safety-details summary{font-weight:850;color:var(--rose);cursor:pointer;list-style:none;padding:2px 0}.safety-details summary::-webkit-details-marker{display:none}.safety-details summary::after{content:'＋';float:right;color:var(--muted)}.safety-details[open] summary::after{content:'−'}.safety-details .notice{margin-top:10px}.focus-welcome h2{margin-top:6px}.focus-welcome{margin-bottom:16px}
-@media(max-width:640px){.safety-card{padding:11px 13px;margin:8px 0 18px;border-radius:18px}.safety-details .notice{font-size:12px;line-height:1.5}.nav{padding:5px 8px calc(5px + env(safe-area-inset-bottom))}.nav button{padding:8px 4px;font-size:13px}.shell{padding-bottom:96px}.focus-welcome{padding:16px;margin:8px 0 16px}.focus-welcome h2{font-size:22px}.focus-welcome .small{font-size:12.5px}}
+.maria-language-switch.diary-language-switch{position:static!important;inset:auto!important;box-shadow:none!important;background:transparent!important;border-color:rgba(118,88,82,.18)!important;margin-left:auto;flex:0 0 auto}.maria-language-switch.diary-language-switch button{min-width:30px!important;min-height:28px!important;padding:5px 7px!important;font-size:11px!important}
+@media(max-width:640px){.safety-card{padding:11px 13px;margin:8px 0 18px;border-radius:18px}.safety-details .notice{font-size:12px;line-height:1.5}.nav{padding:5px 8px calc(5px + env(safe-area-inset-bottom))}.nav button{padding:8px 4px;font-size:13px}.shell{padding-bottom:96px}.focus-welcome{padding:16px;margin:8px 0 16px}.focus-welcome h2{font-size:22px}.focus-welcome .small{font-size:12.5px}.top{gap:7px}.top .brand{font-size:11px}.maria-language-switch.diary-language-switch button{min-width:27px!important;padding:5px 6px!important}.maria-language-switch.diary-language-switch button[data-site-lang="he"]{min-width:42px!important}}
 `;
 document.head.appendChild(polish);
+
+function dockLanguageSwitcher(){
+  const switcher=document.querySelector('.maria-language-switch');
+  const top=document.querySelector('.top');
+  const logout=document.getElementById('logoutBtn');
+  if(!switcher||!top||switcher.classList.contains('diary-language-switch'))return false;
+  switcher.classList.add('diary-language-switch');
+  top.insertBefore(switcher,logout||null);
+  return true;
+}
+if(!dockLanguageSwitcher()){
+  const observer=new MutationObserver(()=>{if(dockLanguageSwitcher())observer.disconnect()});
+  observer.observe(document.body,{childList:true,subtree:true});
+}
 
 if(modes&&voiceButton){
   const wrap=document.createElement('div');
