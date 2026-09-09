@@ -128,4 +128,39 @@ setTimeout(()=>{
   const remembered=localStorage.getItem('diaryLastEmail');if(remembered&&!email.value)email.value=remembered;
 },0);
 
+// Method layer: preserve "Различи" and "Выбери" without sending their text to analytics.
+setTimeout(()=>{
+  const save=document.getElementById('saveEntry');
+  const reflection=document.getElementById('reflection');
+  const discern=document.getElementById('discernText');
+  const choice=document.getElementById('choiceText');
+  if(save&&reflection&&discern&&choice){
+    save.addEventListener('click',()=>{
+      const r=reflection.value.trim();
+      reflection.value=`[[DISCERN]]${discern.value.trim()}[[/DISCERN]][[CHOICE]]${choice.value.trim()}[[/CHOICE]][[REFLECTION]]${r}[[/REFLECTION]]`;
+    },true);
+  }
+
+  const entries=document.getElementById('entries');
+  let decorating=false;
+  async function decorateHistory(){
+    if(decorating||!entries||!entries.children.length)return;
+    decorating=true;
+    try{
+      const {data:{user}}=await s.auth.getUser();
+      if(!user)return;
+      const {data}=await s.from('voice_entries').select('discern_text,choice_text').eq('user_id',user.id).order('created_at',{ascending:false}).limit(60);
+      const cards=[...entries.querySelectorAll('.entry')];
+      (data||[]).forEach((row,i)=>{
+        const card=cards[i];if(!card||card.dataset.methodDecorated==='1')return;
+        card.dataset.methodDecorated='1';
+        if(row.discern_text){const p=document.createElement('p');p.className='small';p.textContent='Что моё: '+row.discern_text;p.dataset.userContent='';card.appendChild(p)}
+        if(row.choice_text){const p=document.createElement('p');p.className='small';p.textContent='Мой выбор: '+row.choice_text;p.dataset.userContent='';card.appendChild(p)}
+      });
+    }finally{decorating=false}
+  }
+  if(entries){new MutationObserver(()=>setTimeout(decorateHistory,0)).observe(entries,{childList:true});setTimeout(decorateHistory,500)}
+  if(history){new MutationObserver(()=>{if(!history.classList.contains('hidden')){setTimeout(decorateHistory,100);if(discern)discern.value='';if(choice)choice.value=''}}).observe(history,{attributes:true,attributeFilter:['class']})}
+},0);
+
 if('serviceWorker' in navigator){window.addEventListener('load',()=>navigator.serviceWorker.register('/sw.js').catch(()=>{}))}
