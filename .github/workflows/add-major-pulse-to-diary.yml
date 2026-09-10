@@ -1,10 +1,13 @@
 name: Add major movement pulse to live diary
+
 on:
   push:
     paths:
       - '.github/workflows/add-major-pulse-to-diary.yml'
+
 permissions:
   contents: write
+
 jobs:
   patch:
     runs-on: ubuntu-latest
@@ -17,85 +20,80 @@ jobs:
           python - <<'PY'
           from pathlib import Path
 
-          hp=Path('diary.html')
-          h=hp.read_text(encoding='utf-8')
-          old='<div id="movementPanel" class="card panel hidden"><h3>Движение</h3><p class="small">Камера нужна только для вашей личной записи. Видео не публикуется.</p><button id="movementRecord" class="btn olive">Начать запись движения</button><div id="movementStatus" class="status"></div><video id="movementPreview" class="hidden" controls playsinline></video></div>'
-          new='<div id="movementPanel" class="card panel hidden"><h3>Движение</h3><p class="small">Камера нужна только для вашей личной записи. Видео не публикуется.</p><div class="small" style="margin-top:12px"><b>Мягкий мажорный пульс</b></div><div class="chips" id="movementPulseDurations"><button type="button" class="chip" data-pulse-minutes="2">2 мин</button><button type="button" class="chip on" data-pulse-minutes="3">3 мин</button><button type="button" class="chip" data-pulse-minutes="4">4 мин</button><button type="button" class="chip" data-pulse-minutes="5">5 мин</button></div><button id="movementPulse" type="button" class="btn secondary">▶ Включить мажорный пульс</button><div id="movementPulseStatus" class="status">Основной тон 250–300 Гц · большая терция · квинта</div><button id="movementRecord" class="btn olive">Начать запись движения</button><div id="movementStatus" class="status"></div><video id="movementPreview" class="hidden" controls playsinline></video></div>'
-          if old not in h:
-              raise SystemExit('movement html anchor not found')
-          h=h.replace(old,new,1)
-          hp.write_text(h,encoding='utf-8')
+          hp = Path('diary.html')
+          h = hp.read_text(encoding='utf-8')
+          if 'id="movementPulse"' not in h:
+              old = '<div id="movementPanel" class="card panel hidden"><h3>Движение</h3><p class="small">Камера нужна только для вашей личной записи. Видео не публикуется.</p><button id="movementRecord" class="btn olive">Начать запись движения</button><div id="movementStatus" class="status"></div><video id="movementPreview" class="hidden" controls playsinline></video></div>'
+              new = '<div id="movementPanel" class="card panel hidden"><h3>Движение</h3><p class="small">Камера нужна только для вашей личной записи. Видео не публикуется.</p><div class="small" style="margin-top:12px"><b>Мягкий мажорный пульс</b></div><div class="chips" id="movementPulseDurations"><button type="button" class="chip" data-pulse-minutes="2">2 мин</button><button type="button" class="chip on" data-pulse-minutes="3">3 мин</button><button type="button" class="chip" data-pulse-minutes="4">4 мин</button><button type="button" class="chip" data-pulse-minutes="5">5 мин</button></div><button id="movementPulse" type="button" class="btn secondary">▶ Включить мажорный пульс</button><div id="movementPulseStatus" class="status">Основной тон 250–300 Гц · большая терция · квинта</div><button id="movementRecord" class="btn olive">Начать запись движения</button><div id="movementStatus" class="status"></div><video id="movementPreview" class="hidden" controls playsinline></video></div>'
+              if old not in h:
+                  raise SystemExit('movement html anchor not found')
+              h = h.replace(old, new, 1)
+              hp.write_text(h, encoding='utf-8')
 
-          jp=Path('diary.js')
-          s=jp.read_text(encoding='utf-8')
-          anchor="$('movementRecord').onclick=()=>recorder?.state==='recording'?(recorder.stop()):startMovement();"
-          if anchor not in s:
-              raise SystemExit('movement js anchor not found')
-          code=r'''
+          jp = Path('diary.js')
+          s = jp.read_text(encoding='utf-8')
+          if 'let movementPulseMinutes=3;' not in s:
+              anchor = "$('movementRecord').onclick=()=>recorder?.state==='recording'?(recorder.stop()):startMovement();"
+              if anchor not in s:
+                  raise SystemExit('movement js anchor not found')
+              code = """
+          let movementPulseMinutes=3;
+          let movementPulseState=null;
+          let movementPulseCtx=null;
 
-let movementPulseMinutes=3;
-let movementPulseState=null;
-let movementPulseCtx=null;
+          document.querySelectorAll('#movementPulseDurations [data-pulse-minutes]').forEach(b=>b.onclick=()=>{
+            movementPulseMinutes=+b.dataset.pulseMinutes;
+            document.querySelectorAll('#movementPulseDurations [data-pulse-minutes]').forEach(x=>x.classList.toggle('on',x===b));
+            if(!movementPulseState)$('movementPulseStatus').textContent=`Выбрано: ${movementPulseMinutes} мин · мажорное трезвучие`;
+          });
 
-document.querySelectorAll('#movementPulseDurations [data-pulse-minutes]').forEach(b=>b.onclick=()=>{
-  movementPulseMinutes=+b.dataset.pulseMinutes;
-  document.querySelectorAll('#movementPulseDurations [data-pulse-minutes]').forEach(x=>x.classList.toggle('on',x===b));
-  const st=$('movementPulseStatus');
-  if(!movementPulseState) st.textContent=`Выбрано: ${movementPulseMinutes} мин · мажорное трезвучие`;
-});
+          function stopMovementPulse(manual=true){
+            const n=movementPulseState;if(!n)return;
+            clearTimeout(n.timer);
+            const now=n.ctx.currentTime;
+            try{n.fade.gain.cancelScheduledValues(now);n.fade.gain.setValueAtTime(Math.max(.0001,n.fade.gain.value),now);n.fade.gain.exponentialRampToValueAtTime(.0001,now+.35)}catch{}
+            setTimeout(()=>{for(const osc of [n.root,n.third,n.fifth,n.freqLfo,n.ampLfo]){try{osc.stop()}catch{}try{osc.disconnect()}catch{}}},400);
+            movementPulseState=null;
+            $('movementPulse').textContent='▶ Включить мажорный пульс';
+            $('movementPulseStatus').textContent=manual?`Выбрано: ${movementPulseMinutes} мин · мажорное трезвучие`:'Готово · мягкое затухание завершено';
+          }
 
-function stopMovementPulse(manual=true){
-  const n=movementPulseState;if(!n)return;
-  clearTimeout(n.timer);
-  const now=n.ctx.currentTime;
-  try{n.fade.gain.cancelScheduledValues(now);n.fade.gain.setValueAtTime(Math.max(.0001,n.fade.gain.value),now);n.fade.gain.exponentialRampToValueAtTime(.0001,now+.35)}catch{}
-  setTimeout(()=>{
-    for(const osc of [n.root,n.third,n.fifth,n.freqLfo,n.ampLfo]){try{osc.stop()}catch{}try{osc.disconnect()}catch{}}
-    try{n.rootGain.disconnect();n.thirdGain.disconnect();n.fifthGain.disconnect();n.mix.disconnect();n.fade.disconnect();n.freqRoot.disconnect();n.freqThird.disconnect();n.freqFifth.disconnect();n.ampDepth.disconnect()}catch{}
-  },400);
-  movementPulseState=null;
-  $('movementPulse').textContent='▶ Включить мажорный пульс';
-  $('movementPulseStatus').textContent=manual?`Выбрано: ${movementPulseMinutes} мин · мажорное трезвучие`:'Готово · мягкое затухание завершено';
-}
-
-async function startMovementPulse(){
-  if(movementPulseState){stopMovementPulse(true);return}
-  try{
-    const AudioCtx=window.AudioContext||window.webkitAudioContext;
-    if(!AudioCtx)throw new Error('AudioContext недоступен');
-    if(!movementPulseCtx)movementPulseCtx=new AudioCtx();
-    const ctx=movementPulseCtx;if(ctx.state==='suspended')await ctx.resume();
-    const root=ctx.createOscillator(),third=ctx.createOscillator(),fifth=ctx.createOscillator();
-    const rootGain=ctx.createGain(),thirdGain=ctx.createGain(),fifthGain=ctx.createGain();
-    const mix=ctx.createGain(),fade=ctx.createGain();
-    const freqLfo=ctx.createOscillator(),freqRoot=ctx.createGain(),freqThird=ctx.createGain(),freqFifth=ctx.createGain();
-    const ampLfo=ctx.createOscillator(),ampDepth=ctx.createGain();
-    root.type=third.type=fifth.type='sine';
-    root.frequency.value=275;
-    third.frequency.value=275*1.25;
-    fifth.frequency.value=275*1.5;
-    rootGain.gain.value=.18;thirdGain.gain.value=.055;fifthGain.gain.value=.07;
-    root.connect(rootGain);third.connect(thirdGain);fifth.connect(fifthGain);
-    rootGain.connect(mix);thirdGain.connect(mix);fifthGain.connect(mix);
-    mix.gain.value=.86;mix.connect(fade);fade.connect(ctx.destination);
-    freqLfo.type='sine';freqLfo.frequency.value=.075;
-    freqRoot.gain.value=25;freqThird.gain.value=31.25;freqFifth.gain.value=37.5;
-    freqLfo.connect(freqRoot);freqLfo.connect(freqThird);freqLfo.connect(freqFifth);
-    freqRoot.connect(root.frequency);freqThird.connect(third.frequency);freqFifth.connect(fifth.frequency);
-    ampLfo.type='sine';ampLfo.frequency.value=.82;ampDepth.gain.value=.11;ampLfo.connect(ampDepth);ampDepth.connect(mix.gain);
-    const now=ctx.currentTime,dur=movementPulseMinutes*60,fadeSec=7;
-    fade.gain.setValueAtTime(.0001,now);fade.gain.exponentialRampToValueAtTime(1,now+.9);fade.gain.setValueAtTime(1,now+Math.max(1,dur-fadeSec));fade.gain.exponentialRampToValueAtTime(.0001,now+dur);
-    for(const osc of [root,third,fifth,freqLfo,ampLfo])osc.start(now);
-    const timer=setTimeout(()=>stopMovementPulse(false),dur*1000+100);
-    movementPulseState={ctx,root,third,fifth,rootGain,thirdGain,fifthGain,mix,fade,freqLfo,freqRoot,freqThird,freqFifth,ampLfo,ampDepth,timer};
-    $('movementPulse').textContent='■ Выключить мажорный пульс';
-    $('movementPulseStatus').textContent=`Звучит ${movementPulseMinutes} мин · 250–300 Гц + большая терция + квинта`;
-  }catch(e){$('movementPulseStatus').textContent='Не удалось включить звук: '+e.message}
-}
-$('movementPulse').onclick=startMovementPulse;
-'''
-          s=s.replace(anchor,anchor+code,1)
-          jp.write_text(s,encoding='utf-8')
+          async function startMovementPulse(){
+            if(movementPulseState){stopMovementPulse(true);return}
+            try{
+              const AudioCtx=window.AudioContext||window.webkitAudioContext;
+              if(!AudioCtx)throw new Error('AudioContext недоступен');
+              if(!movementPulseCtx)movementPulseCtx=new AudioCtx();
+              const ctx=movementPulseCtx;if(ctx.state==='suspended')await ctx.resume();
+              const root=ctx.createOscillator(),third=ctx.createOscillator(),fifth=ctx.createOscillator();
+              const rootGain=ctx.createGain(),thirdGain=ctx.createGain(),fifthGain=ctx.createGain();
+              const mix=ctx.createGain(),fade=ctx.createGain();
+              const freqLfo=ctx.createOscillator(),freqRoot=ctx.createGain(),freqThird=ctx.createGain(),freqFifth=ctx.createGain();
+              const ampLfo=ctx.createOscillator(),ampDepth=ctx.createGain();
+              root.type=third.type=fifth.type='sine';
+              root.frequency.value=275;third.frequency.value=343.75;fifth.frequency.value=412.5;
+              rootGain.gain.value=.18;thirdGain.gain.value=.055;fifthGain.gain.value=.07;
+              root.connect(rootGain);third.connect(thirdGain);fifth.connect(fifthGain);
+              rootGain.connect(mix);thirdGain.connect(mix);fifthGain.connect(mix);mix.gain.value=.86;mix.connect(fade);fade.connect(ctx.destination);
+              freqLfo.type='sine';freqLfo.frequency.value=.075;
+              freqRoot.gain.value=25;freqThird.gain.value=31.25;freqFifth.gain.value=37.5;
+              freqLfo.connect(freqRoot);freqLfo.connect(freqThird);freqLfo.connect(freqFifth);
+              freqRoot.connect(root.frequency);freqThird.connect(third.frequency);freqFifth.connect(fifth.frequency);
+              ampLfo.type='sine';ampLfo.frequency.value=.82;ampDepth.gain.value=.11;ampLfo.connect(ampDepth);ampDepth.connect(mix.gain);
+              const now=ctx.currentTime,dur=movementPulseMinutes*60,fadeSec=7;
+              fade.gain.setValueAtTime(.0001,now);fade.gain.exponentialRampToValueAtTime(1,now+.9);fade.gain.setValueAtTime(1,now+Math.max(1,dur-fadeSec));fade.gain.exponentialRampToValueAtTime(.0001,now+dur);
+              for(const osc of [root,third,fifth,freqLfo,ampLfo])osc.start(now);
+              const timer=setTimeout(()=>stopMovementPulse(false),dur*1000+100);
+              movementPulseState={ctx,root,third,fifth,rootGain,thirdGain,fifthGain,mix,fade,freqLfo,freqRoot,freqThird,freqFifth,ampLfo,ampDepth,timer};
+              $('movementPulse').textContent='■ Выключить мажорный пульс';
+              $('movementPulseStatus').textContent=`Звучит ${movementPulseMinutes} мин · 250–300 Гц + большая терция + квинта`;
+            }catch(e){$('movementPulseStatus').textContent='Не удалось включить звук: '+e.message}
+          }
+          $('movementPulse').onclick=startMovementPulse;
+          """
+              code = '\n'.join(line[10:] if line.startswith('          ') else line for line in code.splitlines())
+              s = s.replace(anchor, anchor + '\n' + code, 1)
+              jp.write_text(s, encoding='utf-8')
           PY
       - name: Commit live diary change
         run: |
