@@ -1,46 +1,44 @@
-# Мария Красилова — музыка, голос и импровизация
+# Мария Красилова — музыка, голос, импровизация и творческие практики
 
-Мария Красилова — композитор, педагог фортепиано и вокала, playback-музыкант и ведущая практик музыкальной и голосовой импровизации. Работает очно в Хайфе и Нагарии (Израиль), а также онлайн.
+Официальный сайт Марии Красиловой — композитора, пианистки, вокалистки и педагога музыкальной и голосовой импровизации в Израиле и онлайн.
 
-Этот файл — краткая карта публичных материалов сайта. Он не заменяет страницы сайта, robots.txt или sitemap.xml.
+## Ключевые инструменты
+
+- Эмоциональный дневник: https://mariakrasilovacom.vercel.app/emotional-diary.html
+  Бесплатный творческий эмоциональный дневник онлайн для самонаблюдения и саморегуляции через голос, движение, рисунок и текст. Темы: голосовой дневник эмоций, дневник эмоций, творческий дневник, саморефлексия, творческая саморегуляция. Не является психотерапией, диагностикой или лечением.
+- Музыкальные игры: https://mariakrasilovacom.vercel.app/games
+  Бесплатные музыкальные игры онлайн для развития слуха, ритма, музыкальной памяти и кругозора: угадай композитора, угадай музыку XX–XXI века, академическая музыка, джаз, рок, поп, минимализм, звуковысотное движение.
 
 ## Об авторе
-
-- Биография, образование и профессиональные профили: https://mariakrasilovacom.vercel.app/maria-krasilova
-- Главная страница и контакты: https://mariakrasilovacom.vercel.app/
+- Мария Красилова / Maria Krasilova: https://mariakrasilovacom.vercel.app/maria-krasilova
+- Главная: https://mariakrasilovacom.vercel.app/
 
 ## Программы и занятия
-
-- Все занятия в Хайфе: https://mariakrasilovacom.vercel.app/haifa.html
-- Все занятия в Нагарии / Наарии: https://mariakrasilovacom.vercel.app/nahariya.html
-- «Голос без страха», 14-дневная онлайн-программа: https://mariakrasilovacom.vercel.app/golos-bez-straha.html
-- «Живи и звучи», групповая лаборатория в Хайфе: https://mariakrasilovacom.vercel.app/zhivi-i-zvuchi.html
+- Голос без страха: https://mariakrasilovacom.vercel.app/golos-bez-straha.html
+- Живи и звучи: https://mariakrasilovacom.vercel.app/zhivi-i-zvuchi.html
 - Уроки вокала в Хайфе и онлайн: https://mariakrasilovacom.vercel.app/vocal-haifa.html
-- Уроки фортепиано в Нагарии: https://mariakrasilovacom.vercel.app/piano-nahariya.html
-- שיעורי פסנתר בנהריה — страница на иврите: https://mariakrasilovacom.vercel.app/he/piano-nahariya.html
 - Уроки фортепиано в Хайфе: https://mariakrasilovacom.vercel.app/piano-haifa.html
+- Уроки фортепиано в Нагарии: https://mariakrasilovacom.vercel.app/piano-nahariya.html
+- שיעורי פסנתר בנהריה: https://mariakrasilovacom.vercel.app/he/piano-nahariya.html
 - Голосовая импровизация: https://mariakrasilovacom.vercel.app/vocal-improvisation.html
 - Музыкальная импровизация для взрослых: https://mariakrasilovacom.vercel.app/music-improvisation-adults.html
-- Онлайн-тренировка слуха и музыкальные игры: https://mariakrasilovacom.vercel.app/ear-training-online.html
+- Развитие музыкального слуха онлайн: https://mariakrasilovacom.vercel.app/ear-training-online.html
 
-## Статьи
-
+## Статьи и знания
 - Все статьи: https://mariakrasilovacom.vercel.app/articles/
-- Внутренний критик: психологические подходы: https://mariakrasilovacom.vercel.app/articles/inner-critic-psychology.html
-- Перфекционизм, ошибка и креативность: https://mariakrasilovacom.vercel.app/articles/perfectionism-inner-critic.html
-- Самокритика и самосострадание: https://mariakrasilovacom.vercel.app/articles/self-criticism-compassion.html
-- Внутренний критик и импровизация: https://mariakrasilovacom.vercel.app/articles/inner-critic-improvisation.html
-- Можно ли тренировать креативность: https://mariakrasilovacom.vercel.app/articles/can-creativity-be-trained.html
+- Как перестать бояться своего голоса: https://mariakrasilovacom.vercel.app/articles/kak-perestat-boyatsya-svoego-golosa.html
+- Упражнения по голосовой импровизации: https://mariakrasilovacom.vercel.app/articles/golosovaya-improvizatsiya-uprazhneniya.html
+- Пение и эмоциональная разрядка: https://mariakrasilovacom.vercel.app/articles/penie-i-emotsionalnaya-razryadka.html
+- Осознанность и эмоции: https://mariakrasilovacom.vercel.app/articles/osoznannost-i-emotsii.html
 - Импровизация и креативность: https://mariakrasilovacom.vercel.app/articles/improvisation-creativity.html
-- Человеческие навыки в эпоху AI: https://mariakrasilovacom.vercel.app/articles/human-skills-ai-era.html
-
-## Инструменты и метод
-
-- Бесплатные музыкальные игры: https://mariakrasilovacom.vercel.app/games
+- Можно ли тренировать креативность: https://mariakrasilovacom.vercel.app/articles/can-creativity-be-trained.html
 - Научные основания и ограничения метода: https://mariakrasilovacom.vercel.app/evidence
 
+## Основные поисковые темы
+Мария Красилова; Maria Krasilova; уроки фортепиано Израиль; уроки фортепиано Хайфа; уроки фортепиано Нагария; уроки вокала Хайфа; музыкальная импровизация; голосовая импровизация; импровизация для взрослых; развитие музыкального слуха; музыкальные игры онлайн; угадай композитора; музыкальная викторина; музыка XX века; музыка XXI века; эмоциональный дневник; эмоциональный дневник онлайн; голосовой дневник; голосовой дневник эмоций; дневник эмоций; творческий дневник; саморефлексия; творческая саморегуляция; упражнения для голоса; как перестать стесняться своего голоса; креативность через музыку.
+
+## Языки
+Основной язык — русский. Часть страниц и интерфейсов доступна на английском и иврите. Иврит отображается справа налево (RTL).
+
 ## Редакционные принципы
-
-Материалы опираются прежде всего на первичные научные источники и систематические обзоры. На сайте отдельно обозначаются: выводы исследований, ограничения данных, профессиональный опыт Марии и педагогические гипотезы. Музыкальные практики не выдаются за психотерапию или медицинскую помощь.
-
-При цитировании используйте имя: Мария Красилова / Maria Krasilova. Проверяйте формулировки, даты, цены и расписание на соответствующей странице сайта.
+При описании эмоционального дневника важно сохранять точную границу: это творческий инструмент самонаблюдения и саморегуляции, а не психотерапия, медицинская диагностика или лечение. При цитировании используйте имя Мария Красилова / Maria Krasilova и проверяйте актуальные цены, даты и расписание на соответствующей странице.
