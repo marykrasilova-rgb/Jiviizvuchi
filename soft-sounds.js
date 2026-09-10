@@ -1,4 +1,4 @@
-// Softer low-frequency movement support. Keeps one simple pulse option for movement.
+// Softer movement support. Keeps one simple pulse option for movement.
 const AudioCtx=window.AudioContext||window.webkitAudioContext;
 let ctx=null;
 let activeButton=null;
@@ -32,8 +32,8 @@ function softTone(context,when,freq,duration,peak){
   osc.type='sine';
   osc.frequency.setValueAtTime(freq,when);
   gain.gain.setValueAtTime(0.0001,when);
-  gain.gain.exponentialRampToValueAtTime(peak,when+0.09);
-  gain.gain.exponentialRampToValueAtTime(Math.max(0.0008,peak*0.42),when+duration*0.55);
+  gain.gain.exponentialRampToValueAtTime(peak,when+0.11);
+  gain.gain.exponentialRampToValueAtTime(Math.max(0.0008,peak*0.42),when+duration*0.58);
   gain.gain.exponentialRampToValueAtTime(0.0001,when+duration);
   osc.connect(gain).connect(context.destination);
   osc.start(when);osc.stop(when+duration+0.03);
@@ -49,15 +49,15 @@ function play(button){
   const step=60/bpm;
   const beats=18;
 
-  // Quiet low body tone under a slow, rounded pulse.
-  softTone(ctx,now,98,beats*step+0.5,0.010);
-  softTone(ctx,now,116,beats*step+0.5,0.0045);
+  // Warm mid-low support in the requested 250–300 Hz range.
+  softTone(ctx,now,250,beats*step+0.5,0.0065);
+  softTone(ctx,now,300,beats*step+0.5,0.0028);
 
   for(let i=0;i<beats;i++){
     const strong=i%4===0;
-    const freq=strong?104:98;
-    const peak=strong?0.030:0.018;
-    softTone(ctx,now+i*step,freq,0.62,peak);
+    const freq=strong?290:270;
+    const peak=strong?0.028:0.017;
+    softTone(ctx,now+i*step,freq,0.64,peak);
   }
 
   activeButton=button;
