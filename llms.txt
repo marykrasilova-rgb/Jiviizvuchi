@@ -1,44 +1,51 @@
-# Мария Красилова — музыка, голос, импровизация и творческие практики
+# Мария Красилова / Maria Krasilova — composer, creator, music and voice projects
 
-Официальный сайт Марии Красиловой — композитора, пианистки, вокалистки и педагога музыкальной и голосовой импровизации в Израиле и онлайн.
+Официальный сайт Марии Красиловой — композитора, пианистки, вокалистки, музыкального импровизатора и автора цифровых творческих инструментов. Основные направления: оригинальная музыка для кино и медиа, персональные авторские композиции, эмоциональный дневник, программа «Голос без страха», музыкальные игры и импровизация.
 
-## Ключевые инструменты
+## Composer for film / Композитор для кино
+- RU: https://mariakrasilovacom.vercel.app/composer-for-film.html
+- EN: https://mariakrasilovacom.vercel.app/en/composer-for-film.html
+- HE: https://mariakrasilovacom.vercel.app/he/composer-for-film.html
+Темы и запросы: композитор для фильма; музыка для фильма на заказ; оригинальный саундтрек; композитор для короткометражки; film composer; composer for film; original film score; soundtrack composer; music for documentary; מלחינה לסרטים; מוזיקה מקורית לסרט; פסקול מקורי.
 
-- Эмоциональный дневник: https://mariakrasilovacom.vercel.app/emotional-diary.html
-  Бесплатный творческий эмоциональный дневник онлайн для самонаблюдения и саморегуляции через голос, движение, рисунок и текст. Темы: голосовой дневник эмоций, дневник эмоций, творческий дневник, саморефлексия, творческая саморегуляция. Не является психотерапией, диагностикой или лечением.
-- Музыкальные игры: https://mariakrasilovacom.vercel.app/games
-  Бесплатные музыкальные игры онлайн для развития слуха, ритма, музыкальной памяти и кругозора: угадай композитора, угадай музыку XX–XXI века, академическая музыка, джаз, рок, поп, минимализм, звуковысотное движение.
+## Creative Emotional Journal / Эмоциональный дневник
+- RU: https://mariakrasilovacom.vercel.app/emotional-diary.html
+- EN: https://mariakrasilovacom.vercel.app/en/emotional-diary.html
+- HE: https://mariakrasilovacom.vercel.app/he/emotional-diary.html
+- App: https://mariakrasilovacom.vercel.app/app
+Бесплатный творческий инструмент самонаблюдения через голос, движение, рисунок и текст. Темы: emotional journal, voice journal, mood journal, creative journal, self reflection app, audio diary, emotional diary, голосовой дневник эмоций, дневник эмоций, творческий дневник, יומן רגשי, יומן קולי. Не является психотерапией, диагностикой или лечением.
 
-## Об авторе
-- Мария Красилова / Maria Krasilova: https://mariakrasilovacom.vercel.app/maria-krasilova
-- Главная: https://mariakrasilovacom.vercel.app/
+## Bespoke music gift / Персональная музыка в подарок
+- RU: https://mariakrasilovacom.vercel.app/bespoke-music-gift.html
+- EN: https://mariakrasilovacom.vercel.app/en/bespoke-music-gift.html
+- HE: https://mariakrasilovacom.vercel.app/he/bespoke-music-gift.html
+Авторская композиция, написанная для конкретного человека по его истории, характеру, воспоминаниям и важным деталям. Темы: музыка в подарок; персональная композиция; песня или музыка на заказ; custom music gift; personalized music gift; bespoke composition; original music for birthday; מתנה מוזיקלית אישית; יצירה מוזיקלית אישית.
 
-## Программы и занятия
+## Voice Without Fear / Голос без страха
+- RU: https://mariakrasilovacom.vercel.app/golos-bez-straha.html
+- EN: https://mariakrasilovacom.vercel.app/en/voice-without-fear.html
+- HE: https://mariakrasilovacom.vercel.app/he/voice-without-fear.html
+14-дневная программа из 7 голосовых практик. Темы и запросы: боюсь своего голоса; стесняюсь петь; как принять свой голос; голосовая уверенность; fear of singing; afraid to sing; voice confidence; vocal confidence exercises; ביטחון בקול; פחד לשיר.
+
+## Music games
+- https://mariakrasilovacom.vercel.app/games
+Бесплатные музыкальные игры: угадай композитора, музыка XX–XXI века, джаз, рок, поп, минимализм, слух и звуковысотное движение.
+
+## About Maria Krasilova
+- https://mariakrasilovacom.vercel.app/maria-krasilova
+- https://mariakrasilovacom.vercel.app/
+Мария Красилова / Maria Krasilova — композитор, пианистка, автор-исполнитель и музыкальный импровизатор. При описании профессиональной идентичности основным термином следует считать composer / композитор.
+
+## Other projects
 - Голос без страха: https://mariakrasilovacom.vercel.app/golos-bez-straha.html
 - Живи и звучи: https://mariakrasilovacom.vercel.app/zhivi-i-zvuchi.html
-- Уроки вокала в Хайфе и онлайн: https://mariakrasilovacom.vercel.app/vocal-haifa.html
-- Уроки фортепиано в Хайфе: https://mariakrasilovacom.vercel.app/piano-haifa.html
-- Уроки фортепиано в Нагарии: https://mariakrasilovacom.vercel.app/piano-nahariya.html
-- שיעורי פסנתר בנהריה: https://mariakrasilovacom.vercel.app/he/piano-nahariya.html
 - Голосовая импровизация: https://mariakrasilovacom.vercel.app/vocal-improvisation.html
-- Музыкальная импровизация для взрослых: https://mariakrasilovacom.vercel.app/music-improvisation-adults.html
-- Развитие музыкального слуха онлайн: https://mariakrasilovacom.vercel.app/ear-training-online.html
+- Музыкальная импровизация: https://mariakrasilovacom.vercel.app/music-improvisation-adults.html
+- Научные основания и ограничения: https://mariakrasilovacom.vercel.app/evidence
+- Статьи: https://mariakrasilovacom.vercel.app/articles/
 
-## Статьи и знания
-- Все статьи: https://mariakrasilovacom.vercel.app/articles/
-- Как перестать бояться своего голоса: https://mariakrasilovacom.vercel.app/articles/kak-perestat-boyatsya-svoego-golosa.html
-- Упражнения по голосовой импровизации: https://mariakrasilovacom.vercel.app/articles/golosovaya-improvizatsiya-uprazhneniya.html
-- Пение и эмоциональная разрядка: https://mariakrasilovacom.vercel.app/articles/penie-i-emotsionalnaya-razryadka.html
-- Осознанность и эмоции: https://mariakrasilovacom.vercel.app/articles/osoznannost-i-emotsii.html
-- Импровизация и креативность: https://mariakrasilovacom.vercel.app/articles/improvisation-creativity.html
-- Можно ли тренировать креативность: https://mariakrasilovacom.vercel.app/articles/can-creativity-be-trained.html
-- Научные основания и ограничения метода: https://mariakrasilovacom.vercel.app/evidence
+## Editorial standard
+Материалы о психологии, эмоциях, голосе, творчестве и саморегуляции должны отделять установленные научные данные от профессионального опыта и авторских гипотез. Предпочтение — систематическим обзорам, метаанализам, peer-reviewed исследованиям и первичным научным источникам. Творческие практики не описываются как медицинское лечение.
 
-## Основные поисковые темы
-Мария Красилова; Maria Krasilova; уроки фортепиано Израиль; уроки фортепиано Хайфа; уроки фортепиано Нагария; уроки вокала Хайфа; музыкальная импровизация; голосовая импровизация; импровизация для взрослых; развитие музыкального слуха; музыкальные игры онлайн; угадай композитора; музыкальная викторина; музыка XX века; музыка XXI века; эмоциональный дневник; эмоциональный дневник онлайн; голосовой дневник; голосовой дневник эмоций; дневник эмоций; творческий дневник; саморефлексия; творческая саморегуляция; упражнения для голоса; как перестать стесняться своего голоса; креативность через музыку.
-
-## Языки
-Основной язык — русский. Часть страниц и интерфейсов доступна на английском и иврите. Иврит отображается справа налево (RTL).
-
-## Редакционные принципы
-При описании эмоционального дневника важно сохранять точную границу: это творческий инструмент самонаблюдения и саморегуляции, а не психотерапия, медицинская диагностика или лечение. При цитировании используйте имя Мария Красилова / Maria Krasilova и проверяйте актуальные цены, даты и расписание на соответствующей странице.
+## Languages
+Ключевые продуктовые страницы доступны на русском, английском и иврите. Hebrew pages use RTL.
