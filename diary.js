@@ -26,6 +26,60 @@ async function startVoice(){try{stream=await navigator.mediaDevices.getUserMedia
 $('voiceRecord').onclick=()=>recorder?.state==='recording'?recorder.stop():startVoice();
 async function startMovement(){try{stream=await navigator.mediaDevices.getUserMedia({video:{facingMode:'user'},audio:true});const chunks=[];const mime=bestMime('video');recorder=new MediaRecorder(stream,mime?{mimeType:mime}:undefined);recorder.ondataavailable=e=>e.data.size&&chunks.push(e.data);recorder.onstop=()=>{mediaBlob=new Blob(chunks,{type:recorder.mimeType||'video/webm'});mediaType='video';$('movementPreview').src=URL.createObjectURL(mediaBlob);$('movementPreview').classList.remove('hidden');stream.getTracks().forEach(t=>t.stop());$('movementRecord').textContent='Записать движение заново';$('movementStatus').textContent='Запись готова'};recorder.start();$('movementRecord').textContent='Остановить запись';$('movementStatus').textContent='Идёт запись'}catch(e){$('movementStatus').textContent='Не удалось включить камеру/микрофон. Проверьте разрешения браузера.'}}
 $('movementRecord').onclick=()=>recorder?.state==='recording'?(recorder.stop()):startMovement();
+
+let movementPulseMinutes=3;
+let movementPulseState=null;
+let movementPulseCtx=null;
+
+document.querySelectorAll('#movementPulseDurations [data-pulse-minutes]').forEach(b=>b.onclick=()=>{
+  movementPulseMinutes=+b.dataset.pulseMinutes;
+  document.querySelectorAll('#movementPulseDurations [data-pulse-minutes]').forEach(x=>x.classList.toggle('on',x===b));
+  if(!movementPulseState)$('movementPulseStatus').textContent=`Выбрано: ${movementPulseMinutes} мин · мажорное трезвучие`;
+});
+
+function stopMovementPulse(manual=true){
+  const n=movementPulseState;if(!n)return;
+  clearTimeout(n.timer);
+  const now=n.ctx.currentTime;
+  try{n.fade.gain.cancelScheduledValues(now);n.fade.gain.setValueAtTime(Math.max(.0001,n.fade.gain.value),now);n.fade.gain.exponentialRampToValueAtTime(.0001,now+.35)}catch{}
+  setTimeout(()=>{for(const osc of [n.root,n.third,n.fifth,n.freqLfo,n.ampLfo]){try{osc.stop()}catch{}try{osc.disconnect()}catch{}}},400);
+  movementPulseState=null;
+  $('movementPulse').textContent='▶ Включить мажорный пульс';
+  $('movementPulseStatus').textContent=manual?`Выбрано: ${movementPulseMinutes} мин · мажорное трезвучие`:'Готово · мягкое затухание завершено';
+}
+
+async function startMovementPulse(){
+  if(movementPulseState){stopMovementPulse(true);return}
+  try{
+    const AudioCtx=window.AudioContext||window.webkitAudioContext;
+    if(!AudioCtx)throw new Error('AudioContext недоступен');
+    if(!movementPulseCtx)movementPulseCtx=new AudioCtx();
+    const ctx=movementPulseCtx;if(ctx.state==='suspended')await ctx.resume();
+    const root=ctx.createOscillator(),third=ctx.createOscillator(),fifth=ctx.createOscillator();
+    const rootGain=ctx.createGain(),thirdGain=ctx.createGain(),fifthGain=ctx.createGain();
+    const mix=ctx.createGain(),fade=ctx.createGain();
+    const freqLfo=ctx.createOscillator(),freqRoot=ctx.createGain(),freqThird=ctx.createGain(),freqFifth=ctx.createGain();
+    const ampLfo=ctx.createOscillator(),ampDepth=ctx.createGain();
+    root.type=third.type=fifth.type='sine';
+    root.frequency.value=275;third.frequency.value=343.75;fifth.frequency.value=412.5;
+    rootGain.gain.value=.18;thirdGain.gain.value=.055;fifthGain.gain.value=.07;
+    root.connect(rootGain);third.connect(thirdGain);fifth.connect(fifthGain);
+    rootGain.connect(mix);thirdGain.connect(mix);fifthGain.connect(mix);mix.gain.value=.86;mix.connect(fade);fade.connect(ctx.destination);
+    freqLfo.type='sine';freqLfo.frequency.value=.075;
+    freqRoot.gain.value=25;freqThird.gain.value=31.25;freqFifth.gain.value=37.5;
+    freqLfo.connect(freqRoot);freqLfo.connect(freqThird);freqLfo.connect(freqFifth);
+    freqRoot.connect(root.frequency);freqThird.connect(third.frequency);freqFifth.connect(fifth.frequency);
+    ampLfo.type='sine';ampLfo.frequency.value=.82;ampDepth.gain.value=.11;ampLfo.connect(ampDepth);ampDepth.connect(mix.gain);
+    const now=ctx.currentTime,dur=movementPulseMinutes*60,fadeSec=7;
+    fade.gain.setValueAtTime(.0001,now);fade.gain.exponentialRampToValueAtTime(1,now+.9);fade.gain.setValueAtTime(1,now+Math.max(1,dur-fadeSec));fade.gain.exponentialRampToValueAtTime(.0001,now+dur);
+    for(const osc of [root,third,fifth,freqLfo,ampLfo])osc.start(now);
+    const timer=setTimeout(()=>stopMovementPulse(false),dur*1000+100);
+    movementPulseState={ctx,root,third,fifth,rootGain,thirdGain,fifthGain,mix,fade,freqLfo,freqRoot,freqThird,freqFifth,ampLfo,ampDepth,timer};
+    $('movementPulse').textContent='■ Выключить мажорный пульс';
+    $('movementPulseStatus').textContent=`Звучит ${movementPulseMinutes} мин · 250–300 Гц + большая терция + квинта`;
+  }catch(e){$('movementPulseStatus').textContent='Не удалось включить звук: '+e.message}
+}
+$('movementPulse').onclick=startMovementPulse;
 const c=$('drawCanvas'),ctx=c.getContext('2d');ctx.lineWidth=10;ctx.lineCap='round';ctx.lineJoin='round';ctx.strokeStyle='#8f5961';let drawing=false;document.querySelectorAll('#drawPalette .swatch').forEach(b=>b.onclick=()=>{ctx.strokeStyle=b.dataset.color;document.querySelectorAll('#drawPalette .swatch').forEach(x=>x.classList.toggle('on',x===b))});function pos(e){const r=c.getBoundingClientRect(),p=e.touches?.[0]||e;return{x:(p.clientX-r.left)*c.width/r.width,y:(p.clientY-r.top)*c.height/r.height}}function begin(e){drawing=true;const p=pos(e);ctx.beginPath();ctx.moveTo(p.x,p.y);e.preventDefault()}function move(e){if(!drawing)return;const p=pos(e);ctx.lineTo(p.x,p.y);ctx.stroke();e.preventDefault()}function end(){drawing=false}c.addEventListener('pointerdown',begin);c.addEventListener('pointermove',move);window.addEventListener('pointerup',end);$('clearCanvas').onclick=()=>ctx.clearRect(0,0,c.width,c.height);
 document.querySelectorAll('.effect').forEach(b=>b.onclick=()=>{effect=b.dataset.effect;document.querySelectorAll('.effect').forEach(x=>x.classList.toggle('on',x===b))});
 async function canvasBlob(){return new Promise(res=>c.toBlob(res,'image/png'))}
