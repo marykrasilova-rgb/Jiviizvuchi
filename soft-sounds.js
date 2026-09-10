@@ -32,32 +32,35 @@ function softTone(context,when,freq,duration,peak){
   osc.type='sine';
   osc.frequency.setValueAtTime(freq,when);
   gain.gain.setValueAtTime(0.0001,when);
-  gain.gain.exponentialRampToValueAtTime(peak,when+0.11);
-  gain.gain.exponentialRampToValueAtTime(Math.max(0.0008,peak*0.42),when+duration*0.58);
+  gain.gain.exponentialRampToValueAtTime(peak,when+0.08);
+  gain.gain.exponentialRampToValueAtTime(Math.max(0.001,peak*0.45),when+duration*0.58);
   gain.gain.exponentialRampToValueAtTime(0.0001,when+duration);
   osc.connect(gain).connect(context.destination);
   osc.start(when);osc.stop(when+duration+0.03);
   nodes.push(osc);
 }
 
-function play(button){
+async function play(button){
   stop();
   if(!AudioCtx)return;
   ctx=new AudioCtx();
-  const now=ctx.currentTime+0.08;
+  if(ctx.state==='suspended'){
+    try{await ctx.resume()}catch{}
+  }
+  const now=ctx.currentTime+0.05;
   const bpm=60;
   const step=60/bpm;
   const beats=18;
 
-  // Warm mid-low support in the requested 250–300 Hz range.
-  softTone(ctx,now,250,beats*step+0.5,0.0065);
-  softTone(ctx,now,300,beats*step+0.5,0.0028);
+  // Warm support in the requested 250–300 Hz range, loud enough for phone speakers.
+  softTone(ctx,now,250,beats*step+0.5,0.018);
+  softTone(ctx,now,300,beats*step+0.5,0.008);
 
   for(let i=0;i<beats;i++){
     const strong=i%4===0;
     const freq=strong?290:270;
-    const peak=strong?0.028:0.017;
-    softTone(ctx,now+i*step,freq,0.64,peak);
+    const peak=strong?0.095:0.058;
+    softTone(ctx,now+i*step,freq,0.62,peak);
   }
 
   activeButton=button;
