@@ -1,3 +1,4 @@
+import './soft-sounds.js';
 // Adds visual depth to the existing real-time microphone waveform without changing recording logic.
 const style=document.createElement('style');
 style.textContent=`
