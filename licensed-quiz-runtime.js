@@ -1,2 +1,3 @@
-// Kept as a compatibility stub for cached copies of games.html.
-// The five strict-canon quizzes now run entirely from modern-quiz.js.
+// Compatibility hook for the five strict-canon quizzes.
+// Also loads the shared Hebrew completion layer used by the diary and games.
+import('./he-complete.js').then(()=>window.MariaLanguage?.refresh?.()).catch(()=>{});
