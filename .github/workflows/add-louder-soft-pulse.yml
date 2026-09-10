@@ -1,0 +1,106 @@
+name: Add louder soft pulse
+
+on:
+  push:
+    branches: [main]
+
+permissions:
+  contents: write
+
+jobs:
+  patch:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Patch app.html
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          p = Path('app.html')
+          s = p.read_text(encoding='utf-8')
+          if 'softPulseAudioCtx' in s:
+              print('Soft pulse already present; nothing to do.')
+              raise SystemExit(0)
+
+          old_panel = '''   <div id="${prefix}videoPanel" class="mode-panel hidden">
+     <p class="small">Можно просто двигаться. Не обязательно танцевать «красиво».</p>
+     <div class="video-wrap hidden" id="${prefix}CameraWrap"><video id="${prefix}Camera" autoplay muted playsinline></video></div>'''
+          new_panel = '''   <div id="${prefix}videoPanel" class="mode-panel hidden">
+     <p class="small">Можно просто двигаться. Не обязательно танцевать «красиво».</p>
+     <button type="button" class="btn secondary" id="${prefix}PulseBtn">◉ Мягкий пульс</button>
+     <div id="${prefix}PulseStatus" class="small">250–300 Гц · нажми, чтобы включить</div>
+     <div class="video-wrap hidden" id="${prefix}CameraWrap"><video id="${prefix}Camera" autoplay muted playsinline></video></div>'''
+          if old_panel not in s:
+              raise SystemExit('Movement panel anchor not found')
+          s = s.replace(old_panel, new_panel, 1)
+
+          old_bind = ''' $(prefix+'VoiceBtn').onclick=()=>recordStateVoice(prefix);
+ $(prefix+'CameraBtn').onclick=()=>openCamera(prefix);'''
+          new_bind = ''' $(prefix+'VoiceBtn').onclick=()=>recordStateVoice(prefix);
+ $(prefix+'PulseBtn').onclick=()=>toggleSoftPulse(prefix);
+ $(prefix+'CameraBtn').onclick=()=>openCamera(prefix);'''
+          if old_bind not in s:
+              raise SystemExit('initState anchor not found')
+          s = s.replace(old_bind, new_bind, 1)
+
+          anchor = '''function bestVideoMime(){'''
+          pulse_code = r'''
+let softPulseAudioCtx=null;
+const softPulseNodes={};
+
+async function toggleSoftPulse(prefix){
+ const btn=$(prefix+'PulseBtn'),status=$(prefix+'PulseStatus');
+ if(softPulseNodes[prefix]){
+   const n=softPulseNodes[prefix];
+   const now=n.ctx.currentTime;
+   try{n.master.gain.cancelScheduledValues(now);n.master.gain.setValueAtTime(n.master.gain.value,now);n.master.gain.linearRampToValueAtTime(0,now+.12)}catch(e){}
+   setTimeout(()=>{try{n.osc.stop();n.lfo.stop()}catch(e){};try{n.osc.disconnect();n.lfo.disconnect();n.lfoGain.disconnect();n.master.disconnect()}catch(e){}},150);
+   delete softPulseNodes[prefix];
+   btn.textContent='◉ Мягкий пульс';
+   setText(status,'250–300 Гц · нажми, чтобы включить');
+   return;
+ }
+ try{
+   if(!softPulseAudioCtx) softPulseAudioCtx=new (window.AudioContext||window.webkitAudioContext)();
+   const ctx=softPulseAudioCtx;
+   if(ctx.state==='suspended') await ctx.resume();
+   const osc=ctx.createOscillator();
+   const master=ctx.createGain();
+   const lfo=ctx.createOscillator();
+   const lfoGain=ctx.createGain();
+   osc.type='sine';
+   osc.frequency.value=275;
+   lfo.type='sine';
+   lfo.frequency.value=.72;
+   lfoGain.gain.value=25;
+   lfo.connect(lfoGain);lfoGain.connect(osc.frequency);
+   const now=ctx.currentTime;
+   master.gain.setValueAtTime(0,now);
+   master.gain.linearRampToValueAtTime(.32,now+.18);
+   osc.connect(master);master.connect(ctx.destination);
+   osc.start();lfo.start();
+   softPulseNodes[prefix]={ctx,osc,master,lfo,lfoGain};
+   btn.textContent='■ Выключить мягкий пульс';
+   setText(status,'Звучит: 250–300 Гц · громкость повышена');
+ }catch(e){
+   setText(status,'Не удалось включить звук: '+e.message);
+ }
+}
+
+'''
+          if anchor not in s:
+              raise SystemExit('JS anchor not found')
+          s = s.replace(anchor, pulse_code + anchor, 1)
+          p.write_text(s, encoding='utf-8')
+          PY
+      - name: Commit change
+        run: |
+          if git diff --quiet; then exit 0; fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add app.html
+          git commit -m "Add louder 250-300 Hz soft pulse to movement mode"
+          git push
