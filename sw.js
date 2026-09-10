@@ -1,4 +1,4 @@
-const CACHE='maria-diary-v3';
+const CACHE='maria-diary-v4';
 const SHELL=['/app','/diary.html','/diary.css','/diary.js','/diary-enhancements.js','/voice-cards.js','/site-translations.js','/site-language.js','/site-language.css','/manifest.webmanifest','/assets/icon.svg'];
 self.addEventListener('install',e=>{e.waitUntil(caches.open(CACHE).then(c=>c.addAll(SHELL)).catch(()=>{}));self.skipWaiting()});
 self.addEventListener('activate',e=>{e.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(k=>k!==CACHE).map(k=>caches.delete(k)))));self.clients.claim()});
