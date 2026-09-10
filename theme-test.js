@@ -1,3 +1,4 @@
+import './he-complete.js';
 const themes={
   plum:{label:'Слива',bg:'#f7f1ee',paper:'#fffdfb',text:'#2f2928',muted:'#756b67',rose:'#6f3f5b',rose2:'#9a6a84',olive:'#75806d',line:'#e5d9d5'},
   sage:{label:'Шалфей',bg:'#f2f5f1',paper:'#fffefb',text:'#29312d',muted:'#6f7872',rose:'#667c70',rose2:'#8fa296',olive:'#667c70',line:'#dbe4dc'},
@@ -43,6 +44,7 @@ function buildSwitcher(){
   const top=document.querySelector('.top');
   (top?.parentElement||document.querySelector('.shell')||document.body).insertBefore(host,top?.nextSibling||null);
   applyTheme(defaultTheme);
+  window.MariaLanguage?.refresh?.();
 }
 
 applyTheme(defaultTheme);
