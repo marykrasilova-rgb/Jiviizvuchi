@@ -95,3 +95,80 @@ supabase.auth.onAuthStateChange(async(event,session)=>{
 });
 
 supabase.auth.getUser().then(({data:{user}})=>{if(user)onSignedIn()});
+
+// Movement mode: keep one pulse only. The optional example card is hidden for movement,
+// and the main pulse uses an HTMLAudio loop (more reliable on iPhone than live oscillators).
+let singlePulseMinutes=3;
+let singlePulseAudio=null;
+let singlePulseTimer=null;
+let singlePulseUrl=null;
+
+function makeSinglePulseUrl(){
+  if(singlePulseUrl)return singlePulseUrl;
+  const rate=16000,bpm=72,beat=60/bpm,beats=4,dur=beat*beats,n=Math.floor(rate*dur);
+  const buffer=new ArrayBuffer(44+n*2),v=new DataView(buffer);
+  const put=(o,t)=>{for(let i=0;i<t.length;i++)v.setUint8(o+i,t.charCodeAt(i))};
+  put(0,'RIFF');v.setUint32(4,36+n*2,true);put(8,'WAVE');put(12,'fmt ');v.setUint32(16,16,true);v.setUint16(20,1,true);v.setUint16(22,1,true);v.setUint32(24,rate,true);v.setUint32(28,rate*2,true);v.setUint16(32,2,true);v.setUint16(34,16,true);put(36,'data');v.setUint32(40,n*2,true);
+  const root=275,third=343.75,fifth=412.5;
+  for(let i=0;i<n;i++){
+    const t=i/rate,within=t%beat,attack=.055,release=.62;
+    let env=0;
+    if(within<attack)env=within/attack;
+    else if(within<release)env=Math.pow(1-(within-attack)/(release-attack),1.45);
+    const shimmer=.94+.06*Math.sin(2*Math.PI*.18*t);
+    let x=env*shimmer*(.56*Math.sin(2*Math.PI*root*t)+.20*Math.sin(2*Math.PI*third*t)+.28*Math.sin(2*Math.PI*fifth*t));
+    x=Math.max(-1,Math.min(1,x*.78));
+    v.setInt16(44+i*2,Math.round(x*32767),true);
+  }
+  singlePulseUrl=URL.createObjectURL(new Blob([buffer],{type:'audio/wav'}));
+  return singlePulseUrl;
+}
+
+function stopSinglePulse(done=false){
+  if(singlePulseTimer){clearTimeout(singlePulseTimer);singlePulseTimer=null}
+  if(singlePulseAudio){singlePulseAudio.pause();try{singlePulseAudio.currentTime=0}catch{}}
+  const b=$('movementPulse'),st=$('movementPulseStatus');
+  if(b)b.textContent='▶ Включить пульс';
+  if(st)st.textContent=done?'Готово':`Выбрано: ${singlePulseMinutes} мин · 250–300 Гц + терция + квинта`;
+}
+
+async function startSinglePulse(){
+  if(singlePulseTimer){stopSinglePulse(false);return}
+  const b=$('movementPulse'),st=$('movementPulseStatus');
+  try{
+    if(!singlePulseAudio){
+      singlePulseAudio=new Audio(makeSinglePulseUrl());
+      singlePulseAudio.loop=true;
+      singlePulseAudio.preload='auto';
+      singlePulseAudio.volume=.95;
+      singlePulseAudio.playsInline=true;
+    }
+    singlePulseAudio.muted=false;
+    singlePulseAudio.currentTime=0;
+    await singlePulseAudio.play();
+    singlePulseTimer=setTimeout(()=>stopSinglePulse(true),singlePulseMinutes*60*1000);
+    if(b)b.textContent='■ Выключить пульс';
+    if(st)st.textContent=`Звучит ${singlePulseMinutes} мин · 250–300 Гц + терция + квинта`;
+  }catch(e){
+    singlePulseTimer=null;
+    if(st)st.textContent='Не удалось включить звук. Проверь громкость телефона и нажми ещё раз.';
+  }
+}
+
+function installSingleMovementPulse(){
+  const pulse=$('movementPulse');
+  if(!pulse)return;
+  pulse.textContent='▶ Включить пульс';
+  pulse.onclick=startSinglePulse;
+  document.querySelectorAll('#movementPulseDurations [data-pulse-minutes]').forEach(btn=>btn.addEventListener('click',()=>{
+    singlePulseMinutes=+btn.dataset.pulseMinutes||3;
+    if(!singlePulseTimer)$('movementPulseStatus').textContent=`Выбрано: ${singlePulseMinutes} мин · 250–300 Гц + терция + квинта`;
+  }));
+  document.querySelectorAll('.mode').forEach(btn=>btn.addEventListener('click',()=>{
+    if(btn.dataset.mode==='movement')setTimeout(()=>document.querySelector('.example-helper')?.classList.add('hidden'),0);
+    else if(singlePulseTimer)stopSinglePulse(false);
+  }));
+  if($('movementPulseStatus'))$('movementPulseStatus').textContent='Выбрано: 3 мин · 250–300 Гц + терция + квинта';
+}
+
+installSingleMovementPulse();
