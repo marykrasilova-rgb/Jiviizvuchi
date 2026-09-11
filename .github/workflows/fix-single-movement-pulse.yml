@@ -1,0 +1,114 @@
+name: Fix single movement pulse
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/fix-single-movement-pulse.yml'
+jobs:
+  patch:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Keep one pulse and make playback reliable
+        shell: python
+        run: |
+          from pathlib import Path
+
+          # 1) Remove the duplicate movement pulse from the optional example card.
+          p = Path('voice-cards.js')
+          s = p.read_text()
+          old = """    }else if(mode==='movement'){\n      ['soft','beat'].forEach(kind=>{const b=document.createElement('button');b.type='button';b.className='btn secondary';b.textContent=kind==='soft'?t('movementSoft'):t('movementBeat');b.onclick=()=>activeAudioButton===b?stopPromptAudio():(playMovementPrompt(b,kind),status.textContent=t('movementStatus'));actions.append(b)});\n    }else if(mode==='drawing'){"""
+          new = """    }else if(mode==='movement'){\n      example.classList.add('hidden');\n      return;\n    }else if(mode==='drawing'){"""
+          if old not in s:
+              raise SystemExit('movement example block not found')
+          p.write_text(s.replace(old, new))
+
+          # 2) Simplify the visible movement control to one pulse.
+          p = Path('diary.html')
+          s = p.read_text()
+          s = s.replace('<div class="small" style="margin-top:12px"><b>Мягкий мажорный пульс</b></div>', '<div class="small" style="margin-top:12px"><b>Мягкий пульс</b></div>')
+          s = s.replace('▶ Включить мажорный пульс', '▶ Включить пульс')
+          p.write_text(s)
+
+          # 3) Replace WebAudio oscillators with one looping HTMLAudio WAV generated in-browser.
+          p = Path('diary.js')
+          s = p.read_text()
+          start = s.index('let movementPulseMinutes=3;')
+          end_marker = "$('movementPulse').onclick=startMovementPulse;"
+          end = s.index(end_marker, start) + len(end_marker)
+          block = r'''let movementPulseMinutes=3;
+let movementPulseAudio=null;
+let movementPulseTimer=null;
+let movementPulseUrl=null;
+
+document.querySelectorAll('#movementPulseDurations [data-pulse-minutes]').forEach(b=>b.onclick=()=>{
+  movementPulseMinutes=+b.dataset.pulseMinutes;
+  document.querySelectorAll('#movementPulseDurations [data-pulse-minutes]').forEach(x=>x.classList.toggle('on',x===b));
+  if(!movementPulseTimer)$('movementPulseStatus').textContent=`Выбрано: ${movementPulseMinutes} мин · 250–300 Гц + терция + квинта`;
+});
+
+function makeMovementPulseUrl(){
+  if(movementPulseUrl)return movementPulseUrl;
+  const rate=16000,bpm=72,beat=60/bpm,beats=4,dur=beat*beats,n=Math.floor(rate*dur);
+  const bytes=new ArrayBuffer(44+n*2),v=new DataView(bytes);
+  const put=(o,t)=>{for(let i=0;i<t.length;i++)v.setUint8(o+i,t.charCodeAt(i))};
+  put(0,'RIFF');v.setUint32(4,36+n*2,true);put(8,'WAVE');put(12,'fmt ');v.setUint32(16,16,true);v.setUint16(20,1,true);v.setUint16(22,1,true);v.setUint32(24,rate,true);v.setUint32(28,rate*2,true);v.setUint16(32,2,true);v.setUint16(34,16,true);put(36,'data');v.setUint32(40,n*2,true);
+  const root=275,third=343.75,fifth=412.5;
+  for(let i=0;i<n;i++){
+    const t=i/rate,within=t%beat;
+    let env=0;
+    const attack=.055,release=.62;
+    if(within<attack)env=within/attack;
+    else if(within<release)env=Math.pow(1-(within-attack)/(release-attack),1.45);
+    const shimmer=.94+.06*Math.sin(2*Math.PI*.18*t);
+    let x=env*shimmer*(.56*Math.sin(2*Math.PI*root*t)+.20*Math.sin(2*Math.PI*third*t)+.28*Math.sin(2*Math.PI*fifth*t));
+    x=Math.max(-1,Math.min(1,x*.78));
+    v.setInt16(44+i*2,Math.round(x*32767),true);
+  }
+  movementPulseUrl=URL.createObjectURL(new Blob([bytes],{type:'audio/wav'}));
+  return movementPulseUrl;
+}
+
+function stopMovementPulse(manual=true){
+  if(movementPulseTimer){clearTimeout(movementPulseTimer);movementPulseTimer=null}
+  if(movementPulseAudio){movementPulseAudio.pause();try{movementPulseAudio.currentTime=0}catch{}}
+  $('movementPulse').textContent='▶ Включить пульс';
+  $('movementPulseStatus').textContent=manual?`Выбрано: ${movementPulseMinutes} мин · 250–300 Гц + терция + квинта`:'Готово';
+}
+
+async function startMovementPulse(){
+  if(movementPulseTimer){stopMovementPulse(true);return}
+  try{
+    if(!movementPulseAudio){
+      movementPulseAudio=new Audio(makeMovementPulseUrl());
+      movementPulseAudio.loop=true;
+      movementPulseAudio.preload='auto';
+      movementPulseAudio.volume=.9;
+      movementPulseAudio.playsInline=true;
+    }
+    movementPulseAudio.muted=false;
+    movementPulseAudio.currentTime=0;
+    await movementPulseAudio.play();
+    movementPulseTimer=setTimeout(()=>stopMovementPulse(false),movementPulseMinutes*60*1000);
+    $('movementPulse').textContent='■ Выключить пульс';
+    $('movementPulseStatus').textContent=`Звучит ${movementPulseMinutes} мин · 250–300 Гц + терция + квинта`;
+  }catch(e){
+    movementPulseTimer=null;
+    $('movementPulseStatus').textContent='Не удалось включить звук. Проверь громкость телефона и нажми ещё раз.';
+  }
+}
+$('movementPulse').onclick=startMovementPulse;'''
+          p.write_text(s[:start] + block + s[end:])
+      - name: Commit patch
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add voice-cards.js diary.html diary.js
+          git diff --cached --quiet && exit 0
+          git commit -m "Use one reliable movement pulse"
+          git push
