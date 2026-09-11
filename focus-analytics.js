@@ -96,9 +96,8 @@ supabase.auth.onAuthStateChange(async(event,session)=>{
 
 supabase.auth.getUser().then(({data:{user}})=>{if(user)onSignedIn()});
 
-// Movement mode: keep one pulse only. The optional example card is hidden for movement,
-// and the main pulse uses an HTMLAudio loop (more reliable on iPhone than live oscillators).
-let singlePulseMinutes=3;
+// Movement mode: one five-minute pulse. The user can stop it at any time.
+const singlePulseMinutes=5;
 let singlePulseAudio=null;
 let singlePulseTimer=null;
 let singlePulseUrl=null;
@@ -129,7 +128,7 @@ function stopSinglePulse(done=false){
   if(singlePulseAudio){singlePulseAudio.pause();try{singlePulseAudio.currentTime=0}catch{}}
   const b=$('movementPulse'),st=$('movementPulseStatus');
   if(b)b.textContent='▶ Включить пульс';
-  if(st)st.textContent=done?'Готово':`Выбрано: ${singlePulseMinutes} мин · 250–300 Гц + терция + квинта`;
+  if(st)st.textContent=done?'5 минут завершены':'Пульс на 5 минут · можно выключить в любой момент';
 }
 
 async function startSinglePulse(){
@@ -148,7 +147,7 @@ async function startSinglePulse(){
     await singlePulseAudio.play();
     singlePulseTimer=setTimeout(()=>stopSinglePulse(true),singlePulseMinutes*60*1000);
     if(b)b.textContent='■ Выключить пульс';
-    if(st)st.textContent=`Звучит ${singlePulseMinutes} мин · 250–300 Гц + терция + квинта`;
+    if(st)st.textContent='Звучит до 5 минут · выключить можно в любой момент';
   }catch(e){
     singlePulseTimer=null;
     if(st)st.textContent='Не удалось включить звук. Проверь громкость телефона и нажми ещё раз.';
@@ -158,17 +157,17 @@ async function startSinglePulse(){
 function installSingleMovementPulse(){
   const pulse=$('movementPulse');
   if(!pulse)return;
+  const durations=$('movementPulseDurations');
+  if(durations)durations.style.display='none';
+  const heading=durations?.previousElementSibling;
+  if(heading&&heading.textContent.includes('пульс'))heading.textContent='Мягкий пульс · 5 минут';
   pulse.textContent='▶ Включить пульс';
   pulse.onclick=startSinglePulse;
-  document.querySelectorAll('#movementPulseDurations [data-pulse-minutes]').forEach(btn=>btn.addEventListener('click',()=>{
-    singlePulseMinutes=+btn.dataset.pulseMinutes||3;
-    if(!singlePulseTimer)$('movementPulseStatus').textContent=`Выбрано: ${singlePulseMinutes} мин · 250–300 Гц + терция + квинта`;
-  }));
   document.querySelectorAll('.mode').forEach(btn=>btn.addEventListener('click',()=>{
     if(btn.dataset.mode==='movement')setTimeout(()=>document.querySelector('.example-helper')?.classList.add('hidden'),0);
     else if(singlePulseTimer)stopSinglePulse(false);
   }));
-  if($('movementPulseStatus'))$('movementPulseStatus').textContent='Выбрано: 3 мин · 250–300 Гц + терция + квинта';
+  if($('movementPulseStatus'))$('movementPulseStatus').textContent='Пульс на 5 минут · можно выключить в любой момент';
 }
 
 installSingleMovementPulse();
