@@ -1,3 +1,4 @@
+import './diary-audio-highlights.js';
 import './voice-cards.js';
 import './diary-enhancements.js';
 import {createClient} from 'https://esm.sh/@supabase/supabase-js@2.57.4';
