@@ -63,32 +63,41 @@ setTimeout(()=>{
   const anchor=terms?.closest('label')||email;
   anchor.after(send,otpBox);
 
+  let authBusy=false, sentEmail='';
   async function sendCode(){
+    if(authBusy)return;
     const mail=email.value.trim();
-    if(!mail||!mail.includes('@')){msg.textContent='Напиши свой email.';email.focus();return}
+    if(!mail||!email.validity.valid){msg.textContent='Напиши свой email.';email.focus();return}
     if(terms&&!terms.checked){msg.textContent='Чтобы хранить личный дневник, нужно принять Политику конфиденциальности и Условия.';return}
     if(terms?.checked)localStorage.setItem('diaryTermsAccepted','1');
-    send.disabled=true;msg.textContent='Отправляю код…';
+    authBusy=true;send.disabled=true;document.getElementById('resendOtpBtn').disabled=true;msg.textContent='Отправляю код…';
+    try{
     const {error}=await s.auth.signInWithOtp({email:mail,options:{shouldCreateUser:true,emailRedirectTo:APP_URL,data:{privacy_accepted:true,terms_accepted:true,privacy_version:'2026-08-29',terms_version:'2026-08-29',marketing_consent:!!document.getElementById('marketingConsent')?.checked,research_consent:!!document.getElementById('researchConsent')?.checked}}});
     send.disabled=false;
     if(error){msg.textContent=friendlyAuthError(error);return}
     localStorage.setItem('diaryLastEmail',mail);
-    msg.textContent='Письмо отправлено.';
+    sentEmail=mail;
+    msg.textContent='Письмо отправлено. Если его нет, проверь папку «Спам». Для входа используй последний полученный код.';
     otpBox.classList.remove('hidden');
-    const code=document.getElementById('otpCode');code?.focus();
+    const code=document.getElementById('otpCode');if(code){code.value='';code.focus()}
+    }catch(e){msg.textContent='Не удалось связаться с сервером. Проверь интернет и попробуй ещё раз.'}finally{authBusy=false;send.disabled=false;document.getElementById('resendOtpBtn').disabled=false}
   }
 
   send.onclick=sendCode;
   document.getElementById('resendOtpBtn').onclick=sendCode;
   document.getElementById('verifyOtpBtn').onclick=async()=>{
+    if(authBusy)return;
     const mail=email.value.trim()||localStorage.getItem('diaryLastEmail')||'';
+    if(mail!==sentEmail){msg.textContent='Email изменён. Сначала получи код для нового адреса.';return}
     const code=(document.getElementById('otpCode')?.value||'').replace(/\D/g,'').slice(0,6);
     if(code.length!==6){msg.textContent='Введи 6 цифр из письма.';return}
-    const verify=document.getElementById('verifyOtpBtn');verify.disabled=true;msg.textContent='Проверяю код…';
+    const verify=document.getElementById('verifyOtpBtn');authBusy=true;verify.disabled=true;msg.textContent='Проверяю код…';
+    try{
     const {error}=await s.auth.verifyOtp({email:mail,token:code,type:'email'});
     verify.disabled=false;
     if(error){msg.textContent=friendlyAuthError(error);return}
     msg.textContent='Готово.';location.replace('/app');
+    }catch(e){msg.textContent='Не удалось связаться с сервером. Проверь интернет и попробуй ещё раз.'}finally{authBusy=false;verify.disabled=false}
   };
   document.getElementById('otpCode')?.addEventListener('input',e=>{e.target.value=e.target.value.replace(/\D/g,'').slice(0,6);if(e.target.value.length===6)document.getElementById('verifyOtpBtn')?.focus()});
   const remembered=localStorage.getItem('diaryLastEmail');if(remembered&&!email.value)email.value=remembered;
