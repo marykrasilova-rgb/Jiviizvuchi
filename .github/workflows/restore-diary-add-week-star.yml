@@ -1,0 +1,24 @@
+name: Restore diary and add weekly star
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/workflows/restore-diary-add-week-star.yml'
+permissions:
+  contents: write
+jobs:
+  patch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Restore full diary and connect star module
+        run: |
+          git show 0ea6c277f333c0d01c52207ce87ce95714a132bb:diary.js > /tmp/diary.js
+          { echo "import './diary-week-favorites.js';"; cat /tmp/diary.js; } > diary.js
+          git config user.name github-actions[bot]
+          git config user.email 41898282+github-actions[bot]@users.noreply.github.com
+          git add diary.js
+          git commit -m "Restore diary and connect weekly highlight stars"
+          git push
