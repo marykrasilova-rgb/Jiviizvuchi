@@ -28,40 +28,6 @@ if(modes){
 }
 
 const history=document.getElementById('historyView');
-if(history){
-  const weekly=document.createElement('div');
-  weekly.className='card weekly-voice';
-  weekly.innerHTML='<div class="label">Неделя в голосе</div><h2>Услышать себя во времени</h2><p class="small">Голосовые следы последних 7 дней — один за другим. Без анализа и оценок.</p><div id="weeklyVoiceList" class="weekly-list"><span class="small">Загружаю…</span></div>';
-  const stats=document.getElementById('stats');
-  stats?.after(weekly);
-
-  async function loadWeek(){
-    const box=document.getElementById('weeklyVoiceList');
-    if(!box)return;
-    const {data:{user}}=await s.auth.getUser();
-    if(!user)return;
-    const since=new Date(Date.now()-7*86400000).toISOString();
-    const {data,error}=await s.from('voice_entries').select('id,created_at,expression_media_path,audio_path_before,modality').eq('user_id',user.id).gte('created_at',since).order('created_at',{ascending:true});
-    if(error){box.innerHTML='<span class="small">Не удалось собрать неделю.</span>';return}
-    const voices=(data||[]).filter(x=>(x.modality==='voice'||x.audio_path_before)&&(x.expression_media_path||x.audio_path_before));
-    box.replaceChildren();
-    if(!voices.length){box.innerHTML='<span class="small">Когда появятся голосовые записи, здесь сложится твоя первая звуковая неделя.</span>';return}
-    for(const [i,x] of voices.entries()){
-      const path=x.expression_media_path||x.audio_path_before;
-      const {data:u}=await s.storage.from('voice-recordings').createSignedUrl(path,1800);
-      if(!u?.signedUrl)continue;
-      const item=document.createElement('div');item.className='weekly-item';
-      const meta=document.createElement('div');meta.className='weekly-meta';meta.textContent=`${i+1}. ${new Date(x.created_at).toLocaleDateString('ru-RU',{weekday:'short',day:'numeric',month:'short'})}`;
-      const audio=document.createElement('audio');audio.controls=true;audio.preload='metadata';audio.src=u.signedUrl;
-      item.append(meta,audio);box.appendChild(item);
-    }
-    const players=[...box.querySelectorAll('audio')];
-    players.forEach((p,i)=>p.addEventListener('ended',()=>players[i+1]?.play().catch(()=>{})));
-  }
-  s.auth.onAuthStateChange((_e,session)=>{if(session?.user)setTimeout(loadWeek,0)});
-  loadWeek();
-}
-
 // Passwordless authentication: one flow for new and returning users.
 const APP_URL='https://mariakrasilovacom.vercel.app/app';
 const friendlyAuthError=e=>{
