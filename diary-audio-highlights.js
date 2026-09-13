@@ -1,12 +1,45 @@
 import {createClient} from 'https://esm.sh/@supabase/supabase-js@2.57.4';
 const s=createClient('https://uecdlqlwsrqmocbpgiwj.supabase.co','sb_publishable_QJ_4e8-BHl0gOZifGqdv1w_doFwpTlb');
-let rendering=false,autoTried=false;
 const currentPeriod=()=>document.getElementById('periodMonth')?.classList.contains('on')?'month':'week';
-function israelParts(){const parts=new Intl.DateTimeFormat('en-GB',{timeZone:'Asia/Jerusalem',weekday:'short',day:'2-digit',month:'2-digit',hour:'2-digit',hour12:false}).formatToParts(new Date());const get=t=>parts.find(x=>x.type===t)?.value;return{weekday:get('weekday'),day:+get('day'),hour:+get('hour')}}
-function autoDue(period){const p=israelParts();return period==='week'?(p.weekday==='Sat'&&p.hour>=18):(p.day===1)}
-async function signed(path){if(!path)return null;const {data}=await s.storage.from('voice-recordings').createSignedUrl(path,1800);return data?.signedUrl||null}
-async function build(period,button,status){const {data:{session}}=await s.auth.getSession();if(!session?.access_token)return;button.disabled=true;status.textContent='Собираю звуковой итог…';try{const r=await fetch('/api/diary-audio-montage',{method:'POST',headers:{'content-type':'application/json',Authorization:`Bearer ${session.access_token}`},body:JSON.stringify({period})});const j=await r.json();if(!r.ok)throw new Error(j.error||'Не удалось собрать');status.textContent='Готово';await render()}catch(e){status.textContent=e.message==='No voice practices in this period'?'Пока недостаточно голосовых записей.':'Не удалось собрать итог. Попробуй позже.';button.disabled=false}}
-async function render(){if(rendering)return;const root=document.getElementById('periodPortrait');if(!root)return;rendering=true;try{root.querySelector('.audio-highlight-card')?.remove();const period=currentPeriod();const box=document.createElement('div');box.className='period-section audio-highlight-card';const h=document.createElement('h3');h.textContent=period==='month'?'Как звучал мой месяц':'Как звучала моя неделя';const status=document.createElement('div');status.className='small';box.append(h,status);root.prepend(box);const {data:{user}}=await s.auth.getUser();if(!user){status.textContent='';return}const {data}=await s.from('diary_audio_highlights').select('audio_path,status,period_start,period_end').eq('user_id',user.id).eq('period_type',period).eq('status','ready').order('period_end',{ascending:false}).limit(1).maybeSingle();if(data?.audio_path){const url=await signed(data.audio_path);if(url){const a=document.createElement('audio');a.controls=true;a.preload='metadata';a.src=url;const meta=document.createElement('div');meta.className='small';meta.textContent=`${data.period_start} — ${data.period_end}`;box.append(meta,a);status.textContent='';return}}const b=document.createElement('button');b.type='button';b.className='btn secondary';b.textContent=period==='month'?'Собрать звучание месяца':'Собрать звучание недели';status.textContent='Из коротких фрагментов твоих голосовых практик.';b.onclick=()=>build(period,b,status);box.appendChild(b);if(!autoTried&&autoDue(period)){autoTried=true;setTimeout(()=>b.click(),250)}}finally{rendering=false}}
-const root=document.getElementById('periodPortrait');if(root)new MutationObserver(()=>setTimeout(render,0)).observe(root,{childList:true});
-document.getElementById('periodWeek')?.addEventListener('click',()=>setTimeout(render,50));document.getElementById('periodMonth')?.addEventListener('click',()=>setTimeout(render,50));
-s.auth.onAuthStateChange((_e,session)=>{if(session?.user)setTimeout(render,250)});setTimeout(render,500);
+function range(period){const day=new Intl.DateTimeFormat('en-CA',{timeZone:'Asia/Jerusalem',year:'numeric',month:'2-digit',day:'2-digit'}).format(new Date());const start=new Date(day+'T12:00:00Z');start.setUTCDate(start.getUTCDate()-(period==='month'?29:6));return{start:start.toISOString().slice(0,10),end:day}}
+let generation=0,building=false;
+async function render(){
+ const root=document.getElementById('periodPortrait');if(!root)return;
+ const ticket=++generation,period=currentPeriod(),dates=range(period);
+ const {data:{user}}=await s.auth.getUser();if(!user||ticket!==generation)return;
+ const {data,error}=await s.from('diary_audio_highlights').select('audio_path,period_start,period_end,source_entry_ids').eq('user_id',user.id).eq('period_type',period).eq('period_start',dates.start).eq('period_end',dates.end).eq('status','ready').maybeSingle();
+ if(ticket!==generation)return;
+ const box=document.createElement('div');box.className='period-section audio-highlight-card';
+ const h=document.createElement('h3');h.textContent=period==='month'?'Коллаж месяца':'Коллаж недели';
+ const meta=document.createElement('div');meta.className='small';meta.textContent=dates.start+' — '+dates.end+' · последние '+(period==='month'?'30':'7')+' дней';
+ const status=document.createElement('div');status.className='small';status.setAttribute('aria-live','polite');
+ box.append(h,meta,status);
+ if(data?.audio_path&&data.source_entry_ids?.length>=2){
+  const {data:link}=await s.storage.from('voice-recordings').createSignedUrl(data.audio_path,1800);
+  if(ticket!==generation)return;
+  if(link?.signedUrl){const audio=document.createElement('audio');audio.controls=true;audio.preload='metadata';audio.src=link.signedUrl;box.append(audio);status.textContent='Фрагменты из '+data.source_entry_ids.length+' разных записей.'}
+ }
+ const button=document.createElement('button');button.type='button';button.className='btn secondary';button.disabled=building;
+ button.textContent=data?'Обновить коллаж':'Собрать коллаж';
+ const hint=document.createElement('p');hint.className='small';hint.textContent='Короткие фрагменты разных записей, с приоритетом разных дней. ★ помогает выбрать запись внутри дня. После новых записей или изменения ★ обнови коллаж.';
+ button.onclick=async()=>{
+  if(building)return;building=true;button.disabled=true;status.textContent='Собираю фрагменты разных дней…';
+  try{
+   const {data:{session}}=await s.auth.getSession();if(!session)throw new Error('Сначала войди в дневник.');
+   const response=await fetch('/api/diary-audio-montage',{method:'POST',headers:{'content-type':'application/json',Authorization:'Bearer '+session.access_token},body:JSON.stringify({period})});
+   const result=await response.json();
+   if(response.status===422)throw new Error('Для коллажа нужны хотя бы две голосовые записи за этот период. Записи разных дней сделают его разнообразнее.');
+   if(!response.ok)throw new Error('Не удалось собрать коллаж. Попробуй ещё раз.');
+   building=false;await render();
+  }catch(e){status.textContent=e.message}finally{building=false;button.disabled=false}
+ };
+ if(error)status.textContent='Не удалось загрузить сохранённый коллаж.';
+ box.append(button,hint);
+ if(ticket!==generation)return;
+ root.querySelector('.audio-highlight-card')?.remove();root.prepend(box);
+}
+const root=document.getElementById('periodPortrait');
+if(root)new MutationObserver(records=>{if(records.some(r=>[...r.addedNodes,...r.removedNodes].some(n=>n.nodeType===1&&!n.classList.contains('audio-highlight-card'))))render()}).observe(root,{childList:true});
+document.getElementById('periodWeek')?.addEventListener('click',()=>setTimeout(render,0));
+document.getElementById('periodMonth')?.addEventListener('click',()=>setTimeout(render,0));
+s.auth.onAuthStateChange(()=>setTimeout(render,0));setTimeout(render,300);
