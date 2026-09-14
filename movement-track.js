@@ -16,7 +16,8 @@ if (pulseButton && status && durations && panel) {
   pulseButton.insertAdjacentElement('afterend', trackButton);
 
   const audio = new Audio('/assets/audio/maria-c-movement-loop.mp3');
-  audio.loop = true;
+  const trackStartSeconds = 115;
+  audio.loop = false;
   audio.preload = 'auto';
   audio.volume = 0.78;
   let stopTimer = null;
@@ -26,10 +27,29 @@ if (pulseButton && status && durations && panel) {
     clearTimeout(stopTimer);
     stopTimer = null;
     audio.pause();
-    audio.currentTime = 0;
+    if (audio.readyState >= 1) audio.currentTime = trackStartSeconds;
     trackButton.textContent = '▶ Трек Марии';
     if (message) status.textContent = message;
   };
+
+  const seekToStart = () => {
+    if (Number.isFinite(audio.duration) && audio.duration <= trackStartSeconds) {
+      stopTrack('Трек недоступен: аудиофайл нужно обновить.');
+      return false;
+    }
+    audio.currentTime = trackStartSeconds;
+    return true;
+  };
+
+  audio.addEventListener('loadedmetadata', seekToStart);
+  audio.addEventListener('ended', async () => {
+    if (!stopTimer || !seekToStart()) return;
+    try {
+      await audio.play();
+    } catch (error) {
+      stopTrack('Не удалось продолжить трек. Нажмите «Трек Марии» ещё раз.');
+    }
+  });
 
   trackButton.addEventListener('click', async () => {
     if (!audio.paused) {
@@ -38,11 +58,12 @@ if (pulseButton && status && durations && panel) {
     }
     if (pulseButton.textContent.trim().startsWith('■')) pulseButton.click();
     try {
+      if (audio.readyState >= 1 && !seekToStart()) return;
       await audio.play();
       const duration = minutes();
       trackButton.textContent = '■ Выключить трек Марии';
       status.textContent = `Звучит ${duration} мин · авторский трек Марии Красиловой`;
-      stopTimer = setTimeout(() => stopTrack('Готово · трек мягко завершён'), duration * 60 * 1000);
+      stopTimer = setTimeout(() => stopTrack('Готово · трек завершён'), duration * 60 * 1000);
     } catch (error) {
       status.textContent = 'Не удалось включить трек. Нажмите ещё раз или проверьте звук телефона.';
     }
