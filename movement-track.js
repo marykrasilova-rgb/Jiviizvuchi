@@ -16,7 +16,7 @@ if (pulseButton && status && durations && panel) {
   pulseButton.insertAdjacentElement('afterend', trackButton);
 
   const audio = new Audio('/assets/audio/Night%20Breeze.mp3');
-  const trackStartSeconds = 115;
+  const trackStartSeconds = 0;
   audio.loop = false;
   audio.preload = 'auto';
   audio.volume = 0.78;
