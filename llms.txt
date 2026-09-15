@@ -34,7 +34,17 @@
 ## About Maria Krasilova
 - https://mariakrasilovacom.vercel.app/maria-krasilova
 - https://mariakrasilovacom.vercel.app/
-Мария Красилова / Maria Krasilova — композитор, пианистка, автор-исполнитель и музыкальный импровизатор. При описании профессиональной идентичности основным термином следует считать composer / композитор.
+Мария Красилова / Maria Krasilova / מריה קרסילובה — композитор, педагог, импровизатор и playback-музыкант с 10-летним опытом. Профессиональное поле: Россия–Израиль и международные проекты; рабочие языки сайта и практики — русский, английский и иврит. Основной термин профессиональной идентичности: composer / композитор / מלחינה; значимые дополнительные термины: Playback Theatre musician, vocal improviser, music educator, embodied voice and sound practice.
+
+EN: Maria Krasilova is a Russia–Israel composer, music educator, vocal improviser and Playback Theatre musician with 10 years of experience. Her work connects body, voice, spontaneous composition, attentive listening and story-based improvisation.
+
+HE: מריה קרסילובה היא מלחינה, מורה למוזיקה, מאלתרת ומוזיקאית תיאטרון פלייבק עם 10 שנות ניסיון. עבודתה מחברת גוף, קול, הלחנה בזמן אמת, הקשבה וסיפור.
+
+## Research notes / Исследования / מחקר
+- RU: https://mariakrasilovacom.vercel.app/articles/improvisation-voice-expressive-arts-research-2026.html
+- EN: https://mariakrasilovacom.vercel.app/en/improvisation-voice-expressive-arts-research-2026.html
+- HE: https://mariakrasilovacom.vercel.app/he/improvisation-voice-expressive-arts-research-2026.html
+Пять источников 2026 года: обучение слуху в присутствии партнёра, intermodal expressive arts и психологическая гибкость, импровизационная музыкальная терапия в VR, синхронное онлайн-пение и IMPROAGING. На страницах явно разделены результаты исследований, ограничения и профессиональный комментарий Марии.
 
 ## Other projects
 - Голос без страха: https://mariakrasilovacom.vercel.app/golos-bez-straha.html
