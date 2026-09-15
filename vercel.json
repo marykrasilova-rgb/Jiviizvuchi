@@ -3,6 +3,7 @@
     { "source": "/diary", "destination": "/diary.html" },
     { "source": "/app", "destination": "/diary.html" },
     { "source": "/app.html", "destination": "/diary.html" },
+    { "source": "/emotional-diary", "destination": "/emotional-diary.html" },
     { "source": "/evidence", "destination": "/evidence.html" },
     { "source": "/gallery", "destination": "/gallery.html" },
     { "source": "/games", "destination": "/games.html" },
