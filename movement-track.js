@@ -15,7 +15,7 @@ if (pulseButton && status && durations && panel) {
   trackButton.textContent = '▶ Трек Марии';
   pulseButton.insertAdjacentElement('afterend', trackButton);
 
-  const audio = new Audio('/assets/audio/maria-c-movement-loop.mp3');
+  const audio = new Audio('/assets/audio/Night%20Breeze.mp3');
   const trackStartSeconds = 115;
   audio.loop = false;
   audio.preload = 'auto';
