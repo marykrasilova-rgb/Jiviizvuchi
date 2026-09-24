@@ -1,0 +1,57 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 1200" role="img" aria-labelledby="title desc">
+  <title id="title">Живи и звучи — Хайфа, четверги, 19:30</title>
+  <desc id="desc">Плакат в геометрической модернистской стилистике: группа по вокальной импровизации, идея меньше репетировать жизнь в голове и чаще входить в неё.</desc>
+  <rect width="1200" height="1200" fill="#f4f0e6"/>
+  <g stroke="#111" stroke-width="16" fill="none">
+    <path d="M55 0v1200M305 0v370M655 0v230M1005 0v1200M0 205h1200M0 520h1200M0 865h1200M0 1080h1200"/>
+    <path d="M305 370h700M305 725h700M305 865v335M650 865v335M875 865v335"/>
+  </g>
+  <rect x="655" y="0" width="350" height="205" fill="#d92f27"/>
+  <rect x="1005" y="0" width="195" height="205" fill="#f4c928"/>
+  <rect x="0" y="205" width="55" height="315" fill="#2456a6"/>
+  <rect x="55" y="370" width="250" height="150" fill="#d92f27"/>
+  <rect x="305" y="520" width="345" height="205" fill="#f4c928"/>
+  <rect x="650" y="520" width="355" height="205" fill="#2456a6"/>
+  <rect x="1005" y="520" width="195" height="345" fill="#f4c928"/>
+  <rect x="55" y="865" width="250" height="215" fill="#f4c928"/>
+  <rect x="650" y="865" width="225" height="215" fill="#2456a6"/>
+  <rect x="875" y="865" width="330" height="215" fill="#d92f27"/>
+
+  <g font-family="Arial, Helvetica, sans-serif" fill="#111">
+    <text x="88" y="118" font-size="78" font-weight="800">ЖИВИ</text>
+    <text x="330" y="118" font-size="42" font-weight="700" fill="#c89b12">И</text>
+    <text x="405" y="118" font-size="78" font-weight="800" fill="#d92f27">ЗВУЧИ</text>
+    <text x="86" y="172" font-size="26" font-weight="700">группа по вокальной импровизации</text>
+
+    <text x="90" y="605" font-size="43" font-weight="800">Перестать</text>
+    <text x="90" y="655" font-size="43" font-weight="800">репетировать</text>
+    <text x="90" y="705" font-size="43" font-weight="800">жизнь в голове —</text>
+    <text x="90" y="762" font-size="43" font-weight="800" fill="#d92f27">и чаще в неё входить</text>
+
+    <text x="82" y="932" font-size="29" font-weight="800">Услышать импульс →</text>
+    <text x="82" y="972" font-size="29" font-weight="800">попробовать</text>
+
+    <text x="338" y="932" font-size="29" font-weight="800">Получилось</text>
+    <text x="338" y="972" font-size="29" font-weight="800">неожиданно →</text>
+    <text x="338" y="1012" font-size="29" font-weight="800">не остановиться</text>
+
+    <text x="676" y="922" font-size="28" font-weight="800" fill="#fff">Кто-то ответил</text>
+    <text x="676" y="960" font-size="28" font-weight="800" fill="#fff">совсем не так →</text>
+    <text x="676" y="998" font-size="28" font-weight="800" fill="#fff">встроить это</text>
+    <text x="676" y="1036" font-size="28" font-weight="800" fill="#fff">в происходящее</text>
+
+    <text x="90" y="1146" font-size="38" font-weight="800">Хайфа · четверги · 19:30</text>
+    <text x="898" y="1135" font-size="36" font-weight="900" fill="#fff">Пиши «ЖИВИ»</text>
+  </g>
+
+  <g transform="translate(650 230)">
+    <path d="M265 80c-54 0-100 44-100 100 0 46 29 82 68 95-33 30-56 72-66 117-15 68 4 136 49 185-39 11-83 31-128 64 57 18 122 23 183 8 44-11 85-31 118-60 27-24 50-55 65-90 21-48 26-102 14-153-13-55-47-105-95-136 4-10 6-20 6-31 0-55-50-99-114-99z" fill="#fff" stroke="#111" stroke-width="12"/>
+    <path d="M187 183c32-84 129-104 184-41 20 23 29 52 26 80-35-28-79-38-117-31-39 7-71 30-93 60-10-23-10-47 0-68z" fill="#111"/>
+    <path d="M276 267c-3 0-6-2-6-5s3-5 6-5 6 2 6 5-3 5-6 5zm67 0c-3 0-6-2-6-5s3-5 6-5 6 2 6 5-3 5-6 5z" fill="#111"/>
+    <path d="M298 301c17 11 36 11 55 0" stroke="#d92f27" stroke-width="8" stroke-linecap="round" fill="none"/>
+    <path d="M170 398c-88 11-143 46-188 108M421 389c87 4 143 35 185 91" stroke="#111" stroke-width="13" stroke-linecap="round" fill="none"/>
+    <path d="M196 399c36 20 69 25 107 24 39 0 72-8 105-27l40 162c-94 34-191 33-289-1z" fill="#d92f27" stroke="#111" stroke-width="12"/>
+    <path d="M229 426v124M303 423v143M377 420v134" stroke="#2456a6" stroke-width="26"/>
+    <path d="M230 340c28 27 73 37 111 25" stroke="#111" stroke-width="10" fill="none" stroke-linecap="round"/>
+  </g>
+</svg>
