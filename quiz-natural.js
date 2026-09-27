@@ -1,7 +1,8 @@
 // Curated real-recording composer quiz: recognizable themes, 18-second excerpts, automatic flow.
 const naturalWorks=[
  {id:'beethoven5',composer:'Людвиг ван Бетховен',work:'Симфония №5',url:'https://upload.wikimedia.org/wikipedia/commons/e/e6/Ludwig_van_Beethoven_-_symphony_no._5_in_c_minor%2C_op._67_-_i._allegro_con_brio.ogg',start:.4,level:1},
- {id:'grieg-mountain',composer:'Эдвард Григ',work:'В пещере горного короля',url:'https://upload.wikimedia.org/wikipedia/commons/b/bb/Musopen_-_In_the_Hall_Of_The_Mountain_King.ogg',start:1.5,level:1},
+ // 18-second excerpt from the Musopen recording on Wikimedia Commons, raised 18 dB without compression.
+ {id:'grieg-mountain',composer:'Эдвард Григ',work:'В пещере горного короля',url:'/assets/audio/quiz/grieg-mountain-king.mp3',start:0,level:1},
  {id:'vivaldi-spring',composer:'Антонио Вивальди',work:'Времена года — Весна',url:'https://commons.wikimedia.org/wiki/Special:Redirect/file/The%20Modena%20Chamber%20Orchestra%20-%20Vivaldi%27s%20Spring%2C%20RV%20269%20-%20I.%20Allegro.ogg',start:.6,level:1},
  {id:'dvorak-newworld',composer:'Антонин Дворжак',work:'Симфония №9 «Из Нового Света» — IV часть',url:'https://commons.wikimedia.org/wiki/Special:Redirect/file/Antonin%20Dvorak%20-%20symphony%20no.%209%20in%20e%20minor%20%27from%20the%20new%20world%27%2C%20op.%2095%20-%20iv.%20allegro%20con%20fuoco.ogg',start:18,level:1},
  {id:'smetana-vltava',composer:'Бедржих Сметана',work:'Влтава',url:'https://commons.wikimedia.org/wiki/Special:Redirect/file/Bedrich%20Smetana%20-%20ma%20vlast%20-%20i.%20vltava%20%27the%20moldau%27.ogg',start:52,level:1},
@@ -67,6 +68,33 @@ const naturalComposers=[...new Set(naturalWorks.map(x=>x.composer))];
 const naturalPlayer=new Audio();
 naturalPlayer.preload='auto';
 naturalPlayer.playsInline=true;
+// Wikimedia recordings allow CORS, so Web Audio can control volume on mobile Safari too.
+naturalPlayer.crossOrigin='anonymous';
+const quizVolume=document.getElementById('quizVolume');
+let quizAudioContext=null,quizGain=null;
+function setQuizVolume(){
+ const value=Number(quizVolume.value)/100;
+ if(quizGain)quizGain.gain.value=value;
+ else naturalPlayer.volume=value;
+ document.getElementById('quizVolumeValue').textContent=`${quizVolume.value}%`;
+}
+function prepareQuizAudio(){
+ if(!quizAudioContext){
+  const Context=window.AudioContext||window.webkitAudioContext;
+  if(Context){
+   try{
+    quizAudioContext=new Context();
+    const source=quizAudioContext.createMediaElementSource(naturalPlayer);
+    quizGain=quizAudioContext.createGain();
+    source.connect(quizGain).connect(quizAudioContext.destination);
+    naturalPlayer.volume=1;
+    setQuizVolume();
+   }catch(error){console.warn('Quiz audio gain unavailable',error)}
+  }
+ }
+ if(quizAudioContext?.state==='suspended')quizAudioContext.resume();
+}
+quizVolume.addEventListener('input',()=>{prepareQuizAudio();setQuizVolume()});
 let naturalTimer=null,quizLevel=1,quizSeen=[],recentComposers=[],autoAdvanceTimer=null;
 const CLIP_SECONDS=18;
 const answerCounts={1:3,2:4,3:5,4:6};
@@ -85,7 +113,7 @@ function naturalAnswers(correct){const count=answerCounts[quizLevel]||4;let othe
 function chooseWork(){const pool=availableWorks();let source=pool.filter(w=>!quizSeen.includes(w.id));if(!source.length){quizSeen=[];source=pool}const lastTwo=recentComposers.slice(-2);let diverse=source.filter(w=>!lastTwo.includes(w.composer));if(!diverse.length)diverse=source.filter(w=>w.composer!==recentComposers.at(-1));if(diverse.length)source=diverse;const w=source[Math.floor(Math.random()*source.length)];quizSeen.push(w.id);recentComposers.push(w.composer);if(recentComposers.length>2)recentComposers=recentComposers.slice(-2);return w}
 function composerButton(name){const b=document.createElement('button');b.className='composer-card';b.dataset.composer=name;const img=document.createElement('img');img.src=composerPortraits[name]||'';img.alt='';img.loading='lazy';img.decoding='async';img.onerror=()=>{img.classList.add('portrait-fallback');img.removeAttribute('src')};const label=document.createElement('span');label.textContent=name;b.append(img,label);b.onclick=()=>answerComposer(b,name);return b}
 
-async function playCurrentQuiz(){if(!currentWork)return;stopNatural();$('quizFeedback').textContent='';try{const needSource=naturalPlayer.getAttribute('src')!==currentWork.url;if(needSource){naturalPlayer.src=currentWork.url;naturalPlayer.load()}const startPlayback=()=>{try{naturalPlayer.currentTime=currentWork.start||0}catch(_){};naturalPlayer.play().then(()=>{naturalTimer=setTimeout(()=>naturalPlayer.pause(),CLIP_SECONDS*1000)}).catch(()=>{$('quizFeedback').textContent='Нажми «Слушать фрагмент» — браузер остановил автоматический запуск.'})};if(naturalPlayer.readyState>=1)startPlayback();else naturalPlayer.onloadedmetadata=()=>{naturalPlayer.onloadedmetadata=null;startPlayback()}}catch(e){console.error(e);$('quizFeedback').textContent='Не удалось загрузить запись. Проверь интернет и попробуй ещё раз.'}}
+async function playCurrentQuiz(){if(!currentWork)return;stopNatural();$('quizFeedback').textContent='';try{prepareQuizAudio();const needSource=naturalPlayer.getAttribute('src')!==currentWork.url;if(needSource){naturalPlayer.src=currentWork.url;naturalPlayer.load()}const startPlayback=()=>{try{naturalPlayer.currentTime=currentWork.start||0}catch(_){};naturalPlayer.play().then(()=>{naturalTimer=setTimeout(()=>naturalPlayer.pause(),CLIP_SECONDS*1000)}).catch(()=>{$('quizFeedback').textContent='Нажми «Слушать фрагмент» — браузер остановил автоматический запуск.'})};if(naturalPlayer.readyState>=1)startPlayback();else naturalPlayer.onloadedmetadata=()=>{naturalPlayer.onloadedmetadata=null;startPlayback()}}catch(e){console.error(e);$('quizFeedback').textContent='Не удалось загрузить запись. Проверь интернет и попробуй ещё раз.'}}
 
 function naturalNewQuiz(autoplay=false){stopNatural();clearTimeout(autoAdvanceTimer);quizLocked=false;$('quizFeedback').textContent='';$('nextQuiz').classList.add('hidden');currentWork=chooseWork();$('quizRound').textContent=`${quizRound}/10`;const box=$('composerAnswers');box.replaceChildren();for(const name of naturalAnswers(currentWork.composer))box.append(composerButton(name));if(autoplay)playCurrentQuiz()}
 function finishQuiz(){stopNatural();clearTimeout(autoAdvanceTimer);$('quizFinish').innerHTML=`Готово! <strong>${quizScore}/10</strong>`;$('quizFinish').classList.remove('hidden');$('playQuiz').classList.add('hidden');$('composerAnswers').classList.add('hidden');$('nextQuiz').classList.add('hidden')}
