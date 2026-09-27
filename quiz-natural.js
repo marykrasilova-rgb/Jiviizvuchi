@@ -68,33 +68,13 @@ const naturalComposers=[...new Set(naturalWorks.map(x=>x.composer))];
 const naturalPlayer=new Audio();
 naturalPlayer.preload='auto';
 naturalPlayer.playsInline=true;
-// Wikimedia recordings allow CORS, so Web Audio can control volume on mobile Safari too.
-naturalPlayer.crossOrigin='anonymous';
 const quizVolume=document.getElementById('quizVolume');
-let quizAudioContext=null,quizGain=null;
 function setQuizVolume(){
  const value=Number(quizVolume.value)/100;
- if(quizGain)quizGain.gain.value=value;
- else naturalPlayer.volume=value;
+ naturalPlayer.volume=value;
  document.getElementById('quizVolumeValue').textContent=`${quizVolume.value}%`;
 }
-function prepareQuizAudio(){
- if(!quizAudioContext){
-  const Context=window.AudioContext||window.webkitAudioContext;
-  if(Context){
-   try{
-    quizAudioContext=new Context();
-    const source=quizAudioContext.createMediaElementSource(naturalPlayer);
-    quizGain=quizAudioContext.createGain();
-    source.connect(quizGain).connect(quizAudioContext.destination);
-    naturalPlayer.volume=1;
-    setQuizVolume();
-   }catch(error){console.warn('Quiz audio gain unavailable',error)}
-  }
- }
- if(quizAudioContext?.state==='suspended')quizAudioContext.resume();
-}
-quizVolume.addEventListener('input',()=>{prepareQuizAudio();setQuizVolume()});
+quizVolume.addEventListener('input',setQuizVolume);
 let naturalTimer=null,quizLevel=1,quizSeen=[],recentComposers=[],autoAdvanceTimer=null,quizPlaybackId=0;
 const CLIP_SECONDS=18;
 const answerCounts={1:3,2:4,3:5,4:6};
@@ -120,7 +100,6 @@ function playCurrentQuiz(){
  const work=currentWork;
  $('quizFeedback').textContent='';
  try{
-  prepareQuizAudio();
   if(naturalPlayer.getAttribute('src')!==work.url){naturalPlayer.src=work.url;naturalPlayer.load()}
   const start=work.start||0;
   // Setting currentTime before metadata sets the default start position. Play must
