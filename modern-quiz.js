@@ -123,7 +123,8 @@
   const answered=current;const played=audio?Math.min(20,Math.round((Date.now()-startedAt)/1000)):0;stop();if(played)report(answered,played);
   button.classList.add('correct');$('modernAnswers').querySelectorAll('button').forEach(item=>item.disabled=true);score++;$('modernScore').textContent=score;
   const full=window.youtubeMusicSearchUrl?window.youtubeMusicSearchUrl(answered):'';
-  $('modernFeedback').innerHTML=`<div class="answer-reveal"><b>Верно!</b><span>${esc(answered.artist)} — ${esc(answered.work)}</span><small>${esc(answered.year)} · ${esc(answered.era)}</small>${full?`<a href="${full}" target="_blank" rel="noopener">Слушать полностью ↗</a>`:''}</div>`;
+  const spotify=`https://open.spotify.com/search/${encodeURIComponent(`${answered.artist} ${answered.work}`)}`;
+  $('modernFeedback').innerHTML=`<div class="answer-reveal"><b>Верно!</b><span>${esc(answered.artist)} — ${esc(answered.work)}</span><small>${esc(answered.year)} · ${esc(answered.era)}</small>${full?`<a href="${full}" target="_blank" rel="noopener">Найти в YouTube Music ↗</a>`:''}<a href="${spotify}" target="_blank" rel="noopener">Найти в Spotify ↗</a></div>`;
   if(typeof recordGameAnswer==='function')recordGameAnswer('modern',true);round++;current=null;
   if(round>=10)return setTimeout(finish,900);setTimeout(()=>prepareNext(sessionToken),900);
  }
