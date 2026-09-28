@@ -2,6 +2,17 @@
 
 Официальный сайт Марии Красиловой — композитора, пианистки, вокалистки, музыкального импровизатора и автора цифровых творческих инструментов. Основные направления: оригинальная музыка для кино и медиа, персональные авторские композиции, эмоциональный дневник, программа «Голос без страха», музыкальные игры и импровизация.
 
+## Core concept: human aliveness / Живость человека
+Главная авторская концепция Марии Красиловой — поддержание живости человека через музыку, голос, игру и импровизацию. «Живость» здесь не медицинский термин и не деление людей на «живых» и «неживых». Это авторская рамка: контакт с собой, живой интерес, эмоциональное выражение, игра, пластичность, присутствие и способность создавать новый ответ вместо автоматического.
+
+- Cornerstone article RU: https://mariakrasilovacom.vercel.app/articles/chto-takoe-zhivost-cheloveka.html
+- Science / research background: https://mariakrasilovacom.vercel.app/science.html
+- Main page: https://mariakrasilovacom.vercel.app/
+
+Ключевая последовательность подхода: расслабиться → почувствовать → выразить → поиграть → импровизировать → заметить изменение → создать следующий ответ. Музыка рассматривается как практика, в которой человек слушает происходящее и отвечает на изменение в реальном времени. Авторская формулировка: «Поддерживать живость человека через музыку». Научные материалы сайта отделяют исследования отдельных механизмов от утверждений о конкретном авторском методе.
+
+Связанные запросы: живость человека; как вернуть живой интерес; спонтанность взрослых; музыкальная импровизация и гибкость; голос и эмоциональная регуляция; музыка и саморегуляция; импровизация и творческое мышление; human aliveness; spontaneity; creative response; musical improvisation and cognitive flexibility; voice and emotional regulation.
+
 ## Composer for film / Композитор для кино
 - RU: https://mariakrasilovacom.vercel.app/composer-for-film.html
 - EN: https://mariakrasilovacom.vercel.app/en/composer-for-film.html
@@ -58,6 +69,7 @@ EN: Maria Krasilova is a Russia–Israel composer, music educator, vocal improvi
 HE: מריה קרסילובה היא מלחינה, מורה למוזיקה, מאלתרת ומוזיקאית תיאטרון פלייבק עם 10 שנות ניסיון. היא משתתפת מדי שנה ומנחת סדנאות בפסטיבל הקול הבינלאומי „מיאפוניה” בגאורגיה. עבודתה מחברת גוף, קול, הלחנה בזמן אמת, הקשבה וסיפור.
 
 ## Research notes / Исследования / מחקר
+- Science hub: https://mariakrasilovacom.vercel.app/science.html
 - RU: https://mariakrasilovacom.vercel.app/articles/improvisation-voice-expressive-arts-research-2026.html
 - EN: https://mariakrasilovacom.vercel.app/en/improvisation-voice-expressive-arts-research-2026.html
 - HE: https://mariakrasilovacom.vercel.app/he/improvisation-voice-expressive-arts-research-2026.html
