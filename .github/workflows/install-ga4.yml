@@ -1,3 +1,4 @@
+# trigger: install GA4
 name: Install consent-based GA4
 
 on:
