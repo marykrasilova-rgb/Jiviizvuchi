@@ -8,23 +8,31 @@
   const path = location.pathname.toLowerCase();
   if (path === '/diary' || path === '/diary.html' || path.startsWith('/diary/')) return;
 
-  let loaded = false;
+  window.dataLayer = window.dataLayer || [];
+  window.gtag = window.gtag || function () { window.dataLayer.push(arguments); };
 
-  function loadAnalytics() {
-    if (loaded) return;
-    loaded = true;
-    window.dataLayer = window.dataLayer || [];
-    window.gtag = window.gtag || function () { window.dataLayer.push(arguments); };
-    window.gtag('js', new Date());
-    window.gtag('config', MEASUREMENT_ID, {
-      anonymize_ip: true,
-      transport_type: 'beacon'
-    });
-    const script = document.createElement('script');
-    script.async = true;
-    script.src = 'https://www.googletagmanager.com/gtag/js?id=' + encodeURIComponent(MEASUREMENT_ID);
-    document.head.appendChild(script);
-  }
+  // Google Consent Mode: the tag is detectable immediately, but analytics
+  // storage and page/event collection stay disabled until explicit consent.
+  window.gtag('consent', 'default', {
+    analytics_storage: 'denied',
+    ad_storage: 'denied',
+    ad_user_data: 'denied',
+    ad_personalization: 'denied',
+    wait_for_update: 500
+  });
+  window.gtag('js', new Date());
+  window.gtag('config', MEASUREMENT_ID, {
+    send_page_view: false,
+    anonymize_ip: true,
+    transport_type: 'beacon'
+  });
+
+  const googleTag = document.createElement('script');
+  googleTag.async = true;
+  googleTag.src = 'https://www.googletagmanager.com/gtag/js?id=' + encodeURIComponent(MEASUREMENT_ID);
+  document.head.appendChild(googleTag);
+
+  let analyticsAllowed = false;
 
   function getConsent() {
     try { return localStorage.getItem(CONSENT_KEY); } catch (_) { return null; }
@@ -32,6 +40,33 @@
 
   function setConsent(value) {
     try { localStorage.setItem(CONSENT_KEY, value); } catch (_) {}
+  }
+
+  function grantAnalytics(sendPageView) {
+    if (analyticsAllowed) return;
+    analyticsAllowed = true;
+    window.gtag('consent', 'update', {
+      analytics_storage: 'granted',
+      ad_storage: 'denied',
+      ad_user_data: 'denied',
+      ad_personalization: 'denied'
+    });
+    if (sendPageView) {
+      window.gtag('event', 'page_view', {
+        page_location: location.href,
+        page_title: document.title
+      });
+    }
+  }
+
+  function denyAnalytics() {
+    analyticsAllowed = false;
+    window.gtag('consent', 'update', {
+      analytics_storage: 'denied',
+      ad_storage: 'denied',
+      ad_user_data: 'denied',
+      ad_personalization: 'denied'
+    });
   }
 
   function makeConsentBanner() {
@@ -61,16 +96,17 @@
       if (!button) return;
       if (button.dataset.gaConsent === 'yes') {
         setConsent('granted');
-        loadAnalytics();
+        grantAnalytics(true);
       } else {
         setConsent('denied');
+        denyAnalytics();
       }
       box.remove();
     });
   }
 
   function track(eventName, params) {
-    if (!loaded || typeof window.gtag !== 'function') return;
+    if (!analyticsAllowed || typeof window.gtag !== 'function') return;
     window.gtag('event', eventName, params || {});
   }
 
@@ -93,12 +129,12 @@
 
   const consent = getConsent();
   if (consent === 'granted') {
-    loadAnalytics();
-  } else if (consent !== 'denied') {
-    if (document.readyState === 'loading') {
-      document.addEventListener('DOMContentLoaded', makeConsentBanner, { once: true });
-    } else {
-      makeConsentBanner();
-    }
+    grantAnalytics(true);
+  } else if (consent === 'denied') {
+    denyAnalytics();
+  } else if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', makeConsentBanner, { once: true });
+  } else {
+    makeConsentBanner();
   }
 })();
