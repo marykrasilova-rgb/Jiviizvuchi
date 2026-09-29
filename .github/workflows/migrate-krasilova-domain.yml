@@ -1,0 +1,91 @@
+name: Migrate site to krasilova.com
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/migrate-krasilova-domain.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  migrate-domain:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Replace old production domain everywhere
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          import json
+
+          root = Path('.')
+          old_url = 'https://mariakrasilovacom.vercel.app'
+          old_host = 'mariakrasilovacom.vercel.app'
+          new_url = 'https://krasilova.com'
+
+          text_exts = {
+              '.html', '.xml', '.txt', '.md', '.js', '.json', '.ts', '.css',
+              '.py', '.yml', '.yaml', '.webmanifest'
+          }
+          skip = {Path('.github/workflows/migrate-krasilova-domain.yml')}
+          changed = []
+
+          for path in root.rglob('*'):
+              if not path.is_file() or '.git' in path.parts or path in skip:
+                  continue
+              if path.suffix.lower() not in text_exts and path.name not in {'robots.txt', 'llms.txt'}:
+                  continue
+              try:
+                  text = path.read_text(encoding='utf-8')
+              except UnicodeDecodeError:
+                  continue
+              new_text = text.replace(old_url, new_url).replace(old_host, 'krasilova.com')
+              if new_text != text:
+                  path.write_text(new_text, encoding='utf-8')
+                  changed.append(str(path))
+
+          # Add a permanent host-based redirect from the old Vercel domain,
+          # preserving the requested path on the new canonical domain.
+          config_path = Path('vercel.json')
+          config = json.loads(config_path.read_text(encoding='utf-8'))
+          redirect_rule = {
+              'source': '/:path*',
+              'has': [{'type': 'host', 'value': old_host}],
+              'destination': 'https://krasilova.com/:path*',
+              'permanent': True,
+          }
+          redirects = config.setdefault('redirects', [])
+          redirects = [r for r in redirects if not (
+              isinstance(r, dict)
+              and r.get('has') == [{'type': 'host', 'value': old_host}]
+          )]
+          redirects.insert(0, redirect_rule)
+          config['redirects'] = redirects
+          config_path.write_text(json.dumps(config, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
+          if 'vercel.json' not in changed:
+              changed.append('vercel.json')
+
+          print(f'Updated {len(changed)} files')
+          for p in changed:
+              print(p)
+          PY
+
+      - name: Commit migration
+        shell: bash
+        run: |
+          if git diff --quiet; then
+            echo "No changes needed"
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git commit -m "Migrate canonical URLs to krasilova.com [skip ci]"
+          git push
