@@ -29,7 +29,7 @@ if(modes){
 
 const history=document.getElementById('historyView');
 // Passwordless authentication: one flow for new and returning users.
-const APP_URL='https://mariakrasilovacom.vercel.app/app';
+const APP_URL='https://krasilova.com/app';
 const friendlyAuthError=e=>{
   const m=(e?.message||'').toLowerCase();
   if(m.includes('rate limit'))return 'Слишком много попыток подряд. Подожди немного и попробуй ещё раз.';

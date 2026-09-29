@@ -28,5 +28,5 @@ Allow: /
 User-agent: Claude-SearchBot
 Allow: /
 
-Sitemap: https://mariakrasilovacom.vercel.app/sitemap.xml
-Sitemap: https://mariakrasilovacom.vercel.app/sitemap-growth.xml
+Sitemap: https://krasilova.com/sitemap.xml
+Sitemap: https://krasilova.com/sitemap-growth.xml

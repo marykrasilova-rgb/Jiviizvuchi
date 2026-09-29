@@ -5,10 +5,10 @@ const config: CapacitorConfig = {
   appName: 'Мой музыкальный дневник',
   webDir: 'native-placeholder',
   server: {
-    url: 'https://mariakrasilovacom.vercel.app/app',
+    url: 'https://krasilova.com/app',
     cleartext: false,
     allowNavigation: [
-      'mariakrasilovacom.vercel.app',
+      'krasilova.com',
       'uecdlqlwsrqmocbpgiwj.supabase.co',
       'esm.sh'
     ]

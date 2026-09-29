@@ -1,45 +1,115 @@
 {
   "rewrites": [
-    { "source": "/diary", "destination": "/diary.html" },
-    { "source": "/app", "destination": "/diary.html" },
-    { "source": "/app.html", "destination": "/diary.html" },
-    { "source": "/emotional-diary", "destination": "/emotional-diary.html" },
-    { "source": "/evidence", "destination": "/evidence.html" },
-    { "source": "/gallery", "destination": "/gallery.html" },
-    { "source": "/games", "destination": "/games.html" },
-    { "source": "/maria-krasilova", "destination": "/maria-krasilova.html" }
+    {
+      "source": "/diary",
+      "destination": "/diary.html"
+    },
+    {
+      "source": "/app",
+      "destination": "/diary.html"
+    },
+    {
+      "source": "/app.html",
+      "destination": "/diary.html"
+    },
+    {
+      "source": "/emotional-diary",
+      "destination": "/emotional-diary.html"
+    },
+    {
+      "source": "/evidence",
+      "destination": "/evidence.html"
+    },
+    {
+      "source": "/gallery",
+      "destination": "/gallery.html"
+    },
+    {
+      "source": "/games",
+      "destination": "/games.html"
+    },
+    {
+      "source": "/maria-krasilova",
+      "destination": "/maria-krasilova.html"
+    }
   ],
   "headers": [
     {
       "source": "/(.*)",
       "headers": [
-        { "key": "X-Content-Type-Options", "value": "nosniff" },
-        { "key": "X-Frame-Options", "value": "DENY" },
-        { "key": "Referrer-Policy", "value": "strict-origin-when-cross-origin" },
-        { "key": "Permissions-Policy", "value": "camera=(self), microphone=(self), geolocation=()" },
-        { "key": "Cross-Origin-Opener-Policy", "value": "same-origin" },
-        { "key": "Cross-Origin-Resource-Policy", "value": "same-site" }
+        {
+          "key": "X-Content-Type-Options",
+          "value": "nosniff"
+        },
+        {
+          "key": "X-Frame-Options",
+          "value": "DENY"
+        },
+        {
+          "key": "Referrer-Policy",
+          "value": "strict-origin-when-cross-origin"
+        },
+        {
+          "key": "Permissions-Policy",
+          "value": "camera=(self), microphone=(self), geolocation=()"
+        },
+        {
+          "key": "Cross-Origin-Opener-Policy",
+          "value": "same-origin"
+        },
+        {
+          "key": "Cross-Origin-Resource-Policy",
+          "value": "same-site"
+        }
       ]
     },
     {
       "source": "/diary(.*)",
       "headers": [
-        { "key": "Content-Security-Policy", "value": "default-src 'self'; script-src 'self' https://esm.sh; style-src 'self' 'unsafe-inline'; connect-src 'self' https://uecdlqlwsrqmocbpgiwj.supabase.co wss://uecdlqlwsrqmocbpgiwj.supabase.co https://esm.sh; img-src 'self' data: blob: https://uecdlqlwsrqmocbpgiwj.supabase.co; media-src 'self' blob: https://uecdlqlwsrqmocbpgiwj.supabase.co; font-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'" },
-        { "key": "Cache-Control", "value": "no-store" }
+        {
+          "key": "Content-Security-Policy",
+          "value": "default-src 'self'; script-src 'self' https://esm.sh; style-src 'self' 'unsafe-inline'; connect-src 'self' https://uecdlqlwsrqmocbpgiwj.supabase.co wss://uecdlqlwsrqmocbpgiwj.supabase.co https://esm.sh; img-src 'self' data: blob: https://uecdlqlwsrqmocbpgiwj.supabase.co; media-src 'self' blob: https://uecdlqlwsrqmocbpgiwj.supabase.co; font-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'"
+        },
+        {
+          "key": "Cache-Control",
+          "value": "no-store"
+        }
       ]
     },
     {
       "source": "/app(.*)",
       "headers": [
-        { "key": "Content-Security-Policy", "value": "default-src 'self'; script-src 'self' https://esm.sh; style-src 'self' 'unsafe-inline'; connect-src 'self' https://uecdlqlwsrqmocbpgiwj.supabase.co wss://uecdlqlwsrqmocbpgiwj.supabase.co https://esm.sh; img-src 'self' data: blob: https://uecdlqlwsrqmocbpgiwj.supabase.co; media-src 'self' blob: https://uecdlqlwsrqmocbpgiwj.supabase.co; font-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'" },
-        { "key": "Cache-Control", "value": "no-store" }
+        {
+          "key": "Content-Security-Policy",
+          "value": "default-src 'self'; script-src 'self' https://esm.sh; style-src 'self' 'unsafe-inline'; connect-src 'self' https://uecdlqlwsrqmocbpgiwj.supabase.co wss://uecdlqlwsrqmocbpgiwj.supabase.co https://esm.sh; img-src 'self' data: blob: https://uecdlqlwsrqmocbpgiwj.supabase.co; media-src 'self' blob: https://uecdlqlwsrqmocbpgiwj.supabase.co; font-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'"
+        },
+        {
+          "key": "Cache-Control",
+          "value": "no-store"
+        }
       ]
     },
     {
       "source": "/gallery(.*)",
       "headers": [
-        { "key": "Content-Security-Policy", "value": "default-src 'self'; script-src 'self' https://esm.sh; style-src 'self'; connect-src 'self' https://uecdlqlwsrqmocbpgiwj.supabase.co wss://uecdlqlwsrqmocbpgiwj.supabase.co https://esm.sh; img-src 'self' data: blob: https://uecdlqlwsrqmocbpgiwj.supabase.co; media-src 'self' blob: https://uecdlqlwsrqmocbpgiwj.supabase.co; font-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'" }
+        {
+          "key": "Content-Security-Policy",
+          "value": "default-src 'self'; script-src 'self' https://esm.sh; style-src 'self'; connect-src 'self' https://uecdlqlwsrqmocbpgiwj.supabase.co wss://uecdlqlwsrqmocbpgiwj.supabase.co https://esm.sh; img-src 'self' data: blob: https://uecdlqlwsrqmocbpgiwj.supabase.co; media-src 'self' blob: https://uecdlqlwsrqmocbpgiwj.supabase.co; font-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'"
+        }
       ]
+    }
+  ],
+  "redirects": [
+    {
+      "source": "/:path*",
+      "has": [
+        {
+          "type": "host",
+          "value": "mariakrasilovacom.vercel.app"
+        }
+      ],
+      "destination": "https://krasilova.com/:path*",
+      "permanent": true
     }
   ]
 }
