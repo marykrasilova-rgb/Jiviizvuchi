@@ -101,6 +101,17 @@
   ],
   "redirects": [
     {
+      "source": "/",
+      "has": [
+        {
+          "type": "host",
+          "value": "mariakrasilovacom.vercel.app"
+        }
+      ],
+      "destination": "https://krasilova.com/",
+      "permanent": true
+    },
+    {
       "source": "/:path*",
       "has": [
         {
