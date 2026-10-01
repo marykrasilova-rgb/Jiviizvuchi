@@ -43,3 +43,43 @@ answerComposer=function(btn,name){
  rewardAnswerComposer(btn,name);
  if(!wasLocked&&quizLocked)showGameReward(correct);
 };
+
+// A gentle next step from a free game into Maria's live and online programs.
+(function installGamePathways(){
+ const style=document.createElement('style');
+ style.textContent=`
+ .game-pathway{margin:24px 0 4px;padding:22px;border:1px solid #dfd2c8;border-radius:22px;background:#fffaf6;text-align:left}
+ .game-pathway h3{margin:0 0 8px;font:600 24px/1.15 Georgia,serif;color:#302828}
+ .game-pathway>p{margin:0 0 16px;color:#665b5a;line-height:1.5}
+ .game-pathway-links{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+ .game-pathway-link{display:block;padding:15px 16px;border:1px solid #d8c9c1;border-radius:16px;background:#fff;text-decoration:none;color:#302828}
+ .game-pathway-link strong{display:block;margin-bottom:4px;color:#704752;font-size:16px}
+ .game-pathway-link span{display:block;font-size:14px;line-height:1.4;color:#665b5a}
+ .game-pathway-link:hover{transform:translateY(-1px);box-shadow:0 8px 22px rgba(73,47,38,.08)}
+ @media(max-width:650px){.game-pathway{padding:18px}.game-pathway-links{grid-template-columns:1fr}}
+ `;
+ document.head.append(style);
+
+ function pathwayMarkup(){
+   return `<div class="game-pathway" data-game-pathway>
+     <h3>Хочется не только угадывать, а звучать самому?</h3>
+     <p>Можно продолжить со мной — через живую музыкальную игру или через голос.</p>
+     <div class="game-pathway-links">
+       <a class="game-pathway-link" href="/zhivi-i-zvuchi.html"><strong>«Живи и звучи» · Хайфа →</strong><span>Голос, импровизация и музыкальная игра в группе. Можно без музыкального опыта.</span></a>
+       <a class="game-pathway-link" href="/golos-bez-straha.html"><strong>«Голос без страха» · онлайн →</strong><span>14 дней коротких практик, чтобы меньше стесняться своего голоса и свободнее звучать.</span></a>
+     </div>
+   </div>`;
+ }
+
+ ['pitchFinish','quizFinish','modernFinish'].forEach(id=>{
+   const finish=document.getElementById(id);
+   if(!finish)return;
+   const ensurePathway=()=>{
+     if(!finish.classList.contains('hidden')&&!finish.querySelector('[data-game-pathway]')){
+       finish.insertAdjacentHTML('beforeend',pathwayMarkup());
+     }
+   };
+   new MutationObserver(ensurePathway).observe(finish,{attributes:true,attributeFilter:['class'],childList:true});
+   ensurePathway();
+ });
+})();
