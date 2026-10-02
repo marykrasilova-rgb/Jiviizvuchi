@@ -111,19 +111,28 @@
   }
 
   document.addEventListener('click', function (event) {
+    const gameButton = event.target.closest('[data-open]');
+    if (gameButton && (path === '/games' || path === '/games.html')) {
+      track('game_start', {
+        game: gameButton.dataset.open || 'unknown',
+        source_page: path
+      });
+    }
+
     const link = event.target.closest('a[href]');
     if (!link) return;
     const href = link.href || '';
     const pathname = new URL(href, location.href).pathname;
+    const linkText = (link.textContent || '').trim().slice(0, 100);
 
     if (/wa\.me|whatsapp\.com/i.test(href)) {
-      track('whatsapp_click', { link_url: href, link_text: (link.textContent || '').trim().slice(0, 100) });
+      track('whatsapp_click', { link_url: href, link_text: linkText, source_page: path });
     } else if (/pay\.grow\.link/i.test(href)) {
-      track('grow_checkout_click', { link_url: href, link_text: (link.textContent || '').trim().slice(0, 100) });
+      track('grow_checkout_click', { link_url: href, link_text: linkText, source_page: path });
     } else if (pathname.endsWith('/zhivi-i-zvuchi.html')) {
-      track('offer_click', { offer: 'zhivi_i_zvuchi', link_url: href });
+      track('offer_click', { offer: 'zhivi_i_zvuchi', link_url: href, link_text: linkText, source_page: path });
     } else if (pathname.endsWith('/golos-bez-straha.html')) {
-      track('offer_click', { offer: 'golos_bez_straha', link_url: href });
+      track('offer_click', { offer: 'golos_bez_straha', link_url: href, link_text: linkText, source_page: path });
     }
   }, { capture: true });
 
