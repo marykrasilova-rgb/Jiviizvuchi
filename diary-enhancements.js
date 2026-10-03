@@ -32,7 +32,7 @@ const history=document.getElementById('historyView');
 const APP_URL='https://krasilova.com/app';
 const friendlyAuthError=e=>{
   const m=(e?.message||'').toLowerCase();
-  if(m.includes('rate limit'))return 'Слишком много попыток подряд. Подожди немного и попробуй ещё раз.';
+  if(m.includes('rate limit'))return 'Письмо уже запрашивали недавно. Подожди около минуты и попробуй снова.';
   if(m.includes('expired'))return 'Ссылка уже устарела. Нажми «Отправить новую ссылку».';
   if(m.includes('invalid')||m.includes('token'))return 'Ссылка не подошла или уже использована. Запроси новую.';
   if(m.includes('email'))return 'Проверь, правильно ли написан email.';
@@ -63,9 +63,31 @@ setTimeout(()=>{
   const anchor=terms?.closest('label')||email;
   anchor.after(send,otpBox);
 
-  let authBusy=false, sentEmail='';
+  let authBusy=false, sentEmail='', cooldownUntil=0, cooldownTimer=null;
+  function startCooldown(seconds=60){
+    cooldownUntil=Date.now()+seconds*1000;
+    clearInterval(cooldownTimer);
+    const resend=document.getElementById('resendOtpBtn');
+    const tick=()=>{
+      const left=Math.max(0,Math.ceil((cooldownUntil-Date.now())/1000));
+      if(left>0){
+        send.disabled=true;
+        if(resend)resend.disabled=true;
+        send.textContent='Повторить через '+left+' с';
+        if(resend)resend.textContent='Отправить снова через '+left+' с';
+      }else{
+        clearInterval(cooldownTimer);cooldownTimer=null;
+        send.disabled=false;
+        send.textContent='Получить ссылку для входа';
+        if(resend){resend.disabled=false;resend.textContent='Отправить новую ссылку'}
+      }
+    };
+    tick();cooldownTimer=setInterval(tick,1000);
+  }
   async function sendCode(){
     if(authBusy)return;
+    const wait=Math.ceil((cooldownUntil-Date.now())/1000);
+    if(wait>0){msg.textContent='Письмо уже отправлено. Подожди '+wait+' с перед повторной отправкой.';return}
     const mail=email.value.trim();
     if(!mail||!email.validity.valid){msg.textContent='Напиши свой email.';email.focus();return}
     if(terms&&!terms.checked){msg.textContent='Чтобы хранить личный дневник, нужно принять Политику конфиденциальности и Условия.';return}
@@ -74,13 +96,14 @@ setTimeout(()=>{
     try{
     const {error}=await s.auth.signInWithOtp({email:mail,options:{shouldCreateUser:true,emailRedirectTo:APP_URL,data:{privacy_accepted:true,terms_accepted:true,privacy_version:'2026-08-29',terms_version:'2026-08-29',marketing_consent:!!document.getElementById('marketingConsent')?.checked,research_consent:!!document.getElementById('researchConsent')?.checked}}});
     send.disabled=false;
-    if(error){msg.textContent=friendlyAuthError(error);return}
+    if(error){msg.textContent=friendlyAuthError(error);if((error.message||'').toLowerCase().includes('rate limit'))startCooldown(60);return}
     localStorage.setItem('diaryLastEmail',mail);
     sentEmail=mail;
     msg.textContent='Письмо отправлено. Открой последнее письмо и нажми «Войти». Если его нет, проверь папку «Спам».';
     otpBox.classList.remove('hidden');
-    const code=document.getElementById('otpCode');if(code){code.value='';code.focus()}
-    }catch(e){msg.textContent='Не удалось связаться с сервером. Проверь интернет и попробуй ещё раз.'}finally{authBusy=false;send.disabled=false;document.getElementById('resendOtpBtn').disabled=false}
+    startCooldown(60);
+    const code=document.getElementById('otpCode');if(code){code.value=''}
+    }catch(e){msg.textContent='Не удалось связаться с сервером. Проверь интернет и попробуй ещё раз.'}finally{authBusy=false;if(Date.now()>=cooldownUntil){send.disabled=false;document.getElementById('resendOtpBtn').disabled=false}}
   }
 
   send.onclick=sendCode;
