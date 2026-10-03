@@ -1,4 +1,4 @@
-name: Fix diary auth copy
+name: Finalize diary auth link copy
 
 on:
   push:
@@ -16,38 +16,22 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.x'
-      - name: Align diary UI with magic-link email
+      - name: Finalize user-facing link wording
         run: |
           python - <<'PY'
           from pathlib import Path
           p = Path('diary-enhancements.js')
           s = p.read_text()
-
-          replacements = {
-            "send.id='sendOtpBtn';send.type='button';send.className='btn';send.textContent='Получить код для входа';":
-            "send.id='sendOtpBtn';send.type='button';send.className='btn';send.textContent='Получить ссылку для входа';",
-
-            "otpBox.innerHTML='<div class=\"small\" style=\"margin-top:14px\">Мы отправили письмо. Введи 6-значный код из письма.</div><input id=\"otpCode\" type=\"text\" inputmode=\"numeric\" autocomplete=\"one-time-code\" maxlength=\"6\" pattern=\"[0-9]*\" placeholder=\"Код из 6 цифр\" style=\"font-size:24px;text-align:center;letter-spacing:.22em\"><button id=\"verifyOtpBtn\" type=\"button\" class=\"btn\">Войти в дневник</button><button id=\"resendOtpBtn\" type=\"button\" class=\"btn secondary\">Отправить новый код</button><div class=\"small\" style=\"margin-top:10px\">Если в письме пока пришла кнопка или ссылка вместо цифр — нажми её. Она тоже автоматически откроет дневник.</div>';":
-            "otpBox.innerHTML='<div class=\"small\" style=\"margin-top:14px\">Мы отправили письмо. Открой его и нажми кнопку «Войти» — ссылка одноразовая и скоро истечёт.</div><input id=\"otpCode\" class=\"hidden\" type=\"text\" inputmode=\"numeric\" autocomplete=\"one-time-code\" maxlength=\"6\" pattern=\"[0-9]*\"><button id=\"verifyOtpBtn\" type=\"button\" class=\"btn hidden\">Войти в дневник</button><button id=\"resendOtpBtn\" type=\"button\" class=\"btn secondary\">Отправить новую ссылку</button><div class=\"small\" style=\"margin-top:10px\">Если письма нет, проверь папку «Спам».</div>';",
-
-            "msg.textContent='Письмо отправлено. Если его нет, проверь папку «Спам». Для входа используй последний полученный код.';":
-            "msg.textContent='Письмо отправлено. Открой последнее письмо и нажми «Войти». Если его нет, проверь папку «Спам».';",
-          }
-
-          for old, new in replacements.items():
-              if old not in s:
-                  raise SystemExit('Expected text not found: ' + old[:120])
-              s = s.replace(old, new)
-
+          s = s.replace("if(m.includes('expired'))return 'Код уже устарел. Нажми «Отправить новый код».';", "if(m.includes('expired'))return 'Ссылка уже устарела. Нажми «Отправить новую ссылку».';")
+          s = s.replace("if(m.includes('invalid')||m.includes('token'))return 'Код не подошёл. Проверь цифры или запроси новый.';", "if(m.includes('invalid')||m.includes('token'))return 'Ссылка не подошла или уже использована. Запроси новую.';")
+          s = s.replace("msg.textContent='Отправляю код…';", "msg.textContent='Отправляю ссылку…';")
           p.write_text(s)
           PY
-
-      - name: Commit changes
+      - name: Commit and remove one-time workflow
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add diary-enhancements.js
-          git commit -m "Align diary sign-in UI with magic-link email" || exit 0
+          git rm .github/workflows/fix-auth-link-copy.yml
+          git commit -m "Finalize diary magic-link wording"
           git push
-
-# retrigger
