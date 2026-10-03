@@ -57,9 +57,9 @@ setTimeout(()=>{
   if(terms&&localStorage.getItem('diaryTermsAccepted')==='1')terms.checked=true;
 
   const send=document.createElement('button');
-  send.id='sendOtpBtn';send.type='button';send.className='btn';send.textContent='Получить код для входа';
+  send.id='sendOtpBtn';send.type='button';send.className='btn';send.textContent='Получить ссылку для входа';
   const otpBox=document.createElement('div');otpBox.id='otpBox';otpBox.className='hidden';
-  otpBox.innerHTML='<div class="small" style="margin-top:14px">Мы отправили письмо. Введи 6-значный код из письма.</div><input id="otpCode" type="text" inputmode="numeric" autocomplete="one-time-code" maxlength="6" pattern="[0-9]*" placeholder="Код из 6 цифр" style="font-size:24px;text-align:center;letter-spacing:.22em"><button id="verifyOtpBtn" type="button" class="btn">Войти в дневник</button><button id="resendOtpBtn" type="button" class="btn secondary">Отправить новый код</button><div class="small" style="margin-top:10px">Если в письме пока пришла кнопка или ссылка вместо цифр — нажми её. Она тоже автоматически откроет дневник.</div>';
+  otpBox.innerHTML='<div class="small" style="margin-top:14px">Мы отправили письмо. Открой его и нажми кнопку «Войти» — ссылка одноразовая и скоро истечёт.</div><input id="otpCode" class="hidden" type="text" inputmode="numeric" autocomplete="one-time-code" maxlength="6" pattern="[0-9]*"><button id="verifyOtpBtn" type="button" class="btn hidden">Войти в дневник</button><button id="resendOtpBtn" type="button" class="btn secondary">Отправить новую ссылку</button><div class="small" style="margin-top:10px">Если письма нет, проверь папку «Спам».</div>';
   const anchor=terms?.closest('label')||email;
   anchor.after(send,otpBox);
 
@@ -77,7 +77,7 @@ setTimeout(()=>{
     if(error){msg.textContent=friendlyAuthError(error);return}
     localStorage.setItem('diaryLastEmail',mail);
     sentEmail=mail;
-    msg.textContent='Письмо отправлено. Если его нет, проверь папку «Спам». Для входа используй последний полученный код.';
+    msg.textContent='Письмо отправлено. Открой последнее письмо и нажми «Войти». Если его нет, проверь папку «Спам».';
     otpBox.classList.remove('hidden');
     const code=document.getElementById('otpCode');if(code){code.value='';code.focus()}
     }catch(e){msg.textContent='Не удалось связаться с сервером. Проверь интернет и попробуй ещё раз.'}finally{authBusy=false;send.disabled=false;document.getElementById('resendOtpBtn').disabled=false}
