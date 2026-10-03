@@ -49,3 +49,5 @@ jobs:
           git add diary-enhancements.js
           git commit -m "Align diary sign-in UI with magic-link email" || exit 0
           git push
+
+# retrigger
