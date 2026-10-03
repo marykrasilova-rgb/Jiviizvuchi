@@ -33,8 +33,8 @@ const APP_URL='https://krasilova.com/app';
 const friendlyAuthError=e=>{
   const m=(e?.message||'').toLowerCase();
   if(m.includes('rate limit'))return 'Слишком много попыток подряд. Подожди немного и попробуй ещё раз.';
-  if(m.includes('expired'))return 'Код уже устарел. Нажми «Отправить новый код».';
-  if(m.includes('invalid')||m.includes('token'))return 'Код не подошёл. Проверь цифры или запроси новый.';
+  if(m.includes('expired'))return 'Ссылка уже устарела. Нажми «Отправить новую ссылку».';
+  if(m.includes('invalid')||m.includes('token'))return 'Ссылка не подошла или уже использована. Запроси новую.';
   if(m.includes('email'))return 'Проверь, правильно ли написан email.';
   return 'Не получилось войти. Попробуй ещё раз.';
 };
@@ -70,7 +70,7 @@ setTimeout(()=>{
     if(!mail||!email.validity.valid){msg.textContent='Напиши свой email.';email.focus();return}
     if(terms&&!terms.checked){msg.textContent='Чтобы хранить личный дневник, нужно принять Политику конфиденциальности и Условия.';return}
     if(terms?.checked)localStorage.setItem('diaryTermsAccepted','1');
-    authBusy=true;send.disabled=true;document.getElementById('resendOtpBtn').disabled=true;msg.textContent='Отправляю код…';
+    authBusy=true;send.disabled=true;document.getElementById('resendOtpBtn').disabled=true;msg.textContent='Отправляю ссылку…';
     try{
     const {error}=await s.auth.signInWithOtp({email:mail,options:{shouldCreateUser:true,emailRedirectTo:APP_URL,data:{privacy_accepted:true,terms_accepted:true,privacy_version:'2026-08-29',terms_version:'2026-08-29',marketing_consent:!!document.getElementById('marketingConsent')?.checked,research_consent:!!document.getElementById('researchConsent')?.checked}}});
     send.disabled=false;
