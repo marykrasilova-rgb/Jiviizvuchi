@@ -3,6 +3,28 @@
 
   const MEASUREMENT_ID = 'G-CHFYS314FZ';
   const CONSENT_KEY = 'mariaAnalyticsConsent';
+  const CAMPAIGN_KEY = 'mariaCampaignSource';
+
+  function readCampaignSource() {
+    const query = new URLSearchParams(location.search);
+    const fromUrl = {
+      traffic_source: query.get('utm_source') || '',
+      traffic_medium: query.get('utm_medium') || '',
+      traffic_campaign: query.get('utm_campaign') || ''
+    };
+    if (fromUrl.traffic_source || fromUrl.traffic_medium || fromUrl.traffic_campaign) {
+      try { sessionStorage.setItem(CAMPAIGN_KEY, JSON.stringify(fromUrl)); } catch (_) {}
+      return fromUrl;
+    }
+    try {
+      const saved = JSON.parse(sessionStorage.getItem(CAMPAIGN_KEY) || 'null');
+      return saved && typeof saved === 'object' ? saved : fromUrl;
+    } catch (_) {
+      return fromUrl;
+    }
+  }
+
+  const campaignSource = readCampaignSource();
 
   // Personal diary pages are intentionally excluded from GA4.
   const path = location.pathname.toLowerCase();
@@ -52,10 +74,10 @@
       ad_personalization: 'denied'
     });
     if (sendPageView) {
-      window.gtag('event', 'page_view', {
+      window.gtag('event', 'page_view', Object.assign({
         page_location: location.href,
         page_title: document.title
-      });
+      }, campaignSource));
     }
   }
 
@@ -107,7 +129,7 @@
 
   function track(eventName, params) {
     if (!analyticsAllowed || typeof window.gtag !== 'function') return;
-    window.gtag('event', eventName, params || {});
+    window.gtag('event', eventName, Object.assign({}, campaignSource, params || {}));
   }
 
   document.addEventListener('click', function (event) {
