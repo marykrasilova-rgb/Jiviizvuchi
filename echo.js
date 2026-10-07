@@ -20,7 +20,7 @@ document.querySelectorAll('.tab').forEach(b=>b.onclick=()=>setView(b.dataset.vie
 
 async function logEvent(name,metadata={}){
   if(!user)return;
-  await s.from('usage_events').insert({user_id:user.id,event_name:name,modality:'voice',metadata}).catch(()=>{});
+  try{await s.from('usage_events').insert({user_id:user.id,event_name:name,modality:'voice',metadata})}catch{}
 }
 
 async function authState(){
@@ -183,7 +183,7 @@ async function renderFeed(){
 }
 async function reportPost(id){
   if(!confirm('Скрыть эту запись из твоего потока и отправить отметку администратору?'))return;
-  const {error}=await s.from('echo_reports').upsert({reporter_user_id:user.id,post_id:id,reason:'other'},{onConflict:'reporter_user_id,post_id'});
+  const {error}=await s.from('echo_reports').insert({reporter_user_id:user.id,post_id:id,reason:'other'});
   if(error){alert('Не удалось отправить отметку.');return}
   feed=feed.filter(p=>p.id!==id);feedIndex=0;renderFeed();await logEvent('echo_report');
 }
