@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#f6f0ea">
+<meta name="robots" content="noindex,nofollow">
+<title>Эхо — голосовая социальная импровизация</title>
+<meta name="description" content="Эхо — пространство, где на голос отвечают голосом. Запиши короткую импровизацию, услышь другого человека и продолжи его звучание.">
+<link rel="canonical" href="https://krasilova.com/echo">
+<link rel="stylesheet" href="/echo.css">
+</head>
+<body>
+<div class="shell">
+  <div class="top">
+    <div class="brand">Живи и звучи · Эхо</div>
+    <div class="toplinks"><a class="linkbtn" href="/diary">Дневник</a><button id="logoutBtn" class="linkbtn hidden" type="button">Выйти</button></div>
+  </div>
+
+  <section id="authView">
+    <div class="label">Голос вместо лайка</div>
+    <h1>Ты звучишь — мир отвечает.</h1>
+    <p class="lead">Здесь не нужно петь красиво. Оставь короткий звуковой импульс, услышь другого человека и ответь ему своим звучанием.</p>
+    <div class="card">
+      <h2>Войти в Эхо</h2>
+      <p class="small">Используй тот же аккаунт, что и в Эмоциональном дневнике.</p>
+      <input id="email" type="email" placeholder="Email" autocomplete="email" inputmode="email">
+      <input id="password" type="password" placeholder="Пароль" autocomplete="current-password">
+      <button id="loginBtn" class="btn" type="button">Войти</button>
+      <a class="btn secondary" href="/diary" style="display:block;text-align:center;text-decoration:none">Я здесь впервые — создать аккаунт</a>
+      <div id="authMsg" class="small" style="margin-top:12px" aria-live="polite"></div>
+    </div>
+    <div class="principle"><strong>Правило Эха:</strong> хочешь вступить в контакт — ответь звучанием. Здесь нет комментариев и рейтингов.</div>
+  </section>
+
+  <section id="appView" class="hidden">
+    <section id="soundView">
+      <div class="label">Я</div>
+      <h1>Как ты звучишь сегодня?</h1>
+      <p class="lead">20–60 секунд. Можно петь, говорить ритмически, дышать, шептать, издавать один звук или придумать что угодно.</p>
+      <div id="replyBanner" class="reply-banner hidden"><div><strong>Ты отвечаешь голосом</strong><div id="replyWho" class="small"></div></div><button id="cancelReply" type="button">Отменить</button></div>
+      <div class="card">
+        <label class="small" for="authorLabel">Как подписать голос? Необязательно.</label>
+        <input id="authorLabel" maxlength="40" placeholder="Например: Маша или оставить анонимно">
+        <button id="recordBtn" class="record-orb" type="button">🎙<br>Начать</button>
+        <div id="timer" class="timer">00:00</div>
+        <div id="recordStatus" class="status">Максимум 60 секунд</div>
+        <audio id="preview" class="hidden" controls></audio>
+        <label class="check"><input id="publishConsent" type="checkbox"><span>Я хочу отправить эту запись в «Эхо». Другие участники смогут её слушать и отвечать своим голосом. Личные записи моего дневника при этом не публикуются.</span></label>
+        <button id="publishBtn" class="btn olive" type="button" disabled>Отправить в Эхо</button>
+        <div id="publishStatus" class="status" aria-live="polite"></div>
+      </div>
+      <div class="principle"><strong>Не нужно производить контент.</strong> Оставь импульс, который другой человек сможет продолжить.</div>
+    </section>
+
+    <section id="listenView" class="hidden">
+      <div class="label">Ты</div>
+      <h1>Услышь другого.</h1>
+      <p class="lead">Не оценивай. Заметь, что появляется в тебе, и при желании ответь звуком.</p>
+      <div id="feedHost"></div>
+    </section>
+
+    <section id="mineView" class="hidden">
+      <div class="label">Мои</div>
+      <h1>Мои голоса</h1>
+      <p class="lead">Здесь только записи, которые ты сама решила отправить в «Эхо». Их можно удалить.</p>
+      <div id="mineHost" class="card"></div>
+    </section>
+
+    <nav class="tabs" aria-label="Разделы Эхо">
+      <button class="tab on" data-view="sound" type="button">Звучи</button>
+      <button class="tab" data-view="listen" type="button">Слушай</button>
+      <button class="tab" data-view="mine" type="button">Мои</button>
+    </nav>
+  </section>
+</div>
+<script type="module" src="/echo.js"></script>
+</body>
+</html>
