@@ -60,7 +60,7 @@ function clearRecording(){
 }
 async function startRecording(){
   try{
-    clearRecording();
+    clearRecording();$('publishStatus').textContent='';
     stream=await navigator.mediaDevices.getUserMedia({audio:true});
     const chunks=[],mime=bestMime();
     recorder=new MediaRecorder(stream,mime?{mimeType:mime}:undefined);
@@ -102,7 +102,8 @@ $('publishBtn').onclick=async()=>{
   if(!user||!recordBlob||!$('publishConsent').checked)return;
   $('publishBtn').disabled=true;$('publishStatus').textContent='Отправляю…';
   const path=user.id+'/'+Date.now()+'-'+crypto.randomUUID()+'.'+extFor(recordBlob.type);
-  const {error:upErr}=await s.storage.from('echo-audio').upload(path,recordBlob,{contentType:recordBlob.type||'audio/webm',upsert:false});
+  const contentType=(recordBlob.type||'audio/webm').split(';')[0];
+  const {error:upErr}=await s.storage.from('echo-audio').upload(path,recordBlob,{contentType,upsert:false});
   if(upErr){$('publishStatus').textContent='Не удалось загрузить запись: '+upErr.message;$('publishBtn').disabled=false;return}
   const label=$('authorLabel').value.trim().slice(0,40)||'Анонимный голос';
   localStorage.setItem('echo_author_label',$('authorLabel').value.trim());
