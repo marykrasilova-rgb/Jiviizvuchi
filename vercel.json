@@ -5,6 +5,10 @@
       "destination": "/diary.html"
     },
     {
+      "source": "/echo",
+      "destination": "/echo.html"
+    },
+    {
       "source": "/app",
       "destination": "/diary.html"
     },
@@ -95,6 +99,43 @@
         {
           "key": "Content-Security-Policy",
           "value": "default-src 'self'; script-src 'self' https://esm.sh; style-src 'self'; connect-src 'self' https://uecdlqlwsrqmocbpgiwj.supabase.co wss://uecdlqlwsrqmocbpgiwj.supabase.co https://esm.sh; img-src 'self' data: blob: https://uecdlqlwsrqmocbpgiwj.supabase.co; media-src 'self' blob: https://uecdlqlwsrqmocbpgiwj.supabase.co; font-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'"
+        }
+      ]
+    },
+    {
+      "source": "/echo(.*)",
+      "headers": [
+        {
+          "key": "X-Content-Type-Options",
+          "value": "nosniff"
+        },
+        {
+          "key": "X-Frame-Options",
+          "value": "DENY"
+        },
+        {
+          "key": "Referrer-Policy",
+          "value": "strict-origin-when-cross-origin"
+        },
+        {
+          "key": "Permissions-Policy",
+          "value": "camera=(), microphone=(self), geolocation=()"
+        },
+        {
+          "key": "Cross-Origin-Opener-Policy",
+          "value": "same-origin"
+        },
+        {
+          "key": "Cross-Origin-Resource-Policy",
+          "value": "same-site"
+        },
+        {
+          "key": "Content-Security-Policy",
+          "value": "default-src 'self'; script-src 'self' https://esm.sh; style-src 'self'; connect-src 'self' https://uecdlqlwsrqmocbpgiwj.supabase.co wss://uecdlqlwsrqmocbpgiwj.supabase.co https://esm.sh; img-src 'self' data: blob:; media-src 'self' blob: https://uecdlqlwsrqmocbpgiwj.supabase.co; font-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'"
+        },
+        {
+          "key": "Cache-Control",
+          "value": "no-store"
         }
       ]
     }
