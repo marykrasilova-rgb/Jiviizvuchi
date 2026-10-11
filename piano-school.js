@@ -138,6 +138,9 @@ async function loadTeacher(){
  const {data,error}=await db.from('piano_class_students').select('id,teacher_user_id,student_user_id,display_name,homework,invite_code,created_at').eq('teacher_user_id',user.id).order('created_at',{ascending:false});
  if(error){notify(langText().error+error.message,true);return}
  teacherRows=data||[];
+ let weeklyReports=0;
+ if(teacherRows.length){const ids=teacherRows.map(x=>x.id);const currentWeek=weekSunday(new Date());const {data:rows,error:reportsError}=await db.from('piano_class_weeks').select('student_id').in('student_id',ids).eq('week_start',currentWeek);if(!reportsError)weeklyReports=(rows||[]).length}
+ $('tReports').textContent=String(weeklyReports);
  if(!teacherRows.some(x=>x.id===selectedId))selectedId=teacherRows[0]?.id||null;
  await renderTeacher();
 }
@@ -167,7 +170,7 @@ async function renderTeacher(){
  $('teacherStudents').innerHTML=teacherRows.length?teacherRows.map(s=>'<button type="button" class="student-list-item'+(s.id===selectedId?' selected':'')+'" data-student="'+safe(s.id)+'"><span><b>'+safe(s.display_name)+'</b><small>'+safe(langText()[s.student_user_id?'connected':'notConnected'])+'</small></span><span class="chevron">›</span></button>').join(''):'<p class="small">'+langText().noStudents+'</p>';
  $('teacherStudents').querySelectorAll('[data-student]').forEach(b=>b.onclick=async()=>{selectedId=b.dataset.student;await renderTeacher()});
  $('selectedStudentCard').classList.toggle('hidden',!selectedId);
- if(!selectedId){$('tReports').textContent='0';return}
+ if(!selectedId){return}
  const item=teacherRows.find(s=>s.id===selectedId);
  $('selectedStudentTitle').textContent=item.display_name;
  $('studentJoinState').textContent=langText()[item.student_user_id?'connected':'notConnected'];
@@ -181,7 +184,6 @@ async function loadTeacherReport(){
  const {data,error}=await db.from('piano_class_weeks').select('week_start,report,updated_at').eq('student_id',item.id).order('week_start',{ascending:false}).limit(40);
  if(error){notify(langText().error+error.message,true);return}
  weekRecords=data||[];
- $('tReports').textContent=weekRecords.filter(x=>x.week_start===weekSunday(new Date())).length;
  const current=weekRecords.find(x=>x.week_start===reportWeek),r=current?normalizeReport(current.report):null,st=statsOf(r);
  $('teacherReportStats').innerHTML=r?[
  [langText().days,st.daysCount+' / 7'],[langText().stars,st.points+' ★'],[langText().tasks,st.taskCount]
