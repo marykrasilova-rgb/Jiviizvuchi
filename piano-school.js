@@ -26,7 +26,7 @@ he:{eyebrow:"מוזיקה בכל יום",mainTitle:"יומן אחד — שתי �
 };
 let lang=new URLSearchParams(location.search).get('lang')==='he'?'he':(localStorage.getItem('piano-school-lang')||'ru');
 if(!COPY[lang])lang='ru';
-let user=null,roleChoice='teacher',isSignup=false,teacher=null,student=null,teacherRows=[],selectedId=null,weekReport=null,reportWeek=weekSunday(new Date()),weekRecords=[],pendingSave=null;
+let user=null,roleChoice='teacher',isSignup=false,teacher=null,student=null,teacherName='',teacherRows=[],selectedId=null,weekReport=null,reportWeek=weekSunday(new Date()),weekRecords=[],pendingSave=null;
 const langText=()=>COPY[lang];
 const weekDate=d=>[d.getFullYear(),String(d.getMonth()+1).padStart(2,'0'),String(d.getDate()).padStart(2,'0')].join('-');
 function weekSunday(d){const a=new Date(d);a.setDate(a.getDate()-a.getDay());return weekDate(a)}
@@ -201,12 +201,11 @@ async function loadTeacherReport(){
 }
 async function loadStudent(){
  const {data:profile}=await db.from('piano_teacher_accounts').select('display_name').eq('user_id',student.teacher_user_id).maybeSingle();
- $('studentSub').textContent=langText().studentSub+(profile?.display_name||'—');
+ teacherName=profile?.display_name||'—';
  $('studentWeek').value=reportWeek;
  await loadStudentWeek();
 }
 async function loadStudentWeek(){
- if(pendingSave){clearTimeout(pendingSave);pendingSave=null;await saveReport()}
  const {data,error}=await db.from('piano_class_weeks').select('report').eq('student_id',student.id).eq('week_start',reportWeek).maybeSingle();
  if(error){notify(langText().error+error.message,true);return}
  weekReport=normalizeReport(data?.report);renderStudent();
@@ -214,7 +213,7 @@ async function loadStudentWeek(){
 function renderStudent(){
  if(!student)return;
  const t=langText();
- $('studentSub').textContent=t.studentSub+($('studentSub').textContent.split(t.studentSub)[1]||'');
+ $('studentSub').textContent=t.studentSub+teacherName;
  $('homeworkContent').textContent=student.homework||t.noHomework;
  $('studentWeek').value=reportWeek;
  const r=weekReport||defaultReport(),stat=statsOf(r);
@@ -229,7 +228,7 @@ function renderStudent(){
  const flags=[stat.daysCount>=1,stat.daysCount>=3,stat.daysCount>=5,stat.days.some((_,i)=>r.checks['scale_c:'+i]),techGroups>=4,r.pieces.some(p=>CRIT.filter(c=>p.done[c[0]]).length>=4)];
  $('achievements').innerHTML=badges.map((b,i)=>'<div class="achievement'+(flags[i]?' earned':'')+'"><span class="symbol">'+b[0]+'</span><span><strong>'+safe(b[1])+'</strong><small>'+safe(b[2])+'</small></span></div>').join('');
 }
-$('studentWeek').onchange=async()=>{reportWeek=selectedSunday($('studentWeek').value);$('studentWeek').value=reportWeek;await loadStudentWeek()};
+$('studentWeek').onchange=async()=>{if(pendingSave){clearTimeout(pendingSave);pendingSave=null;await saveReport()}reportWeek=selectedSunday($('studentWeek').value);$('studentWeek').value=reportWeek;await loadStudentWeek()};
 function markDirty(){
  if(pendingSave)clearTimeout(pendingSave);
  $('weekSaveStatus').textContent=lang==='he'?'יש שינויים שלא נשמרו':'Есть несохранённые изменения';
