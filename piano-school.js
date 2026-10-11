@@ -26,9 +26,9 @@ he:{eyebrow:"מוזיקה בכל יום",mainTitle:"יומן אחד — שתי �
 };
 let lang=new URLSearchParams(location.search).get('lang')==='he'?'he':(localStorage.getItem('piano-school-lang')||'ru');
 if(!COPY[lang])lang='ru';
+const weekDate=d=>[d.getFullYear(),String(d.getMonth()+1).padStart(2,'0'),String(d.getDate()).padStart(2,'0')].join('-');
 let user=null,roleChoice='teacher',isSignup=false,teacher=null,student=null,teacherName='',teacherRows=[],selectedId=null,weekReport=null,reportWeek=weekSunday(new Date()),weekRecords=[],pendingSave=null;
 const langText=()=>COPY[lang];
-const weekDate=d=>[d.getFullYear(),String(d.getMonth()+1).padStart(2,'0'),String(d.getDate()).padStart(2,'0')].join('-');
 function weekSunday(d){const a=new Date(d);a.setDate(a.getDate()-a.getDay());return weekDate(a)}
 function selectedSunday(value){const date=new Date((value||weekDate(new Date()))+"T12:00:00");return Number.isNaN(+date)?weekSunday(new Date()):weekSunday(date)}
 function show(id){["authScreen","chooseRoleScreen","teacherScreen","studentScreen"].forEach(k=>$(k).classList.toggle('hidden',k!==id))}
