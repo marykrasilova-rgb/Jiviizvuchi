@@ -150,7 +150,7 @@ function gameStats(data){
  const checks=data.checks&&typeof data.checks==="object"?data.checks:{};
  const days=Array.from({length:7},(_,day)=>GROUPS.some(g=>g.rows.some(row=>!!checks["t:"+row[0]+":"+day])));
  const active=days.filter(Boolean).length;
- const playedGroups=GROUPS.filter(g=>g.rows.some(row=>days.some((_,day)=>!!checks["t:"+row[0]+":"+day)))).map(g=>g.id);
+ const playedGroups=GROUPS.filter(g=>g.rows.some(row=>days.some((_,day)=>!!checks["t:"+row[0]+":"+day]))).map(g=>g.id);
  const pieces=Array.isArray(data.pieces)?data.pieces:[];
  const doneCount=pieces.reduce((sum,p)=>sum+PIECE_CRITERIA.filter(c=>p?.done?.[c[0]]).length,0);
  const points=active*10+playedGroups.length*5+doneCount*5;
