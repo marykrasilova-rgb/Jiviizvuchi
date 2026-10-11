@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#f7f1eb">
+<meta name="robots" content="noindex,nofollow">
+<title>Музыкальный класс — учитель и ученик | Мария Красилова</title>
+<meta name="description" content="Личный музыкальный журнал преподавателя и ученика: домашние задания, дневник занятий, звёзды и прогресс.">
+<link rel="stylesheet" href="/piano-school.css">
+</head>
+<body>
+<div class="container">
+  <header class="topbar">
+    <a href="/" class="brand">Мария Красилова <span>· Музыкальный класс</span></a>
+    <div class="topright"><div class="langset"><button id="ru" type="button">Русский</button><button id="he" type="button" lang="he">עברית</button></div><button id="logout" class="link-button hidden" type="button">Выйти</button></div>
+  </header>
+  <div class="status-message hidden" id="notification" role="status" aria-live="polite"></div>
+  <main>
+    <section class="auth-section" id="authScreen">
+      <div class="eyebrow" id="eyebrow">Музыка каждый день</div>
+      <h1 id="mainTitle">Один дневник — два взгляда на прогресс</h1>
+      <p class="lead" id="mainLead">Преподаватель даёт задания и видит результат. Ученик отмечает занятия, собирает звёзды и открывает достижения.</p>
+      <div class="role-grid">
+        <button type="button" class="role-card" id="pickTeacher"><span class="role-icon">♬</span><strong id="roleTeacher">Я преподаватель</strong><span id="roleTeacherHint">Мой класс, ученики, задания и отчёты</span><span class="role-arrow">→</span></button>
+        <button type="button" class="role-card" id="pickStudent"><span class="role-icon">♫</span><strong id="roleStudent">Я ученик / родитель</strong><span id="roleStudentHint">Мой дневник, практика и достижения</span><span class="role-arrow">→</span></button>
+      </div>
+      <div class="card auth-card hidden" id="loginCard">
+        <div class="split"><div><div class="eyebrow" id="formRole"></div><h2 id="formTitle"></h2></div><button class="link-button" type="button" id="changeRole">← <span id="changeRoleLabel">Назад</span></button></div>
+        <div class="field"><label for="email" id="emailLabel">Электронная почта</label><input id="email" type="email" autocomplete="email" inputmode="email"></div>
+        <div class="field"><label for="password" id="passLabel">Пароль</label><input id="password" type="password" minlength="8" autocomplete="current-password"></div>
+        <div class="field hidden" id="nameField"><label for="displayName" id="nameLabel">Как вас зовут?</label><input id="displayName" maxlength="90"></div>
+        <label class="consent hidden" id="consentBox"><input id="consent" type="checkbox"><span id="consentText">Я согласен(а) с условиями и политикой конфиденциальности.</span></label>
+        <div class="actions"><button type="button" class="primary" id="submitAuth"></button><button type="button" class="secondary" id="toggleAuth"></button></div>
+        <p class="small" id="authNote"></p>
+        <p class="small" id="authResult" role="status" aria-live="polite"></p>
+      </div>
+      <p class="privacy-note" id="introFoot"></p>
+    </section>
+    <section class="hidden" id="chooseRoleScreen">
+      <div class="eyebrow" id="welcomeEyebrow">Профиль</div><h1 id="welcomeTitle">С чего начнём?</h1><p class="lead" id="welcomeText">Выбери роль, чтобы продолжить.</p>
+      <div class="role-grid"><button type="button" class="role-card" id="newTeacher">♬ <strong id="newTeacherText">Создать журнал преподавателя</strong></button><button type="button" class="role-card" id="newStudent">♫ <strong id="newStudentText">Подключиться как ученик</strong></button></div>
+      <div class="card hidden" id="teacherSetup"><h2 id="setupTitle">Название класса</h2><div class="field"><label for="teacherName" id="teacherNameLabel">Имя преподавателя</label><input id="teacherName" maxlength="100"></div><button class="primary" type="button" id="createTeacher"></button></div>
+      <div class="card hidden" id="studentSetup"><h2 id="joinTitle">Подключиться к преподавателю</h2><p id="joinHelp"></p><div class="field"><label for="inviteCode" id="inviteLabel">Код приглашения</label><input id="inviteCode" maxlength="16" autocomplete="off" autocapitalize="characters" spellcheck="false"></div><button class="primary" type="button" id="joinClass"></button></div>
+    </section>
+    <section class="hidden" id="teacherScreen">
+      <div class="section-heading"><div><div class="eyebrow" id="teacherLabel">Кабинет преподавателя</div><h1 id="teacherTitle">Мой музыкальный класс</h1><p class="lead" id="teacherSub">Выдавай задания, приглашай учеников и смотри их домашнюю практику.</p></div><span class="eyebrow tag" id="teacherChip">Учитель</span></div>
+      <div class="stats-row"><div class="stat"><span id="tStudentsLabel">Учеников</span><strong id="tStudents">0</strong></div><div class="stat"><span id="tJoinedLabel">Подключились</span><strong id="tJoined">0</strong></div><div class="stat"><span id="tReportsLabel">Отчётов за неделю</span><strong id="tReports">0</strong></div></div>
+      <div class="teacher-grid">
+        <div class="card"><h2 id="addTitle">Добавить ученика</h2><div class="field"><label for="newStudentName" id="addName">Имя или псевдоним ученика</label><input id="newStudentName" maxlength="90"></div><div class="field"><label for="newStudentHomework" id="addHomework">Первое домашнее задание</label><textarea id="newStudentHomework" maxlength="3000" rows="3"></textarea></div><button class="primary" type="button" id="addStudent"></button><p class="small" id="addHint">Ученику выдаётся индивидуальный код для подключения.</p></div>
+        <div class="card"><div class="split"><h2 id="classTitle">Мои ученики</h2><button class="link-button" type="button" id="refreshTeacher">↻</button></div><div id="teacherStudents" class="students"></div></div>
+      </div>
+      <div class="card hidden" id="selectedStudentCard">
+        <div class="split"><div><span class="eyebrow" id="studentRecordLabel">Журнал ученика</span><h2 id="selectedStudentTitle"></h2><p class="small" id="inviteStatus"></p></div><div class="tag" id="studentJoinState"></div></div>
+        <div class="field"><label for="teacherHomework" id="homeworkLabel">Домашнее задание</label><textarea id="teacherHomework" rows="4" maxlength="3000"></textarea></div>
+        <div class="actions"><button type="button" class="primary" id="saveHomework"></button><button type="button" class="secondary" id="copyInvite"></button></div>
+        <div class="separator"></div>
+        <div class="split"><h3 id="weekReportTitle">Прогресс за неделю</h3><label class="inline"><span id="teacherWeekLabel">Неделя с</span><input id="teacherWeek" type="date"></label></div>
+        <div class="report-cards" id="teacherReportStats"></div><div class="report-box" id="teacherReportDetails"></div>
+        <h3 id="historyTitle">Последние недели</h3><div class="history" id="teacherHistory"></div>
+      </div>
+    </section>
+    <section class="hidden" id="studentScreen">
+      <div class="section-heading"><div><div class="eyebrow" id="studentLabel">Дневник ученика</div><h1 id="studentTitle">Мой музыкальный путь</h1><p class="lead" id="studentSub"></p></div><span class="eyebrow tag" id="studentChip">Ученик</span></div>
+      <div class="card homework"><div class="eyebrow" id="homeworkHeading">Задание от преподавателя</div><p id="homeworkContent"></p></div>
+      <div class="card"><div class="split"><h2 id="practiceTitle">Моя неделя</h2><label class="inline"><span id="weekSelectorLabel">Неделя с</span><input type="date" id="studentWeek"></label></div>
+        <div class="stats-row"><div class="stat"><span id="starsLabel">Звёзды</span><strong id="starsCount">0 ★</strong></div><div class="stat"><span id="daysLabel">Дней занятий</span><strong id="daysCount">0 / 7</strong></div><div class="stat"><span id="levelLabel">Уровень</span><strong id="levelCount">1</strong></div></div>
+        <div class="day-grid" id="dayGrid"></div>
+        <div class="field"><label id="scaleLabel" for="weekScale">Гамма недели</label><input id="weekScale" maxlength="160"></div>
+        <div class="sheet-scroller" id="studentChecklist"></div>
+        <h3 id="pieceTitle">Работа над пьесами</h3><div class="piece-grid" id="pieceGrid"></div>
+        <div class="field"><label id="reflectionLabel" for="weekReflection">Что получилось лучше всего?</label><textarea id="weekReflection" rows="3" maxlength="1200"></textarea></div>
+        <button type="button" class="primary" id="saveWeek">Сохранить неделю</button><span class="small" id="weekSaveStatus" role="status"></span>
+      </div>
+      <div class="card"><div class="split"><h2 id="achievementsTitle">Мои достижения</h2><a id="quizLink" href="/games?lang=ru#quiz">Угадай композитора →</a></div><div class="achievement-grid" id="achievements"></div></div>
+    </section>
+  </main>
+  <footer><a href="/piano-practice.html" id="classicJournal">Открыть обычный дневник</a> · <a href="/privacy.html" id="privacyLink">Конфиденциальность</a> · <a href="/terms.html" id="termsLink">Условия</a><p id="betaNote"></p></footer>
+</div>
+<script type="module" src="/piano-school.js"></script>
+</body>
+</html>
