@@ -18,8 +18,41 @@ h1,h2{font-family:Georgia,"Noto Serif Hebrew",serif}h1{font-size:clamp(30px,5vw,
 tr.group-row td{padding:8px 12px;text-align:start!important;background:var(--purple-light)!important;color:var(--purple);font-weight:800;position:static!important}.check-cell{display:flex;align-items:center;justify-content:center;min-width:35px;min-height:24px}.check-cell input{width:21px;height:21px;accent-color:var(--green);cursor:pointer}.pieces-table td:first-child{min-width:180px;width:auto}.pieces-table input[type=text]{max-width:190px;min-width:125px;width:100%;padding:7px;border:1px solid #d8cfca;border-radius:7px}.pieces-table th{min-width:94px;max-width:130px;line-height:1.25}.piece-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:12px}.analysis-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:13px}.analysis-card{background:#fff;border:1px solid var(--line);border-radius:14px;padding:16px}.analysis-card h3{margin:0 0 12px;font-size:17px}.analysis-card .field{margin:9px 0}.reflection{display:grid;grid-template-columns:1fr 1fr;gap:14px}.toolbar{display:flex;align-items:center;gap:10px;flex-wrap:wrap;padding:6px 0}.btn{border:1px solid var(--purple);background:var(--purple);color:#fff;border-radius:999px;font-weight:750;padding:11px 16px;min-height:43px}.btn.alt{background:transparent;color:var(--purple)}.status{color:var(--green);font-size:14px;font-weight:700}.footnote{font-size:13px;color:var(--muted);margin-top:17px}.badge{font-size:13px;background:var(--green-light);color:var(--green);border-radius:20px;padding:5px 10px;font-weight:700}
 html[dir=rtl] .brand{font-family:"Noto Sans Hebrew",Arial,sans-serif}
 .quiz-promo{display:flex;align-items:center;justify-content:space-between;gap:22px;margin-top:20px;padding:20px 24px;border-radius:18px;background:var(--green-light);border:1px solid #c7dfd5}.quiz-promo strong{font-size:20px;color:var(--green)}.quiz-promo p{margin:5px 0 0;color:var(--muted)}.quiz-promo a{display:inline-flex;align-items:center;justify-content:center;min-height:42px;white-space:nowrap;text-decoration:none;border-radius:999px;background:var(--green);color:white;padding:10px 19px;font-weight:750}
+
+/* Student gamification: badges and stars are a gentle reflection of practice, not a grade. */
+.game-panel{border-color:#dfc6d2;background:linear-gradient(150deg,#fffafc,#fffdfb 65%)}
+.game-panel h2{color:var(--purple)}
+.game-hero{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:14px 0}
+.game-stat{background:#f7edf1;border:1px solid #e7d5df;border-radius:16px;padding:16px}
+.game-stat .game-stat-label{display:block;font-size:13px;color:#695360;font-weight:700;margin-bottom:2px}
+.game-stat strong{font-size:clamp(24px,4vw,35px);font-weight:850;font-variant-numeric:tabular-nums;line-height:1.2}
+.game-stat strong .star{color:#c08b28}
+.game-stat small{display:block;color:#66575f;margin-top:3px}
+.game-progress-track{height:12px;border-radius:40px;overflow:hidden;background:#e8dde2;margin:9px 0 8px}
+.game-progress-fill{width:0;height:100%;background:linear-gradient(90deg,#b98b44,#8d4869);border-radius:40px;transition:width .25s ease}
+.game-progress-caption{font-size:13px;color:var(--muted);min-height:18px}
+.game-mission{display:flex;gap:14px;align-items:center;justify-content:space-between;flex-wrap:wrap;padding:12px 0 6px}
+.game-mission label{display:flex;align-items:center;gap:10px;font-weight:700}
+.game-mission select{border:1px solid #d5bec8;background:#fff;border-radius:9px;padding:7px;color:var(--text)}
+.game-days{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:7px;margin-top:12px}
+.game-day{display:flex;align-items:center;justify-content:center;flex-direction:column;gap:5px;background:#f7f3f2;border:1px solid #e6dfe1;border-radius:13px;min-height:68px;text-align:center;color:#796b71}
+.game-day strong{font-size:13px}.game-day .game-day-mark{font-size:22px;line-height:1}
+.game-day.done{background:#ecf8ef;color:#236c50;border-color:#bde2ca}
+.game-day.done .game-day-mark{color:#2e9561}
+.game-awards-title{font-size:17px;margin:22px 0 10px}
+.achievement-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.achievement{border:1px solid #e5dbe0;border-radius:13px;padding:12px;background:#f8f6f7;display:flex;gap:9px;align-items:center;min-height:78px;color:#8a8185}
+.achievement .achievement-symbol{display:grid;place-items:center;flex:0 0 38px;height:38px;background:#eee6e9;border-radius:50%;font-size:20px;filter:grayscale(1);opacity:.6}
+.achievement strong{display:block;font-size:13px;line-height:1.25}.achievement small{display:block;font-size:11px;line-height:1.25;margin-top:3px}
+.achievement.earned{background:#f1f8f1;color:#245b3f;border-color:#b7dcc6}
+.achievement.earned .achievement-symbol{background:#dcefe3;filter:none;opacity:1}
+.game-demo-row{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin:13px 0 0}
+.game-demo-row button{background:transparent;border:1px solid #b99ca9;border-radius:999px;padding:8px 13px;color:var(--purple);font-weight:700}
+.game-demo-note{font-size:13px;color:#83643e}
+.game-support{font-size:13px;color:var(--muted);margin-top:13px}
+@media(max-width:740px){.game-hero{gap:8px}.game-stat{padding:12px}.achievement-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.achievement{padding:9px}.game-days{gap:4px}.game-day{min-height:57px}.game-day strong{font-size:11px}}
 @media(max-width:740px){.shell{padding:16px 10px 60px}.panel{padding:15px;border-radius:14px}.meta,.reflection,.analysis-grid{grid-template-columns:1fr}.analysis-grid{gap:12px}td:first-child,th:first-child{min-width:205px;width:205px}th,td{padding:8px 5px}h1{font-size:30px}.mast{gap:9px}}
-@media print{.quiz-promo{display:none!important}@page{size:A4 landscape;margin:10mm}body{background:#fff;font-size:10px}.shell{max-width:none;padding:0}.mast,.intro p,.toolbar,.footnote,.switch,.screen-only{display:none!important}h1{font-size:20px}.panel{margin:7px 0;padding:9px;break-inside:auto;border-radius:0;box-shadow:none}.section-head h2{font-size:15px}.group-row td,.group-title{print-color-adjust:exact;-webkit-print-color-adjust:exact}.table-scroll,.piece-wrap{overflow:visible}.table-scroll table{min-width:0}.meta{grid-template-columns:repeat(3,1fr)}.field input,.field textarea{min-height:24px;padding:4px;font-size:10px}.analysis-grid{grid-template-columns:repeat(3,1fr)}th,td{font-size:9px;padding:4px}td:first-child,th:first-child{min-width:190px;position:static}.check-cell input{width:13px;height:13px}.pieces-table th{min-width:auto;font-size:8px}.analysis-card{padding:7px;break-inside:avoid}.reflection{grid-template-columns:1fr 1fr}button{display:none}.panel:last-child{page-break-inside:avoid}}
+@media print{.game-panel{display:none!important}.quiz-promo{display:none!important}@page{size:A4 landscape;margin:10mm}body{background:#fff;font-size:10px}.shell{max-width:none;padding:0}.mast,.intro p,.toolbar,.footnote,.switch,.screen-only{display:none!important}h1{font-size:20px}.panel{margin:7px 0;padding:9px;break-inside:auto;border-radius:0;box-shadow:none}.section-head h2{font-size:15px}.group-row td,.group-title{print-color-adjust:exact;-webkit-print-color-adjust:exact}.table-scroll,.piece-wrap{overflow:visible}.table-scroll table{min-width:0}.meta{grid-template-columns:repeat(3,1fr)}.field input,.field textarea{min-height:24px;padding:4px;font-size:10px}.analysis-grid{grid-template-columns:repeat(3,1fr)}th,td{font-size:9px;padding:4px}td:first-child,th:first-child{min-width:190px;position:static}.check-cell input{width:13px;height:13px}.pieces-table th{min-width:auto;font-size:8px}.analysis-card{padding:7px;break-inside:avoid}.reflection{grid-template-columns:1fr 1fr}button{display:none}.panel:last-child{page-break-inside:avoid}}
 </style>
 </head>
 <body>
@@ -28,6 +61,22 @@ html[dir=rtl] .brand{font-family:"Noto Sans Hebrew",Arial,sans-serif}
  <section class="intro"><h1 id="pageTitle"></h1><p id="pageLead" class="muted"></p><span class="badge" id="privacyShort"></span></section>
  <main id="worksheet">
  <section class="panel"><div class="meta"><label class="field"><span id="labelName"></span><input id="student" autocomplete="name" placeholder=" "></label><label class="field"><span id="labelWeek"></span><input type="date" id="week" aria-label="Week starting Sunday"></label><label class="field"><span id="labelScale"></span><input id="scale" data-text="scale" placeholder=" "></label></div></section>
+ <section class="panel game-panel" id="gamePanel">
+  <div class="section-head"><h2 id="gameTitle">Мой музыкальный путь</h2><span class="badge" id="gameWeekTag">Звёзды этой недели</span></div>
+  <p class="muted" id="gameLead">Каждый день занятий — маленькое музыкальное достижение.</p>
+  <div class="game-hero">
+   <div class="game-stat"><span class="game-stat-label" id="gameStarsLabel">Мои звёзды</span><strong><span class="star" aria-hidden="true">★</span> <span id="gameStars">0</span></strong><small id="gameStarsRule">10 за день занятий, 5 за освоенный раздел или шаг по пьесе</small></div>
+   <div class="game-stat"><span class="game-stat-label" id="gameLevelLabel">Мой уровень</span><strong id="gameLevel">1 · Ноты</strong><small id="gameNextLevel"></small></div>
+  </div>
+  <div class="game-progress-track" role="progressbar" id="gameProgress" aria-label="Прогресс до следующего уровня" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><div class="game-progress-fill" id="gameProgressFill"></div></div>
+  <div class="game-progress-caption" id="gameProgressCaption"></div>
+  <div class="game-mission"><label><span id="gameMissionLabel">Моя цель на неделю</span><select id="gameTarget" aria-label="Цель: дней практики"></select></label><strong id="gameMissionStatus"></strong></div>
+  <div class="game-days" id="gameDays" aria-label="Дни с практикой"></div>
+  <h3 class="game-awards-title" id="gameAwardsTitle">Мои достижения</h3>
+  <div class="achievement-grid" id="gameAwards"></div>
+  <div class="game-demo-row"><button type="button" id="gameDemo" aria-pressed="false">Посмотреть пример</button><span id="gameDemoNote" class="game-demo-note"></span></div>
+  <p class="game-support" id="gameSupport">Каждый занимается в своём темпе. Это не оценки и не соревнование.</p>
+ </section>
  <section class="panel"><div class="section-head"><h2 id="techTitle"></h2><small id="daysCount"></small></div><p class="muted" id="techSubtitle"></p><div class="table-scroll" id="techTable"></div></section>
  <section class="panel"><h2 id="piecesTitle"></h2><p class="muted" id="piecesHelp"></p><div class="piece-wrap" id="piecesTable"></div></section>
  <section class="panel"><h2 id="analysisTitle"></h2><div class="analysis-grid" id="analyses"></div></section>
@@ -84,9 +133,72 @@ const blank=()=>({scale:"",improved:"",goal:"",checks:{},pieces:Array.from({leng
 let lang=new URLSearchParams(location.search).get("lang")==="he"?"he":(localStorage.getItem("piano-practice-lang")||"ru");
 if(!TR[lang])lang="ru";
 let state=blank(),student=localStorage.getItem("piano-practice-student")||"",week=todaySunday();
+
+const GAME_COPY={
+ru:{title:"Мой музыкальный путь",tag:"Эта неделя",lead:"Собирай звёзды за регулярность, исследуй музыку и открывай достижения.",stars:"Мои звёзды",starsRule:"10 за день занятий, 5 за каждый раздел техники и каждый новый шаг по пьесе",level:"Мой уровень",levels:["Ноты","Ритм","Мелодия","Маэстро","Виртуоз"],next:"До следующего уровня: ",max:"Высший уровень этой недели!",progress:"Звёзд до следующего уровня: ",mission:"Моя цель на неделю",missionDone:"Цель выполнена!",daysWord:"дн. из",daysOf:"из",awards:"Мои достижения",demo:"Посмотреть пример",demoClose:"Вернуться к моему прогрессу",demoNote:"Это пример: реальные отметки не изменились.",support:"Главное — удовольствие от музыки. Награды не оценки и не соревнование.",badges:[
+["🌱","Первый шаг","Позанимайся один день"],["🎵","В ритме","Позанимайся в 3 разных дня"],["🌟","Звезда недели","Позанимайся в 5 разных дней"],["🦋","Бабочка","Сыграй гамму расходящимся движением"],["🎹","Исследователь техники","Попробуй 4 раздела техники"],["🎼","Пьеса оживает","Отметь 4 этапа работы над пьесой"],["👂","Музыкальный слух","Отметь задание для слуха и викторину"]]},
+he:{title:"המסע המוזיקלי שלי",tag:"השבוע",lead:"אוספים כוכבים על תרגול, מגלים מוזיקה ומשיגים הישגים חדשים.",stars:"הכוכבים שלי",starsRule:"10 על כל יום תרגול, 5 על תחום טכניקה חדש או שלב חדש ביצירה",level:"הרמה שלי",levels:["תווים","קצב","מנגינה","מאסטרו","וירטואוז"],next:"עד לרמה הבאה: ",max:"הגעתם לרמה הגבוהה ביותר השבוע!",progress:"כוכבים לרמה הבאה: ",mission:"המטרה שלי לשבוע",missionDone:"היעד הושג!",daysWord:"ימים מתוך",daysOf:"מתוך",awards:"ההישגים שלי",demo:"הצגת דוגמה",demoClose:"בחזרה להתקדמות שלי",demoNote:"זו דוגמה בלבד. הסימונים שלך לא השתנו.",support:"העיקר ליהנות מהמוזיקה. ההישגים אינם ציונים או תחרות.",badges:[
+["🌱","צעד ראשון","מתרגלים ביום אחד"],["🎵","בקצב","מתרגלים ב-3 ימים שונים"],["🌟","כוכב השבוע","מתרגלים ב-5 ימים שונים"],["🦋","פרפר","מנגנים סולם בתנועה מנוגדת"],["🎹","חוקר/ת טכניקה","מנסים 4 תחומי טכניקה"],["🎼","היצירה מתעוררת","מסמנים 4 שלבים ביצירה"],["👂","אוזן מוזיקלית","מסמנים גם תרגיל שמיעה וגם חידון"]]}
+};
+const GAME_LEVELS=[0,40,90,150,230];
+let gameDemoMode=false;
+const GAME_DEMO_STATE={
+checks:{"t:scale_r:0":true,"t:scale_l:0":true,"t:scale_c:1":true,"t:chrom_r:1":true,"t:chord_r:3":true,"t:arp_r:4":true,"t:reading:4":true,"t:pitch:3":true,"t:quiz:4":true,"t:scale_b:6":true},
+pieces:[{name:"Менуэт",done:{right:true,left:true,fingers:true,together:true}},{name:"",done:{}},{name:"",done:{}},{name:"",done:{}}],goalDays:3
+};
+function gameStats(data){
+ const checks=data.checks&&typeof data.checks==="object"?data.checks:{};
+ const days=Array.from({length:7},(_,day)=>GROUPS.some(g=>g.rows.some(row=>!!checks["t:"+row[0]+":"+day])));
+ const active=days.filter(Boolean).length;
+ const playedGroups=GROUPS.filter(g=>g.rows.some(row=>days.some((_,day)=>!!checks["t:"+row[0]+":"+day)))).map(g=>g.id);
+ const pieces=Array.isArray(data.pieces)?data.pieces:[];
+ const doneCount=pieces.reduce((sum,p)=>sum+PIECE_CRITERIA.filter(c=>p?.done?.[c[0]]).length,0);
+ const points=active*10+playedGroups.length*5+doneCount*5;
+ const level=Math.max(0,GAME_LEVELS.findIndex((threshold,i)=>i===GAME_LEVELS.length-1||points<GAME_LEVELS[i+1]));
+ const max=level===GAME_LEVELS.length-1;
+ const low=GAME_LEVELS[level],high=max?GAME_LEVELS[level]:GAME_LEVELS[level+1];
+ const percent=max?100:Math.min(100,Math.max(0,(points-low)/(high-low)*100));
+ const played=new Set(playedGroups);
+ const badgeFlags=[
+ active>=1,active>=3,active>=5,
+ days.some((_,day)=>!!checks["t:scale_c:"+day]),
+ ["scale","chrom","chord","arp","long"].filter(g=>played.has(g)).length>=4,
+ pieces.some(p=>PIECE_CRITERIA.filter(c=>p?.done?.[c[0]]).length>=4),
+ days.some((_,day)=>!!checks["t:pitch:"+day])&&days.some((_,day)=>!!checks["t:quiz:"+day])
+ ];
+ return {days,active,points,level,max,high,percent,badgeFlags};
+}
+function renderGame(){
+ const t=GAME_COPY[lang],data=gameDemoMode?GAME_DEMO_STATE:state,stats=gameStats(data);
+ const set=(id,value)=>$(id).textContent=value;
+ set("gameTitle",t.title);set("gameWeekTag",t.tag);set("gameLead",t.lead);
+ set("gameStarsLabel",t.stars);set("gameStarsRule",t.starsRule);set("gameStars",stats.points);
+ set("gameLevelLabel",t.level);set("gameLevel",(stats.level+1)+" · "+t.levels[stats.level]);
+ set("gameNextLevel",stats.max?t.max:t.next+t.levels[stats.level+1]);
+ $("gameProgressFill").style.width=stats.percent+"%";
+ $("gameProgress").setAttribute("aria-valuenow",String(Math.round(stats.percent)));
+ $("gameProgress").setAttribute("aria-label",t.progress+(stats.max?0:stats.high-stats.points));
+ set("gameProgressCaption",stats.max?t.max:t.progress+(stats.high-stats.points));
+ set("gameMissionLabel",t.mission);
+ const targetSelect=$("gameTarget");
+ const target=Math.max(2,Math.min(7,Number(data.goalDays)||3));
+ targetSelect.replaceChildren();
+ for(let i=2;i<=7;i++){const op=document.createElement("option");op.value=String(i);op.textContent=i+" "+t.daysWord+" 7";op.selected=i===target;targetSelect.append(op)}
+ targetSelect.disabled=gameDemoMode;
+ set("gameMissionStatus",stats.active>=target?t.missionDone:stats.active+" "+t.daysOf+" "+target);
+ $("gameDays").innerHTML=stats.days.map((done,i)=>'<div class="game-day'+(done?' done':'')+'" aria-label="'+esc(DAYS[lang][i])+'"><strong>'+esc(DAYS[lang][i])+'</strong><span class="game-day-mark" aria-hidden="true">'+(done?'★':'○')+'</span></div>').join("");
+ set("gameAwardsTitle",t.awards);
+ $("gameAwards").innerHTML=t.badges.map((a,i)=>'<div class="achievement'+(stats.badgeFlags[i]?' earned':'')+'" title="'+esc(a[2])+'"><span class="achievement-symbol" aria-hidden="true">'+a[0]+'</span><span><strong>'+esc(a[1])+'</strong><small>'+esc(stats.badgeFlags[i]?'✓ '+a[2]:a[2])+'</small></span></div>').join("");
+ set("gameDemo",gameDemoMode?t.demoClose:t.demo);set("gameDemoNote",gameDemoMode?t.demoNote:"");set("gameSupport",t.support);
+ $("gameDemo").setAttribute("aria-pressed",String(gameDemoMode));
+}
+function exitGameDemo(){if(gameDemoMode){gameDemoMode=false;renderGame()}}
+$("gameDemo").addEventListener("click",()=>{gameDemoMode=!gameDemoMode;renderGame()});
+$("gameTarget").addEventListener("change",e=>{state.goalDays=Math.max(2,Math.min(7,Number(e.target.value)||3));save()});
+
 function key(){return "piano-practice-v3:"+encodeURIComponent(student.trim().toLowerCase()||"_unnamed")+":"+week}
-function load(){try{const saved=JSON.parse(localStorage.getItem(key())||"null");state=saved&&typeof saved==="object"?Object.assign(blank(),saved):blank();if(!Array.isArray(state.pieces))state.pieces=blank().pieces;if(!Array.isArray(state.analysis))state.analysis=blank().analysis;state.pieces=Array.from({length:4},(_,i)=>Object.assign({name:"",done:{}},state.pieces[i]||{}));state.analysis=Array.from({length:3},(_,i)=>state.analysis[i]||{});if(!state.checks||typeof state.checks!=="object")state.checks={}}catch(e){state=blank()}render()}
-function save(){try{localStorage.setItem(key(),JSON.stringify(state));localStorage.setItem("piano-practice-student",student);$("saveStatus").textContent=TR[lang].saved}catch(e){$("saveStatus").textContent=""}countDays()}
+function load(){gameDemoMode=false;try{const saved=JSON.parse(localStorage.getItem(key())||"null");state=saved&&typeof saved==="object"?Object.assign(blank(),saved):blank();if(!Array.isArray(state.pieces))state.pieces=blank().pieces;if(!Array.isArray(state.analysis))state.analysis=blank().analysis;state.pieces=Array.from({length:4},(_,i)=>Object.assign({name:"",done:{}},state.pieces[i]||{}));state.analysis=Array.from({length:3},(_,i)=>state.analysis[i]||{});if(!state.checks||typeof state.checks!=="object")state.checks={}}catch(e){state=blank()}render()}
+function save(){try{localStorage.setItem(key(),JSON.stringify(state));localStorage.setItem("piano-practice-student",student);$("saveStatus").textContent=TR[lang].saved}catch(e){$("saveStatus").textContent=""}countDays();renderGame()}
 function label(s){return s[lang==="he"?2:1]}
 function checkCell(k,description){return '<td><label class="check-cell"><input type="checkbox" data-check="'+esc(k)+'" aria-label="'+esc(description)+'"'+(state.checks[k]?" checked":"")+'></label></td>'}
 function renderTech(){
@@ -99,13 +211,14 @@ for(let i=0;i<4;i++){h+='<tr><td><input type="text" data-piece-name="'+i+'" valu
 function renderAnalysis(){
 $("analyses").innerHTML=state.analysis.map((item,i)=>'<section class="analysis-card"><h3>'+esc(TR[lang].piece+(i+1))+'</h3>'+A_FIELDS.map(f=>'<label class="field"><span>'+esc(label(f))+'</span>'+(["form","symbols","hard","plan"].includes(f[0])?'<textarea data-analysis="'+i+':'+f[0]+'">'+esc(item[f[0]]||"")+'</textarea>':'<input type="text" data-analysis="'+i+':'+f[0]+'" value="'+esc(item[f[0]]||"")+'">')+'</label>').join("")+'</section>').join("")}
 function countDays(){const count=DAYS.ru.filter((_,d)=>GROUPS.some(g=>g.rows.some(r=>state.checks["t:"+r[0]+":"+d]))).length;$("daysCount").textContent=TR[lang].days+count+" / 7"}
-function render(){document.documentElement.lang=lang;document.documentElement.dir=lang==="he"?"rtl":"ltr";$("ruBtn").classList.toggle("active",lang==="ru");$("heBtn").classList.toggle("active",lang==="he");const pairs={pageTitle:"title",pageLead:"lead",privacyShort:"privacy",labelName:"name",labelWeek:"week",labelScale:"scale",techTitle:"tech",techSubtitle:"techHelp",piecesTitle:"pieces",piecesHelp:"piecesHelp",analysisTitle:"analysis",reflectionTitle:"reflection",improvedLabel:"improved",goalLabel:"goal",sendBtn:"send",copyBtn:"copy",printBtn:"print",nextBtn:"next",privacyLong:"privacyLong"};for(const [id,k] of Object.entries(pairs))$(id).textContent=TR[lang][k];$("student").value=student;$("week").value=week;$("scale").value=state.scale||"";qsa('textarea[data-text]').forEach(el=>el.value=state[el.dataset.text]||"");const quizText=lang==="he"?{title:"נחשו את המלחין",desc:"האזינו לקטע מוזיקלי ובחרו את המלחין. ארבע רמות קושי.",cta:"למשחק ←"}:{title:"Угадай композитора",desc:"Послушай музыкальный фрагмент и выбери композитора. Четыре уровня сложности.",cta:"Играть →"};$("quizPromoTitle").textContent=quizText.title;$("quizPromoDesc").textContent=quizText.desc;$("quizPromoLink").textContent=quizText.cta;$("quizPromoLink").href="/games?lang="+lang+"#quiz";renderTech();renderPieces();renderAnalysis();countDays();$("saveStatus").textContent=""}
-function update(e){const el=e.target;if(el.dataset.check){state.checks[el.dataset.check]=el.checked;save()}else if(el.dataset.pieceCheck){let [i,c]=el.dataset.pieceCheck.split(":");state.pieces[Number(i)].done[c]=el.checked;save()}else if(el.dataset.pieceName!==undefined){state.pieces[Number(el.dataset.pieceName)].name=el.value;save()}else if(el.dataset.analysis){const [i,f]=el.dataset.analysis.split(":");state.analysis[Number(i)][f]=el.value;save()}else if(el.dataset.text){state[el.dataset.text]=el.value;save()}}
+function render(){document.documentElement.lang=lang;document.documentElement.dir=lang==="he"?"rtl":"ltr";$("ruBtn").classList.toggle("active",lang==="ru");$("heBtn").classList.toggle("active",lang==="he");const pairs={pageTitle:"title",pageLead:"lead",privacyShort:"privacy",labelName:"name",labelWeek:"week",labelScale:"scale",techTitle:"tech",techSubtitle:"techHelp",piecesTitle:"pieces",piecesHelp:"piecesHelp",analysisTitle:"analysis",reflectionTitle:"reflection",improvedLabel:"improved",goalLabel:"goal",sendBtn:"send",copyBtn:"copy",printBtn:"print",nextBtn:"next",privacyLong:"privacyLong"};for(const [id,k] of Object.entries(pairs))$(id).textContent=TR[lang][k];$("student").value=student;$("week").value=week;$("scale").value=state.scale||"";qsa('textarea[data-text]').forEach(el=>el.value=state[el.dataset.text]||"");const quizText=lang==="he"?{title:"נחשו את המלחין",desc:"האזינו לקטע מוזיקלי ובחרו את המלחין. ארבע רמות קושי.",cta:"למשחק ←"}:{title:"Угадай композитора",desc:"Послушай музыкальный фрагмент и выбери композитора. Четыре уровня сложности.",cta:"Играть →"};$("quizPromoTitle").textContent=quizText.title;$("quizPromoDesc").textContent=quizText.desc;$("quizPromoLink").textContent=quizText.cta;$("quizPromoLink").href="/games?lang="+lang+"#quiz";renderTech();renderPieces();renderAnalysis();countDays();renderGame();$("saveStatus").textContent=""}
+function update(e){exitGameDemo();const el=e.target;if(el.dataset.check){state.checks[el.dataset.check]=el.checked;save()}else if(el.dataset.pieceCheck){let [i,c]=el.dataset.pieceCheck.split(":");state.pieces[Number(i)].done[c]=el.checked;save()}else if(el.dataset.pieceName!==undefined){state.pieces[Number(el.dataset.pieceName)].name=el.value;save()}else if(el.dataset.analysis){const [i,f]=el.dataset.analysis.split(":");state.analysis[Number(i)][f]=el.value;save()}else if(el.dataset.text){state[el.dataset.text]=el.value;save()}}
 $("worksheet").addEventListener("input",e=>{if(e.target.id!=="student"&&e.target.id!=="week")update(e)});
 $("worksheet").addEventListener("change",e=>{if(e.target.id==="student"){student=e.target.value.trim();load()}else if(e.target.id==="week"){week=e.target.value||todaySunday();load()}else if(e.target.type==="checkbox"){update(e)}});
 function setLang(value){lang=value;localStorage.setItem("piano-practice-lang",lang);render()}
 $("ruBtn").addEventListener("click",()=>setLang("ru"));$("heBtn").addEventListener("click",()=>setLang("he"));
 function report(){
+const gs=gameStats(state);
 const t=TR[lang],lines=[t.summary,(student||t.noName),t.week+": "+week,t.scale+": "+(state.scale||"—"),""];
 for(let d=0;d<7;d++){const activities=GROUPS.flatMap(g=>g.rows.filter(r=>state.checks["t:"+r[0]+":"+d]).map(r=>label(r)));if(activities.length)lines.push(DAYS[lang][d]+": "+activities.join("; "))}
 if(lines[lines.length-1]==="")lines.push(t.noWork);
@@ -113,6 +226,7 @@ lines.push("",t.piecesLabel+":");for(let i=0;i<4;i++){const p=state.pieces[i];if
 for(let i=0;i<3;i++){const a=state.analysis[i];if(Object.values(a).some(Boolean))lines.push(t.analysisLabel+" "+(i+1)+": "+A_FIELDS.filter(f=>a[f[0]]).map(f=>label(f)+": "+a[f[0]]).join("; "))}
 if(state.improved)lines.push(t.improvedLabel+": "+state.improved);
 if(state.goal)lines.push(t.goalLabel+": "+state.goal);
+lines.push((lang==="he"?"כוכבים השבוע: ":"Звёзд за неделю: ")+gs.points);
 return lines.join("\n")
 }
 $("sendBtn").addEventListener("click",()=>{const url="https://wa.me/972542662800?text="+encodeURIComponent(report());window.open(url,"_blank","noopener,noreferrer")});
