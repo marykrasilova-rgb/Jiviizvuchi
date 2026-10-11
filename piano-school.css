@@ -22,3 +22,7 @@
 .assignment-summary .review-check{color:var(--green);font-weight:750}
 .assignment-summary .muted{color:var(--muted)}
 .student-list-item small{line-height:1.3}
+
+.assignment-jump{display:inline-flex;align-items:center;justify-content:center;border:1px solid var(--wine);background:var(--wine);color:white;text-decoration:none;border-radius:999px;padding:10px 16px;font-weight:750;margin:1px 0 15px;min-height:44px}
+.assignment-jump:hover,.assignment-jump:focus-visible{background:#54263b;color:white}
+#teacherAssignmentCard{scroll-margin-top:18px}
