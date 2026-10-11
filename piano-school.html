@@ -31,8 +31,16 @@
         <div class="field hidden" id="nameField"><label for="displayName" id="nameLabel">Как вас зовут?</label><input id="displayName" maxlength="90"></div>
         <label class="consent hidden" id="consentBox"><input id="consent" type="checkbox"><span id="consentText">Я согласен(а) с условиями и политикой конфиденциальности.</span></label>
         <div class="actions"><button type="button" class="primary" id="submitAuth"></button><button type="button" class="secondary" id="toggleAuth"></button></div>
+        <button type="button" class="link-button" id="forgotPassword" style="margin-top:10px"></button>
         <p class="small" id="authNote"></p>
         <p class="small" id="authResult" role="status" aria-live="polite"></p>
+      </div>
+      <div class="card auth-card hidden" id="resetCard">
+        <h2 id="resetTitle">Новый пароль</h2>
+        <p class="small" id="resetHelp">Придумайте новый пароль от аккаунта.</p>
+        <div class="field"><label for="newPassword" id="resetLabel">Новый пароль (от 8 символов)</label><input type="password" id="newPassword" minlength="8" autocomplete="new-password"></div>
+        <button class="primary" type="button" id="saveNewPassword"></button>
+        <p class="small" id="resetResult" role="status"></p>
       </div>
       <p class="privacy-note" id="introFoot"></p>
     </section>
