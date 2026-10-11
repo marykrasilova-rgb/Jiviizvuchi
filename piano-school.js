@@ -172,8 +172,8 @@ async function loadIdentity(){
  const intent=localStorage.getItem('piano-school-pending-role');
  if(intent==='teacher')$('newTeacher').click();else if(intent==='student')$('newStudent').click();
 }
-function defaultReport(){return {checks:{},pieces:Array.from({length:2},()=>({name:'',done:{}})),scale:'',reflection:''}}
-function normalizeReport(r){let o=(r&&typeof r==='object'&&!Array.isArray(r))?r:{};return {...defaultReport(),...o,checks:(o.checks&&typeof o.checks==='object')?o.checks:{},pieces:Array.from({length:2},(_,i)=>({name:String(o.pieces?.[i]?.name||''),done:o.pieces?.[i]?.done||{}}))}}
+function defaultReport(){return {checks:{},pieces:Array.from({length:4},()=>({name:'',done:{}})),scale:'',reflection:''}}
+function normalizeReport(r){let o=(r&&typeof r==='object'&&!Array.isArray(r))?r:{};return {...defaultReport(),...o,checks:(o.checks&&typeof o.checks==='object')?o.checks:{},pieces:Array.from({length:4},(_,i)=>({name:String(o.pieces?.[i]?.name||''),done:o.pieces?.[i]?.done||{}}))}}
 function statsOf(report){
  let r=normalizeReport(report),days=D.ru.map((_,i)=>TASKS.some(g=>g.rows.some(row=>r.checks[row[0]+':'+i]))),groups=TASKS.filter(g=>g.rows.some(row=>days.some((_,i)=>r.checks[row[0]+':'+i]))).map(g=>g.ru),pieceCount=r.pieces.reduce((n,p)=>n+CRIT.filter(c=>p.done[c[0]]).length,0);
  let taskCount=Object.values(r.checks).filter(Boolean).length,points=days.filter(Boolean).length*10+groups.length*5+pieceCount*5;
@@ -233,12 +233,24 @@ const normalizedAssignment=r=>{
 };
 async function loadTeacherAssignment(){
  const studentId=selectedId,week=reportWeek;
+ activeAssignment=null;
+ $('assignmentStatus').textContent='';
  const {data,error}=await db.from('piano_class_assignments').select('assigned_tasks,reviewed_tasks,scale,pieces,notes').eq('student_id',studentId).eq('week_start',week).maybeSingle();
  if(studentId!==selectedId||week!==reportWeek)return;
  if(error){$('assignmentStatus').textContent=langText().error+error.message;return}
  activeAssignment=normalizedAssignment(data);
  renderTeacherAssignment();
 }
+function syncAssignmentFields(){
+ if(!activeAssignment)activeAssignment=blankAssignment();
+ activeAssignment.scale=$('assignmentScale').value.trim();
+ activeAssignment.pieces=$('assignmentPieces').value.split(/\r?\n/).map(x=>x.trim()).filter(Boolean).slice(0,4);
+ activeAssignment.notes=$('assignmentNotes').value.trim();
+}
+['assignmentScale','assignmentPieces','assignmentNotes'].forEach(id=>$(id).addEventListener('input',()=>{
+ syncAssignmentFields();
+ $('assignmentStatus').textContent=lang==='he'?'לא נשמרו שינויים':'Изменения ещё не сохранены';
+}));
 function renderTeacherAssignment(){
  const a=activeAssignment||blankAssignment(),t=langText();
  $('assignmentScale').value=a.scale;
@@ -258,6 +270,7 @@ function renderTeacherAssignment(){
 $('teacherAssignmentGrid').addEventListener('change',e=>{
  const id=e.target.dataset.assign||e.target.dataset.review;
  if(!id||!TASK_KEYS.includes(id))return;
+ syncAssignmentFields();
  if(!activeAssignment)activeAssignment=blankAssignment();
  if(e.target.dataset.assign){
   activeAssignment.assigned_tasks=e.target.checked?[...new Set([...activeAssignment.assigned_tasks,id])]:activeAssignment.assigned_tasks.filter(k=>k!==id);
@@ -270,6 +283,7 @@ $('teacherAssignmentGrid').addEventListener('change',e=>{
  $('assignmentStatus').textContent=lang==='he'?'לא נשמרו שינויים':'Изменения ещё не сохранены';
 });
 $('selectAssignmentAll').onclick=()=>{
+ syncAssignmentFields();
  if(!activeAssignment)activeAssignment=blankAssignment();
  const haveAll=TASK_KEYS.every(id=>activeAssignment.assigned_tasks.includes(id));
  activeAssignment.assigned_tasks=haveAll?[]:[...TASK_KEYS];
@@ -279,10 +293,8 @@ $('selectAssignmentAll').onclick=()=>{
 $('saveAssignment').onclick=async()=>{
  const item=teacherRows.find(s=>s.id===selectedId);
  if(!item){$('assignmentStatus').textContent=langText().assignmentMissing;return}
- const a=activeAssignment||blankAssignment(),date=reportWeek;
- a.scale=$('assignmentScale').value.trim();
- a.pieces=$('assignmentPieces').value.split(/\r?\n/).map(x=>x.trim()).filter(Boolean).slice(0,4);
- a.notes=$('assignmentNotes').value.trim();
+ syncAssignmentFields();
+ const a=activeAssignment,date=reportWeek;
  a.reviewed_tasks=a.reviewed_tasks.filter(id=>a.assigned_tasks.includes(id));
  const payload={student_id:item.id,week_start:date,assigned_tasks:a.assigned_tasks,reviewed_tasks:a.reviewed_tasks,scale:a.scale,pieces:a.pieces,notes:a.notes,updated_at:new Date().toISOString()};
  $('saveAssignment').disabled=true;$('assignmentStatus').textContent=langText().loading;
