@@ -146,6 +146,16 @@
     const href = link.href || '';
     const pathname = new URL(href, location.href).pathname;
     const linkText = (link.textContent || '').trim().slice(0, 100);
+    // Funnel navigation is measured only after analytics consent.
+    const funnelStep = link.getAttribute('data-funnel-step');
+    if (funnelStep) {
+      track('voice_funnel_click', {
+        funnel_step: funnelStep,
+        source_page: path,
+        link_url: href,
+        link_text: linkText
+      });
+    }
 
     if (/wa\.me|whatsapp\.com/i.test(href)) {
       track('whatsapp_click', { link_url: href, link_text: linkText, source_page: path });
