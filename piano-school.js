@@ -74,7 +74,7 @@ $('submitAuth').onclick=async()=>{
   if(isSignup){
    localStorage.setItem('piano-school-pending-role',roleChoice);
    if(name)localStorage.setItem('piano-school-pending-teacher-name',name);
-   const {data,error}=await db.auth.signUp({email,password,options:{emailRedirectTo:'https://krasilova.com/piano-school.html',data:{terms_accepted:true,privacy_accepted:true,piano_school_role_intent:roleChoice}}});
+   const {data,error}=await db.auth.signUp({email,password,options:{emailRedirectTo:'https://krasilova.com/piano-school.html'+(localStorage.getItem('piano-school-pending-invite')?'?invite='+encodeURIComponent(localStorage.getItem('piano-school-pending-invite')):''),data:{terms_accepted:true,privacy_accepted:true,piano_school_role_intent:roleChoice}}});
    if(error)throw error;
    $('authResult').textContent=langText().signupOk;
    if(data.session)await loadIdentity();
@@ -106,6 +106,7 @@ $('joinClass').onclick=async()=>{
  $('joinClass').disabled=false;
  if(error){notify(langText().error+error.message,true);return}
  localStorage.removeItem('piano-school-pending-role');
+ localStorage.removeItem('piano-school-pending-invite');
  await loadIdentity();
 };
 async function loadIdentity(){
@@ -122,7 +123,7 @@ async function loadIdentity(){
  if(teacher){show('teacherScreen');await loadTeacher();return}
  if(student){show('studentScreen');await loadStudent();return}
  show('chooseRoleScreen');
- const code=new URLSearchParams(location.search).get('invite');
+ const code=new URLSearchParams(location.search).get('invite')||localStorage.getItem('piano-school-pending-invite');
  if(code){$('inviteCode').value=code.toUpperCase();$('newStudent').click();return}
  const intent=localStorage.getItem('piano-school-pending-role');
  if(intent==='teacher')$('newTeacher').click();else if(intent==='student')$('newStudent').click();
@@ -261,7 +262,8 @@ async function saveReport(){
 }
 $('saveWeek').onclick=async()=>{if(pendingSave)clearTimeout(pendingSave);pendingSave=null;await saveReport()};
 async function initialize(){
- const code=new URLSearchParams(location.search).get('invite');if(code){$('inviteCode').value=code.toUpperCase();roleChoice='student'}
+ const code=new URLSearchParams(location.search).get('invite')||localStorage.getItem('piano-school-pending-invite');
+ if(code&&/^[A-F0-9]{16}$/i.test(code)){localStorage.setItem('piano-school-pending-invite',code.toUpperCase());$('inviteCode').value=code.toUpperCase();roleChoice='student'}
  renderLanguage();await loadIdentity();
  if(!user&&code)selectRole('student');
 }
