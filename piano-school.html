@@ -63,13 +63,26 @@
         <div class="actions"><button type="button" class="primary" id="saveHomework"></button><button type="button" class="secondary" id="copyInvite"></button></div>
         <div class="separator"></div>
         <div class="split"><h3 id="weekReportTitle">Прогресс за неделю</h3><label class="inline"><span id="teacherWeekLabel">Неделя с</span><input id="teacherWeek" type="date"></label></div>
+        <div class="digital-panel" id="teacherAssignmentCard">
+          <div class="split"><div><h3 id="assignmentTitle">Электронные задания на неделю</h3><p class="small" id="assignmentHelp">Выбери упражнения в столбце «Задать». Отмечай освоенные учеником пункты в столбце «Проверено».</p></div></div>
+          <div class="field"><label for="assignmentScale" id="assignmentScaleLabel">Гамма недели</label><input id="assignmentScale" maxlength="160"></div>
+          <div class="field"><label for="assignmentPieces" id="assignmentPiecesLabel">Пьесы (каждая с новой строки, до четырёх)</label><textarea id="assignmentPieces" rows="2" maxlength="500"></textarea></div>
+          <div class="table-caption"><span id="assignTasksLabel">Выбор упражнений</span><span id="assignSummary" class="small"></span></div>
+          <div class="sheet-scroller" id="teacherAssignmentGrid"></div>
+          <div class="field"><label for="assignmentNotes" id="assignmentNotesLabel">Пояснения и домашнее задание</label><textarea id="assignmentNotes" rows="3" maxlength="3000"></textarea></div>
+          <div class="actions"><button type="button" class="primary" id="saveAssignment">Сохранить электронное задание</button><button type="button" class="secondary" id="selectAssignmentAll">Выбрать все упражнения</button></div>
+          <p class="small" id="assignmentStatus" role="status" aria-live="polite"></p>
+        </div>
+        <h3 id="studentProgressHeader">Отметки занятий ученика</h3>
+        <p class="small" id="studentProgressHelp">Галочки по дням ставит ученик в своём дневнике. Здесь видно, что он уже сделал.</p>
+        <div class="sheet-scroller" id="teacherPracticeGrid"></div>
         <div class="report-cards" id="teacherReportStats"></div><div class="report-box" id="teacherReportDetails"></div>
         <h3 id="historyTitle">Последние недели</h3><div class="history" id="teacherHistory"></div>
       </div>
     </section>
     <section class="hidden" id="studentScreen">
       <div class="section-heading"><div><div class="eyebrow" id="studentLabel">Дневник ученика</div><h1 id="studentTitle">Мой музыкальный путь</h1><p class="lead" id="studentSub"></p></div><span class="eyebrow tag" id="studentChip">Ученик</span></div>
-      <div class="card homework"><div class="eyebrow" id="homeworkHeading">Задание от преподавателя</div><p id="homeworkContent"></p></div>
+      <div class="card homework"><div class="eyebrow" id="homeworkHeading">Задание от преподавателя</div><p id="homeworkContent"></p><div class="assignment-summary" id="studentAssignmentSummary"></div></div>
       <div class="card"><div class="split"><h2 id="practiceTitle">Моя неделя</h2><label class="inline"><span id="weekSelectorLabel">Неделя с</span><input type="date" id="studentWeek"></label></div>
         <div class="stats-row"><div class="stat"><span id="starsLabel">Звёзды</span><strong id="starsCount">0 ★</strong></div><div class="stat"><span id="daysLabel">Дней занятий</span><strong id="daysCount">0 / 7</strong></div><div class="stat"><span id="levelLabel">Уровень</span><strong id="levelCount">1</strong></div></div>
         <div class="day-grid" id="dayGrid"></div>
