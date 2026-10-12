@@ -1,5 +1,8 @@
 // Composer quiz: after a correct answer, advance immediately and start the next excerpt from the same tap.
 (function(){
+  let missedFirstAttempt=false;
+  const originalReset=resetQuiz;
+  resetQuiz=function(...args){missedFirstAttempt=false;return originalReset(...args)};
   const nextButton=document.getElementById('nextQuiz');
   if(nextButton)nextButton.style.display='none';
 
@@ -8,6 +11,7 @@
     const correct=name===currentWork.composer;
 
     if(!correct){
+      missedFirstAttempt=true;
       btn.classList.add('wrong');
       btn.disabled=true;
       $('quizFeedback').textContent='Пока нет. Послушай ещё раз или выбери другой вариант.';
@@ -18,7 +22,7 @@
     quizLocked=true;
     stopNatural();
     btn.classList.add('correct');
-    quizScore++;
+    if(!missedFirstAttempt)quizScore++;
     $('quizScore').textContent=quizScore;
     document.querySelectorAll('#composerAnswers button').forEach(b=>b.disabled=true);
     if(typeof showGameReward==='function')showGameReward(true);
@@ -32,6 +36,7 @@
     }
 
     quizRound++;
+    missedFirstAttempt=false;
     naturalNewQuiz(false);
     $('quizFeedback').textContent='';
     playCurrentQuiz();
