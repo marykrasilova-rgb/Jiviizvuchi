@@ -232,7 +232,7 @@ function renderGameResults(target,asTeacher=false){
  const html=games.map(([id,ru,he])=>{
   const result=best[id],count=gameSessions.filter(g=>g.game===id).length;
   const label=safe(lang==='he'?he:ru);
-  const meta=result?(safe(String(result.score))+'/10 · '+safe(lang==='he'?'רמה ':'уровень ')+safe(String(result.level))+(asTeacher?' · '+count+(lang==='he'?' ניסיונות':' попыток') :'')):(lang==='he'?'Ещё не пройдено'.replace('Ещё не пройдено','טרם בוצע'):'Пока не пройдено');
+  const meta=result?(safe(String(result.score))+'/10 · '+safe(lang==='he'?'רמה ':'уровень ')+safe(String(result.level))+(asTeacher?' · '+count+(lang==='he'?' ניסיונות':' попыток') :'')):(lang==='he'?'טרם בוצע':'Пока не пройдено');
   return '<div class="game-best"><strong>'+label+'</strong><small>'+meta+'</small>'+(asTeacher?'':'<a target="_blank" rel="noopener noreferrer" href="/games?lang='+lang+'#'+id+'">'+(lang==='he'?'לשחק ←':'Играть →')+'</a>')+'</div>';
  }).join('');
  el.innerHTML='<h3>'+title+'</h3><div class="game-best-list">'+html+'</div><p class="small">'+bonus+'</p>';
@@ -532,8 +532,9 @@ function renderStudent(){
  $('starsCount').textContent=stat.points+' ★';$('daysCount').textContent=stat.daysCount+' / 7';$('levelCount').textContent=String(stat.level);
  $('dayGrid').innerHTML=stat.days.map((v,i)=>'<div class="day'+(v?' done':'')+'"><strong>'+safe(D[lang][i])+'</strong><span class="symbol">'+(v?'★':'○')+'</span></div>').join('');
  $('weekScale').value=r.scale||'';$('weekReflection').value=r.reflection||'';
+ const recordedKeys=new Set(gameSessions.map(g=>{const day=Math.round((new Date(g.played_on+'T12:00:00')-new Date(reportWeek+'T12:00:00'))/86400000);return g.game+':'+day}));
  let h='<table><thead><tr><th>'+safe(lang==='he'?'תרגיל':'Упражнение')+'</th>'+D[lang].map(x=>'<th>'+safe(x)+'</th>').join('')+'</tr></thead><tbody>';
- for(let g of TASKS){const rows=activeAssignment?.assigned_tasks?.length?g.rows.filter(row=>activeAssignment.assigned_tasks.includes(row[0])):g.rows;if(!rows.length)continue;h+='<tr class="group-row"><td colspan="8">'+safe(g[lang])+'</td></tr>';for(let row of rows){h+='<tr><td>'+taskGameLink(row[0],row[lang==='he'?2:1])+'</td>'+D[lang].map((d,i)=>'<td><input type="checkbox" data-task="'+row[0]+':'+i+'" aria-label="'+safe(row[lang==='he'?2:1]+' '+d)+'"'+(r.checks[row[0]+':'+i]?' checked':'')+'></td>').join('')+'</tr>'}}
+ for(let g of TASKS){const rows=activeAssignment?.assigned_tasks?.length?g.rows.filter(row=>activeAssignment.assigned_tasks.includes(row[0])):g.rows;if(!rows.length)continue;h+='<tr class="group-row"><td colspan="8">'+safe(g[lang])+'</td></tr>';for(let row of rows){h+='<tr><td>'+taskGameLink(row[0],row[lang==='he'?2:1])+'</td>'+D[lang].map((d,i)=>'<td><input type="checkbox" data-task="'+row[0]+':'+i+'" aria-label="'+safe(row[lang==='he'?2:1]+' '+d)+'"'+(r.checks[row[0]+':'+i]?' checked':'')+(recordedKeys.has(row[0]+':'+i)?' disabled title="'+safe(lang==='he'?'נשמר אוטומטית אחרי המשחק':'Отмечено автоматически после игры')+'"':'')+'></td>').join('')+'</tr>'}}
  $('studentChecklist').innerHTML=h+'</tbody></table>';
  const indices=assignment?[...assignment.pieces.map((_,i)=>i),...(assignment.etude?[8]:[])]:[0,...r.pieces.slice(1,8).flatMap((p,i)=>(p.name||Object.values(p.done).some(Boolean))?[i+1]:[]),...(r.pieces[8].name?[8]:[])];
  $('pieceGrid').innerHTML=indices.map(i=>{
@@ -589,6 +590,13 @@ async function saveReport(){
  $('weekSaveStatus').textContent=langText().saved;
 }
 $('saveWeek').onclick=async()=>{if(pendingSave)clearTimeout(pendingSave);pendingSave=null;await saveReport()};
+document.addEventListener('visibilitychange',async()=>{
+ if(document.visibilityState!=='visible'||!user)return;
+ if(student){
+  if(pendingSave){clearTimeout(pendingSave);pendingSave=null;await saveReport()}
+  await loadStudentWeek();
+ }else if(teacher&&selectedId)await loadTeacherReport();
+});
 async function initialize(){
  if(new URLSearchParams(location.search).has("password-recovery"))passwordRecoveryMode=true;
  const code=new URLSearchParams(location.search).get('invite')||localStorage.getItem('piano-school-pending-invite');
