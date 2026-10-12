@@ -56,3 +56,23 @@
 .game-report .small{margin-bottom:0}
 .game-report.card{box-shadow:none}
 @media(max-width:600px){.mission-items,.game-best-list{grid-template-columns:1fr}}
+
+/* Individual PDF sheet and image library, shared only with each linked pupil. */
+.material-panel,.student-materials{margin:18px 0;padding:18px;border:1px solid var(--line);border-radius:15px;background:#faf7f5}
+.material-panel h3,.student-materials h3{margin:0 0 7px;color:var(--wine)}
+.student-materials{margin-top:20px;background:#fff}
+.material-upload-row{display:grid;grid-template-columns:1fr 1.1fr;gap:13px;margin:8px 0}
+.material-upload-row .field{margin:8px 0}
+.material-file-field input[type=file]{font-size:13px;padding:8px;width:100%;max-width:100%;height:auto}
+.material-list{display:grid;gap:10px;margin-top:12px}
+.material-item{display:flex;align-items:center;gap:13px;border:1px solid var(--line);background:white;border-radius:12px;padding:12px 13px;min-width:0}
+.material-illustration{display:grid;place-items:center;width:42px;height:48px;flex:0 0 42px;border-radius:10px;background:var(--light);color:var(--wine);font-size:22px}
+.material-info{flex:1 1 170px;min-width:0}
+.material-info strong{display:block;font-weight:750;overflow-wrap:anywhere;line-height:1.4}
+.material-info small{display:block;color:var(--muted);overflow-wrap:anywhere;margin-top:3px}
+.material-actions{display:flex;gap:5px;flex-wrap:wrap;justify-content:flex-end}
+.material-actions button{border:1px solid var(--line);background:white;color:var(--wine);border-radius:99px;padding:8px 12px;font-size:13px;font-weight:750;cursor:pointer;white-space:nowrap}
+.material-actions button:hover,.material-actions button:focus-visible{background:var(--light)}
+.material-actions button.material-remove{color:#8a4b4b}
+.material-actions button:disabled{opacity:.5;cursor:wait}
+@media(max-width:700px){.material-upload-row{grid-template-columns:1fr}.material-item{flex-wrap:wrap}.material-actions{width:100%;justify-content:flex-start}.material-panel,.student-materials{padding:13px}}
