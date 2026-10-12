@@ -203,9 +203,13 @@ function load(){gameDemoMode=false;try{const saved=JSON.parse(localStorage.getIt
 function save(){try{localStorage.setItem(key(),JSON.stringify(state));localStorage.setItem("piano-practice-student",student);$("saveStatus").textContent=TR[lang].saved}catch(e){$("saveStatus").textContent=""}countDays();renderGame()}
 function label(s){return s[lang==="he"?2:1]}
 function checkCell(k,description){return '<td><label class="check-cell"><input type="checkbox" data-check="'+esc(k)+'" aria-label="'+esc(description)+'"'+(state.checks[k]?" checked":"")+'></label></td>'}
+function taskGameLink(id,label){
+const text=esc(label);
+return id==="pitch"||id==="quiz"?'<a href="/games?lang='+lang+'#'+id+'" target="_blank" rel="noopener noreferrer">'+text+'</a>':text
+}
 function renderTech(){
 let h='<table><thead><tr><th>'+TR[lang].task+'</th>'+DAYS[lang].map(d=>'<th scope="col">'+d+'</th>').join("")+'</tr></thead><tbody>';
-for(const g of GROUPS){h+='<tr class="group-row"><td colspan="8">'+esc(g[lang])+'</td></tr>';for(const row of g.rows){h+='<tr><td>'+esc(label(row))+'</td>'+DAYS[lang].map((day,idx)=>checkCell("t:"+row[0]+":"+idx,label(row)+" — "+day)).join("")+'</tr>'}}
+for(const g of GROUPS){h+='<tr class="group-row"><td colspan="8">'+esc(g[lang])+'</td></tr>';for(const row of g.rows){h+='<tr><td>'+taskGameLink(row[0],label(row))+'</td>'+DAYS[lang].map((day,idx)=>checkCell("t:"+row[0]+":"+idx,label(row)+" — "+day)).join("")+'</tr>'}}
 $("techTable").innerHTML=h+'</tbody></table>'}
 function renderPieces(){
 let h='<table class="pieces-table"><thead><tr><th>'+TR[lang].pieces+'</th>'+PIECE_CRITERIA.map(p=>'<th scope="col">'+esc(label(p))+'</th>').join("")+'</tr></thead><tbody>';
