@@ -61,6 +61,17 @@
         <div class="split"><div><span class="eyebrow" id="studentRecordLabel">Журнал ученика</span><h2 id="selectedStudentTitle"></h2><p class="small" id="inviteStatus"></p></div><div class="tag" id="studentJoinState"></div></div>
         <div class="field"><label for="teacherHomework" id="homeworkLabel">Домашнее задание</label><textarea id="teacherHomework" rows="4" maxlength="3000"></textarea></div>
         <div class="actions"><button type="button" class="primary" id="saveHomework"></button><button type="button" class="secondary" id="copyInvite"></button></div>
+        <section id="teacherMaterialsPanel" class="material-panel hidden" aria-labelledby="teacherMaterialsHeading">
+          <h3 id="teacherMaterialsHeading">Материалы для ученика</h3>
+          <p class="small" id="teacherMaterialsHelp">Добавляйте ноты в PDF или изображения. Файлы увидит только выбранный ученик и его преподаватель.</p>
+          <div class="material-upload-row">
+            <div class="field material-file-field"><label for="materialFile" id="materialFileLabel">PDF или изображение (до 15 МБ)</label><input id="materialFile" type="file" accept=".pdf,.jpg,.jpeg,.png,.webp,.heic,.heif,application/pdf,image/jpeg,image/png,image/webp,image/heic,image/heif"></div>
+            <div class="field material-title-field"><label for="materialTitle" id="materialTitleLabel">Название или пояснение (необязательно)</label><input id="materialTitle" maxlength="160" placeholder="Например: Сонатина, стр. 1"></div>
+          </div>
+          <div class="actions"><button type="button" id="uploadMaterial" class="secondary">Добавить материал</button></div>
+          <p id="uploadMaterialStatus" class="small" role="status" aria-live="polite"></p>
+          <div id="teacherMaterialsList" class="material-list"></div>
+        </section>
         <div class="separator"></div>
         <div class="split"><h3 id="weekReportTitle">Прогресс за неделю</h3><label class="inline"><span id="teacherWeekLabel">Неделя с</span><input id="teacherWeek" type="date"></label></div>
         <div class="digital-panel" id="teacherAssignmentCard">
@@ -88,7 +99,7 @@
     </section>
     <section class="hidden" id="studentScreen">
       <div class="section-heading"><div><div class="eyebrow" id="studentLabel">Дневник ученика</div><h1 id="studentTitle">Мой музыкальный путь</h1><p class="lead" id="studentSub"></p></div><span class="eyebrow tag" id="studentChip">Ученик</span></div>
-      <div class="card homework"><div class="eyebrow" id="homeworkHeading">Задание от преподавателя</div><p id="homeworkContent"></p><div class="assignment-summary" id="studentAssignmentSummary"></div></div>
+      <div class="card homework"><div class="eyebrow" id="homeworkHeading">Задание от преподавателя</div><p id="homeworkContent"></p><div class="assignment-summary" id="studentAssignmentSummary"></div><section class="student-materials" aria-labelledby="studentMaterialsHeading"><h3 id="studentMaterialsHeading">Мои материалы</h3><p id="studentMaterialsHelp" class="small">Ноты, PDF и изображения от преподавателя.</p><div id="studentMaterialsList" class="material-list"></div></section></div>
       <div class="card"><div class="split"><h2 id="practiceTitle">Моя неделя</h2><label class="inline"><span id="weekSelectorLabel">Неделя с</span><input type="date" id="studentWeek"></label></div>
         <div class="stats-row"><div class="stat"><span id="starsLabel">Звёзды</span><strong id="starsCount">0 ★</strong></div><div class="stat"><span id="daysLabel">Дней занятий</span><strong id="daysCount">0 / 7</strong></div><div class="stat"><span id="levelLabel">Уровень</span><strong id="levelCount">1</strong></div></div>
         <div class="day-grid" id="dayGrid"></div>
