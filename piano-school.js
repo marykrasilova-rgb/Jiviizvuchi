@@ -2,6 +2,10 @@ import {createClient} from 'https://esm.sh/@supabase/supabase-js@2.57.4';
 const db=createClient('https://uecdlqlwsrqmocbpgiwj.supabase.co','sb_publishable_QJ_4e8-BHl0gOZifGqdv1w_doFwpTlb',{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true}});
 const $=id=>document.getElementById(id);
 const safe=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+function taskGameLink(id,label){
+ const text=safe(label);
+ return id==='pitch'||id==='quiz'?'<a href="/games?lang='+lang+'#'+id+'" target="_blank" rel="noopener noreferrer">'+text+'</a>':text;
+}
 const D={ru:["Вс","Пн","Вт","Ср","Чт","Пт","Сб"],he:["א׳","ב׳","ג׳","ד׳","ה׳","ו׳","שבת"]};
 const TASKS=[
 {ru:"Гаммы",he:"סולמות",rows:[
@@ -332,7 +336,7 @@ function renderTeacherAssignment(){
   rows.push('<tr class="group-row"><td colspan="3">'+safe(g[lang])+'</td></tr>');
   for(const row of g.rows){
    const id=row[0],chosen=a.assigned_tasks.includes(id),reviewed=a.reviewed_tasks.includes(id);
-   rows.push('<tr class="'+(reviewed?'is-reviewed':chosen?'is-assigned':'')+'"><td>'+safe(row[lang==='he'?2:1])+'</td><td><input type="checkbox" data-assign="'+safe(id)+'" aria-label="'+safe(t.assignColumn+': '+row[lang==='he'?2:1])+'"'+(chosen?' checked':'')+'></td><td class="reviewed-col"><input type="checkbox" data-review="'+safe(id)+'" aria-label="'+safe(t.reviewColumn+': '+row[lang==='he'?2:1])+'"'+(reviewed?' checked':'')+(chosen?'':' disabled')+'></td></tr>');
+   rows.push('<tr class="'+(reviewed?'is-reviewed':chosen?'is-assigned':'')+'"><td>'+taskGameLink(id,row[lang==='he'?2:1])+'</td><td><input type="checkbox" data-assign="'+safe(id)+'" aria-label="'+safe(t.assignColumn+': '+row[lang==='he'?2:1])+'"'+(chosen?' checked':'')+'></td><td class="reviewed-col"><input type="checkbox" data-review="'+safe(id)+'" aria-label="'+safe(t.reviewColumn+': '+row[lang==='he'?2:1])+'"'+(reviewed?' checked':'')+(chosen?'':' disabled')+'></td></tr>');
   }
  }
  $('teacherAssignmentGrid').innerHTML=rows.join('')+'</tbody></table>';
@@ -451,7 +455,7 @@ function renderStudent(){
   if(assignment.pieces?.some(Boolean))assignedHtml+='<p><b>'+safe(t.assignedPieces)+':</b> '+assignment.pieces.filter(Boolean).map(safe).join(', ')+'</p>';
    if(assignment.etude)assignedHtml+='<p><b>'+safe(t.assignedEtude)+':</b> '+safe(assignment.etude)+(assignment.reviewed_pieces.includes('etude')?' ✓':'')+'</p>';
   if(assignment.notes)assignedHtml+='<p><b>'+safe(t.assignedNotes)+':</b> '+safe(assignment.notes)+'</p>';
-  if(assignment.assigned_tasks.length)assignedHtml+='<ul class="assignment-list">'+assignment.assigned_tasks.map(id=>'<li>'+safe(taskMap.get(id)||id)+' <small class="'+(assignment.reviewed_tasks.includes(id)?'review-check':'muted')+'">'+safe(assignment.reviewed_tasks.includes(id)?'✓ '+t.teacherMarked:t.teacherAwait)+'</small></li>').join('')+'</ul>';
+  if(assignment.assigned_tasks.length)assignedHtml+='<ul class="assignment-list">'+assignment.assigned_tasks.map(id=>'<li>'+taskGameLink(id,taskMap.get(id)||id)+' <small class="'+(assignment.reviewed_tasks.includes(id)?'review-check':'muted')+'">'+safe(assignment.reviewed_tasks.includes(id)?'✓ '+t.teacherMarked:t.teacherAwait)+'</small></li>').join('')+'</ul>';
   else assignedHtml+='<p class="muted">'+safe(t.studentNoAssignment)+'</p>';
  }
  $('studentAssignmentSummary').innerHTML=assignedHtml;
@@ -460,7 +464,7 @@ function renderStudent(){
  $('dayGrid').innerHTML=stat.days.map((v,i)=>'<div class="day'+(v?' done':'')+'"><strong>'+safe(D[lang][i])+'</strong><span class="symbol">'+(v?'★':'○')+'</span></div>').join('');
  $('weekScale').value=r.scale||'';$('weekReflection').value=r.reflection||'';
  let h='<table><thead><tr><th>'+safe(lang==='he'?'תרגיל':'Упражнение')+'</th>'+D[lang].map(x=>'<th>'+safe(x)+'</th>').join('')+'</tr></thead><tbody>';
- for(let g of TASKS){const rows=activeAssignment?.assigned_tasks?.length?g.rows.filter(row=>activeAssignment.assigned_tasks.includes(row[0])):g.rows;if(!rows.length)continue;h+='<tr class="group-row"><td colspan="8">'+safe(g[lang])+'</td></tr>';for(let row of rows){h+='<tr><td>'+safe(row[lang==='he'?2:1])+'</td>'+D[lang].map((d,i)=>'<td><input type="checkbox" data-task="'+row[0]+':'+i+'" aria-label="'+safe(row[lang==='he'?2:1]+' '+d)+'"'+(r.checks[row[0]+':'+i]?' checked':'')+'></td>').join('')+'</tr>'}}
+ for(let g of TASKS){const rows=activeAssignment?.assigned_tasks?.length?g.rows.filter(row=>activeAssignment.assigned_tasks.includes(row[0])):g.rows;if(!rows.length)continue;h+='<tr class="group-row"><td colspan="8">'+safe(g[lang])+'</td></tr>';for(let row of rows){h+='<tr><td>'+taskGameLink(row[0],row[lang==='he'?2:1])+'</td>'+D[lang].map((d,i)=>'<td><input type="checkbox" data-task="'+row[0]+':'+i+'" aria-label="'+safe(row[lang==='he'?2:1]+' '+d)+'"'+(r.checks[row[0]+':'+i]?' checked':'')+'></td>').join('')+'</tr>'}}
  $('studentChecklist').innerHTML=h+'</tbody></table>';
  const indices=assignment?[...assignment.pieces.map((_,i)=>i),...(assignment.etude?[8]:[])]:[0,...r.pieces.slice(1,8).flatMap((p,i)=>(p.name||Object.values(p.done).some(Boolean))?[i+1]:[]),...(r.pieces[8].name?[8]:[])];
  $('pieceGrid').innerHTML=indices.map(i=>{
