@@ -70,4 +70,5 @@ for(const game of ['pitch','quiz']){
   storeRound(game,finish);
  };
  new MutationObserver(check).observe(finish,{attributes:true,attributeFilter:['class'],childList:true});
+ check();
 }
