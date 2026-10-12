@@ -81,6 +81,7 @@
         <h3 id="studentProgressHeader">Отметки занятий ученика</h3>
         <p class="small" id="studentProgressHelp">Галочки по дням ставит ученик в своём дневнике. Здесь видно, что он уже сделал.</p>
         <div class="sheet-scroller" id="teacherPracticeGrid"></div>
+        <div class="game-report card" id="teacherGameResults" aria-live="polite"></div>
         <div class="report-cards" id="teacherReportStats"></div><div class="report-box" id="teacherReportDetails"></div>
         <h3 id="historyTitle">Последние недели</h3><div class="history" id="teacherHistory"></div>
       </div>
@@ -91,6 +92,8 @@
       <div class="card"><div class="split"><h2 id="practiceTitle">Моя неделя</h2><label class="inline"><span id="weekSelectorLabel">Неделя с</span><input type="date" id="studentWeek"></label></div>
         <div class="stats-row"><div class="stat"><span id="starsLabel">Звёзды</span><strong id="starsCount">0 ★</strong></div><div class="stat"><span id="daysLabel">Дней занятий</span><strong id="daysCount">0 / 7</strong></div><div class="stat"><span id="levelLabel">Уровень</span><strong id="levelCount">1</strong></div></div>
         <div class="day-grid" id="dayGrid"></div>
+        <div class="weekly-missions" id="studentMissions"></div>
+        <div class="game-report" id="studentGameResults"></div>
         <div class="field"><label id="scaleLabel" for="weekScale">Гамма недели</label><input id="weekScale" maxlength="160"></div>
         <div class="sheet-scroller" id="studentChecklist"></div>
         <h3 id="pieceTitle">Работа над пьесами</h3><div class="piece-grid" id="pieceGrid"></div>
