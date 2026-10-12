@@ -32,7 +32,7 @@ let lang=new URLSearchParams(location.search).get('lang')==='he'?'he':(localStor
 if(!COPY[lang])lang='ru';
 const weekDate=d=>[d.getFullYear(),String(d.getMonth()+1).padStart(2,'0'),String(d.getDate()).padStart(2,'0')].join('-');
 let passwordRecoveryMode=false;
-let user=null,roleChoice='teacher',isSignup=false,teacher=null,student=null,teacherName='',teacherRows=[],selectedId=null,weekReport=null,reportWeek=weekSunday(new Date()),weekRecords=[],pendingSave=null,activeAssignment=null;
+let user=null,roleChoice='teacher',isSignup=false,teacher=null,student=null,teacherName='',teacherRows=[],selectedId=null,weekReport=null,reportWeek=weekSunday(new Date()),weekRecords=[],pendingSave=null,activeAssignment=null,gameSessions=[];
 const langText=()=>COPY[lang];
 function weekSunday(d){const a=new Date(d);a.setDate(a.getDate()-a.getDay());return weekDate(a)}
 function selectedSunday(value){const date=new Date((value||weekDate(new Date()))+"T12:00:00");return Number.isNaN(+date)?weekSunday(new Date()):weekSunday(date)}
@@ -183,12 +183,73 @@ function statsOf(report){
  let taskCount=Object.values(r.checks).filter(Boolean).length,points=days.filter(Boolean).length*10+groups.length*5+pieceCount*5;
  return {days,daysCount:days.filter(Boolean).length,groups,taskCount,points,level:Math.min(5,1+Math.floor(points/50)),pieceCount}
 }
+// Game attempts are stored independently: saving a practice week cannot erase them.
+function reportWithGames(raw){
+ const r=normalizeReport(raw);
+ r.checks={...r.checks};
+ const start=new Date(reportWeek+'T12:00:00');
+ for(const g of gameSessions){
+  if(g.game!=='pitch'&&g.game!=='quiz')continue;
+  const diff=Math.round((new Date(g.played_on+'T12:00:00')-start)/86400000);
+  if(diff>=0&&diff<7)r.checks[g.game+':'+diff]=true;
+ }
+ return r;
+}
+function bestGameResults(){
+ const best={};
+ for(const g of gameSessions){
+  const old=best[g.game];
+  if(!old||g.score>old.score||(g.score===old.score&&g.level>old.level))best[g.game]=g;
+ }
+ return best;
+}
+function longestStreak(days){
+ let longest=0,current=0;
+ for(const day of days){current=day?current+1:0;longest=Math.max(longest,current)}
+ return longest;
+}
+function weeklyMissions(st,report){
+ const best=bestGameResults();
+ return [
+  {done:st.daysCount>=3,ru:'Практика в 3 дня',he:'תרגול ב-3 ימים'},
+  {done:!!best.pitch,ru:'Пройти упражнение на слух',he:'משחק כיוון הצליל'},
+  {done:!!best.quiz,ru:'Пройти викторину',he:'חידון המלחינים'},
+  {done:st.pieceCount>=4,ru:'4 шага в работе над пьесой',he:'4 צעדים ביצירה'}
+ ];
+}
+function progressWithGames(report){
+ const r=reportWithGames(report),st=statsOf(r);
+ const missions=weeklyMissions(st,r),complete=missions.every(m=>m.done);
+ st.points+=Object.keys(bestGameResults()).length*15+(complete?20:0);
+ st.level=Math.min(5,1+Math.floor(st.points/50));
+ st.missions=missions;st.missionComplete=complete;st.streak=longestStreak(st.days);
+ return {report:r,stat:st};
+}
+function renderGameResults(target,asTeacher=false){
+ const el=$(target),best=bestGameResults(),games=[['pitch','Звуковысотные движения','כיוון הצליל'],['quiz','Музыкальная викторина','חידון מוזיקלי']];
+ const title=lang==='he'?'תוצאות המשחקים':'Результаты музыкальных игр';
+ const bonus=lang==='he'?'15 כוכבים לכל משחק פעם בשבוע':'+15 звёзд за каждую игру один раз за неделю';
+ const html=games.map(([id,ru,he])=>{
+  const result=best[id],count=gameSessions.filter(g=>g.game===id).length;
+  const label=safe(lang==='he'?he:ru);
+  const meta=result?(safe(String(result.score))+'/10 · '+safe(lang==='he'?'רמה ':'уровень ')+safe(String(result.level))+(asTeacher?' · '+count+(lang==='he'?' ניסיונות':' попыток') :'')):(lang==='he'?'Ещё не пройдено'.replace('Ещё не пройдено','טרם בוצע'):'Пока не пройдено');
+  return '<div class="game-best"><strong>'+label+'</strong><small>'+meta+'</small>'+(asTeacher?'':'<a target="_blank" rel="noopener noreferrer" href="/games?lang='+lang+'#'+id+'">'+(lang==='he'?'לשחק ←':'Играть →')+'</a>')+'</div>';
+ }).join('');
+ el.innerHTML='<h3>'+title+'</h3><div class="game-best-list">'+html+'</div><p class="small">'+bonus+'</p>';
+}
+function renderMissions(st){
+ const labels=st.missions.map(m=>'<div class="mission-item'+(m.done?' done':'')+'"><span class="mission-check">'+(m.done?'✓':'○')+'</span><span>'+safe(m[lang])+'</span></div>').join('');
+ const done=st.missions.filter(m=>m.done).length;
+ const title=lang==='he'?'משימות השבוע':'Миссии недели';
+ const streak=(lang==='he'?'רצף תרגול: ':'Серия занятий: ')+st.streak+(lang==='he'?' ימים':' дней подряд');
+ $('studentMissions').innerHTML='<h3>'+title+' · '+done+'/4</h3><div class="mission-items">'+labels+'</div><p class="small">'+streak+(st.missionComplete?(lang==='he'?' · +20 כוכבים!':' · +20 звёзд за все миссии!'):'')+'</p>';
+}
 async function loadTeacher(){
  const {data,error}=await db.from('piano_class_students').select('id,teacher_user_id,student_user_id,display_name,homework,invite_code,created_at').eq('teacher_user_id',user.id).order('created_at',{ascending:false});
  if(error){notify(langText().error+error.message,true);return}
  teacherRows=data||[];
  let weeklyReports=0;
- if(teacherRows.length){const ids=teacherRows.map(x=>x.id);const currentWeek=weekSunday(new Date());const {data:rows,error:reportsError}=await db.from('piano_class_weeks').select('student_id').in('student_id',ids).eq('week_start',currentWeek);if(!reportsError)weeklyReports=(rows||[]).length}
+ if(teacherRows.length){const ids=teacherRows.map(x=>x.id);const currentWeek=weekSunday(new Date());const [weeks,games]=await Promise.all([db.from('piano_class_weeks').select('student_id').in('student_id',ids).eq('week_start',currentWeek),db.from('piano_class_game_results').select('student_id').in('student_id',ids).eq('week_start',currentWeek)]);if(!weeks.error&&!games.error)weeklyReports=new Set([...(weeks.data||[]),...(games.data||[])].map(x=>x.student_id)).size}
  $('tReports').textContent=String(weeklyReports);
  if(!teacherRows.some(x=>x.id===selectedId))selectedId=teacherRows[0]?.id||null;
  await renderTeacher();
@@ -379,7 +440,7 @@ $('saveAssignment').onclick=async()=>{
  if(!error)renderTeacherPracticeGrid(weekRecords.find(x=>x.week_start===date)?.report);
 };
 function renderTeacherPracticeGrid(raw){
- const report=normalizeReport(raw),a=activeAssignment||blankAssignment();
+ const report=reportWithGames(raw),a=activeAssignment||blankAssignment();
  const filter=a.assigned_tasks.length?new Set(a.assigned_tasks):null;
  const rows=['<table class="teacher-practice-grid"><thead><tr><th>'+safe(lang==='he'?'תרגיל':'Упражнение')+'</th>'+D[lang].map(d=>'<th>'+safe(d)+'</th>').join('')+'</tr></thead><tbody>'];
  for(const g of TASKS){
@@ -396,19 +457,24 @@ async function loadTeacherReport(){
  const item=teacherRows.find(s=>s.id===selectedId);if(!item)return;
  const startingId=item.id,startingWeek=reportWeek;
  await loadTeacherAssignment();
- const {data,error}=await db.from('piano_class_weeks').select('week_start,report,updated_at').eq('student_id',item.id).order('week_start',{ascending:false}).limit(40);
- if(error){notify(langText().error+error.message,true);return}
+ const [weeks,games]=await Promise.all([
+  db.from('piano_class_weeks').select('week_start,report,updated_at').eq('student_id',item.id).order('week_start',{ascending:false}).limit(40),
+  db.from('piano_class_game_results').select('game,level,score,total,played_on,completed_at').eq('student_id',item.id).eq('week_start',startingWeek).order('completed_at',{ascending:false}).limit(100)
+ ]);
+ const {data,error}=weeks;
+ if(error||games.error){notify(langText().error+(error||games.error).message,true);return}
  if(selectedId!==startingId||reportWeek!==startingWeek)return;
- weekRecords=data||[];
- const current=weekRecords.find(x=>x.week_start===reportWeek),r=current?normalizeReport(current.report):null,st=statsOf(r);
+ weekRecords=data||[];gameSessions=games.data||[];
+ const current=weekRecords.find(x=>x.week_start===reportWeek),r=current?normalizeReport(current.report):null,progress=progressWithGames(r),st=progress.stat;
+ renderGameResults('teacherGameResults',true);
  renderTeacherPracticeGrid(r);
- $('teacherReportStats').innerHTML=r?[
+ $('teacherReportStats').innerHTML=(r||gameSessions.length)?[
  [langText().days,st.daysCount+' / 7'],[langText().stars,st.points+' ★'],[langText().tasks,st.taskCount]
  ].map(x=>'<span class="report-pill">'+safe(x[0])+': <b>'+safe(x[1])+'</b></span>').join(''):'';
- if(!r){$('teacherReportDetails').textContent=langText().noReport}
+ if(!r){$('teacherReportDetails').textContent=gameSessions.length?(lang==='he'?'התלמיד/ה סיים/ה משחקים השבוע.':'На этой неделе ученик проходил музыкальные игры.'):langText().noReport}
  else{
   const lines=[];
-  st.days.forEach((d,idx)=>{if(!d)return;const things=TASKS.flatMap(g=>g.rows.filter(row=>r.checks[row[0]+':'+idx]).map(row=>row[lang==='he'?2:1]));lines.push('<div class="report-day"><b>'+safe(D[lang][idx])+'</b> '+safe(things.join(' · '))+'</div>')});
+  st.days.forEach((d,idx)=>{if(!d)return;const things=TASKS.flatMap(g=>g.rows.filter(row=>progress.report.checks[row[0]+':'+idx]).map(row=>row[lang==='he'?2:1]));lines.push('<div class="report-day"><b>'+safe(D[lang][idx])+'</b> '+safe(things.join(' · '))+'</div>')});
   if(r.scale)lines.push('<p><strong>'+safe(langText().reportScale)+':</strong> '+safe(r.scale)+'</p>');
   const pieces=r.pieces.filter(p=>p.name||Object.values(p.done).some(Boolean));
   if(pieces.length)lines.push('<p><strong>'+safe(langText().reportPieces)+':</strong> '+pieces.map(p=>safe(p.name)+' ('+CRIT.filter(c=>p.done[c[0]]).map(c=>safe(c[lang==='he'?2:1])).join(', ')+')').join('; ')+'</p>');
@@ -426,13 +492,15 @@ async function loadStudent(){
 }
 async function loadStudentWeek(){
  const targetWeek=reportWeek,targetId=student.id;
- const [saved,assigned]=await Promise.all([
+ const [saved,assigned,games]=await Promise.all([
   db.from('piano_class_weeks').select('report').eq('student_id',targetId).eq('week_start',targetWeek).maybeSingle(),
-  db.from('piano_class_assignments').select('assigned_tasks,reviewed_tasks,scale,pieces,etude,reviewed_pieces,notes').eq('student_id',targetId).eq('week_start',targetWeek).maybeSingle()
+  db.from('piano_class_assignments').select('assigned_tasks,reviewed_tasks,scale,pieces,etude,reviewed_pieces,notes').eq('student_id',targetId).eq('week_start',targetWeek).maybeSingle(),
+  db.from('piano_class_game_results').select('game,level,score,total,played_on,completed_at').eq('student_id',targetId).eq('week_start',targetWeek).order('completed_at',{ascending:false}).limit(100)
  ]);
- if(saved.error||assigned.error){notify(langText().error+(saved.error||assigned.error).message,true);return}
+ if(saved.error||assigned.error||games.error){notify(langText().error+(saved.error||assigned.error||games.error).message,true);return}
  if(targetWeek!==reportWeek||student?.id!==targetId)return;
  activeAssignment=assigned.data?normalizedAssignment(assigned.data):null;
+ gameSessions=games.data||[];
  weekReport=normalizeReport(saved.data?.report);
  if(activeAssignment?.pieces.length)activeAssignment.pieces.forEach((name,i)=>{if(weekReport.pieces[i]&&!weekReport.pieces[i].name)weekReport.pieces[i].name=name});
  if(activeAssignment?.etude&&!weekReport.pieces[8].name)weekReport.pieces[8].name=activeAssignment.etude;
@@ -459,7 +527,8 @@ function renderStudent(){
   else assignedHtml+='<p class="muted">'+safe(t.studentNoAssignment)+'</p>';
  }
  $('studentAssignmentSummary').innerHTML=assignedHtml;
- const r=weekReport||defaultReport(),stat=statsOf(r);
+ const progress=progressWithGames(weekReport),r=progress.report,stat=progress.stat;
+ renderMissions(stat);renderGameResults('studentGameResults');
  $('starsCount').textContent=stat.points+' ★';$('daysCount').textContent=stat.daysCount+' / 7';$('levelCount').textContent=String(stat.level);
  $('dayGrid').innerHTML=stat.days.map((v,i)=>'<div class="day'+(v?' done':'')+'"><strong>'+safe(D[lang][i])+'</strong><span class="symbol">'+(v?'★':'○')+'</span></div>').join('');
  $('weekScale').value=r.scale||'';$('weekReflection').value=r.reflection||'';
@@ -476,7 +545,19 @@ function renderStudent(){
  }).join('');
  const badges=t.badges,techGroups=TASKS.slice(0,5).filter(g=>g.rows.some(row=>stat.days.some((_,idx)=>r.checks[row[0]+':'+idx]))).length;
  const flags=[stat.daysCount>=1,stat.daysCount>=3,stat.daysCount>=5,stat.days.some((_,i)=>r.checks['scale_c:'+i]),techGroups>=4,r.pieces.some(p=>CRIT.filter(c=>p.done[c[0]]).length>=4)];
- $('achievements').innerHTML=badges.map((b,i)=>'<div class="achievement'+(flags[i]?' earned':'')+'"><span class="symbol">'+b[0]+'</span><span><strong>'+safe(b[1])+'</strong><small>'+safe(b[2])+'</small></span></div>').join('');
+ const best=bestGameResults();
+ const extra=lang==='he'?[
+  ['👂','חוקר/ת צלילים','הושלם משחק כיוון הצליל',!!best.pitch],
+  ['🎼','מומחה/ית למלחינים','הושלם חידון מוזיקלי',!!best.quiz],
+  ['🔥','שלושה ימים רצופים','תרגול ב-3 ימים רצופים',stat.streak>=3],
+  ['🏆','אלוף/ת השבוע','הושלמו כל המשימות',stat.missionComplete]
+ ]:[
+  ['👂','Исследователь слуха','Пройди звуковысотные движения',!!best.pitch],
+  ['🎼','Знаток композиторов','Пройди музыкальную викторину',!!best.quiz],
+  ['🔥','Три дня подряд','Занимайся три дня подряд',stat.streak>=3],
+  ['🏆','Мастер недели','Выполни все миссии',stat.missionComplete]
+ ];
+ $('achievements').innerHTML=badges.map((b,i)=>'<div class="achievement'+(flags[i]?' earned':'')+'"><span class="symbol">'+b[0]+'</span><span><strong>'+safe(b[1])+'</strong><small>'+safe(b[2])+'</small></span></div>').join('')+extra.map(b=>'<div class="achievement'+(b[3]?' earned':'')+'"><span class="symbol">'+b[0]+'</span><span><strong>'+safe(b[1])+'</strong><small>'+safe(b[2])+'</small></span></div>').join('');
 }
 $('studentWeek').onchange=async()=>{if(pendingSave){clearTimeout(pendingSave);pendingSave=null;await saveReport()}reportWeek=selectedSunday($('studentWeek').value);$('studentWeek').value=reportWeek;await loadStudentWeek()};
 function markDirty(){
