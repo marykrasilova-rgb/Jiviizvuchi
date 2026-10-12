@@ -39,3 +39,20 @@
 .assigned-piece-row .remove-piece{font-size:12px;align-self:center}
 .piece-box input[readonly]{background:#f5f2f0;color:var(--ink)}
 @media(max-width:760px){.assigned-piece-row{gap:7px}.assigned-piece-row .field{flex:1 1 100%;width:100%}.assigned-piece-row .piece-review{margin-inline-end:auto}}
+
+/* Linked music games, weekly missions and new badges. */
+.weekly-missions,.game-report{background:#fcf8fb;border:1px solid var(--line);border-radius:15px;padding:17px;margin:15px 0}
+.weekly-missions h3,.game-report h3{margin:0 0 10px;color:var(--wine)}
+.mission-items{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px;margin-top:12px}
+.mission-item{display:flex;align-items:center;gap:8px;padding:10px;border:1px solid var(--line);background:#fff;border-radius:11px;font-size:13px}
+.mission-item.done{background:var(--glight);border-color:#b5dccc}
+.mission-item .mission-check{color:var(--green);font-weight:800;font-size:17px}
+.game-best-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.game-best{background:white;border:1px solid var(--line);border-radius:11px;padding:11px 12px;font-size:14px}
+.game-best strong,.game-best small{display:block}
+.game-best strong{color:var(--wine);font-size:15px}
+.game-best small{color:var(--muted)}
+.game-best a{font-size:13px;font-weight:700}
+.game-report .small{margin-bottom:0}
+.game-report.card{box-shadow:none}
+@media(max-width:600px){.mission-items,.game-best-list{grid-template-columns:1fr}}
