@@ -49,6 +49,7 @@ function renderLanguage(){
  $('logout').textContent=lang==='he'?'יציאה':'Выйти';
  $('quizLink').href='/games?lang='+lang+'#quiz';
  renderAuthForm();
+ setMaterialLanguage();
  if(teacher)renderTeacher();
  if(student)renderStudent();
 }
@@ -280,7 +281,11 @@ async function renderTeacher(){
  $('teacherStudents').innerHTML=teacherRows.length?teacherRows.map(s=>'<button type="button" class="student-list-item'+(s.id===selectedId?' selected':'')+'" data-student="'+safe(s.id)+'"><span><b>'+safe(s.display_name)+'</b><small>'+safe(langText()[s.student_user_id?'connected':'notConnected'])+'</small></span><span class="chevron">›</span></button>').join(''):'<p class="small">'+langText().noStudents+'</p>';
  $('teacherStudents').querySelectorAll('[data-student]').forEach(b=>b.onclick=async()=>{selectedId=b.dataset.student;await renderTeacher()});
  $('selectedStudentCard').classList.remove('hidden');
+ $('teacherMaterialsPanel').classList.toggle('hidden',!selectedId);
  if(!selectedId){
+  teacherMaterialRows=[];
+  $('teacherMaterialsList').replaceChildren();
+  $('uploadMaterialStatus').textContent='';
   $('selectedStudentTitle').textContent=langText().previewTitle;
   $('studentJoinState').textContent=langText().previewTag;
   $('inviteStatus').textContent=langText().previewHint;
@@ -309,7 +314,8 @@ async function renderTeacher(){
  $('inviteStatus').textContent=langText().inviteStatus+item.invite_code;
  $('teacherHomework').value=item.homework||'';
  $('teacherWeek').value=reportWeek;
- await loadTeacherReport();
+ $('uploadMaterialStatus').textContent='';
+ await Promise.all([loadTeacherReport(),loadTeacherMaterials()]);
 }
 
 const TASK_KEYS=TASKS.flatMap(g=>g.rows.map(row=>row[0]));
@@ -488,7 +494,7 @@ async function loadStudent(){
  const {data:profile}=await db.from('piano_teacher_accounts').select('display_name').eq('user_id',student.teacher_user_id).maybeSingle();
  teacherName=profile?.display_name||'—';
  $('studentWeek').value=reportWeek;
- await loadStudentWeek();
+ await Promise.all([loadStudentWeek(),loadStudentMaterials()]);
 }
 async function loadStudentWeek(){
  const targetWeek=reportWeek,targetId=student.id;
@@ -594,9 +600,155 @@ document.addEventListener('visibilitychange',async()=>{
  if(document.visibilityState!=='visible'||!user)return;
  if(student){
   if(pendingSave){clearTimeout(pendingSave);pendingSave=null;await saveReport()}
-  await loadStudentWeek();
- }else if(teacher&&selectedId)await loadTeacherReport();
+  await Promise.all([loadStudentWeek(),loadStudentMaterials()]);
+ }else if(teacher&&selectedId)await Promise.all([loadTeacherReport(),loadTeacherMaterials()]);
 });
+
+const MATERIAL_BUCKET='piano-student-materials';
+const MATERIAL_MAX_BYTES=15728640;
+let teacherMaterialRows=[],studentMaterialRows=[];
+const MATERIAL_MIMES={pdf:'application/pdf',jpg:'image/jpeg',jpeg:'image/jpeg',png:'image/png',webp:'image/webp',heic:'image/heic',heif:'image/heif'};
+function materialWords(){
+ return lang==='he'?{
+  titleTeacher:'חומרים לתלמיד/ה',helpTeacher:'קובצי PDF או תמונות. רק המורה והתלמיד/ה המתאים/ה יכולים לראות אותם.',
+  fileLabel:'PDF או תמונה (עד 15 MB)',titleLabel:'שם או הסבר (לא חובה)',titlePlaceholder:'לדוגמה: סונטינה, עמוד 1',
+  upload:'הוספת חומר',titleStudent:'החומרים שלי',helpStudent:'תווים, קובצי PDF ותמונות מהמורה.',
+  noneTeacher:'עדיין לא נוספו חומרים לתלמיד/ה.',noneStudent:'המורה עדיין לא הוסיף/ה חומרים.',
+  loading:'טוענים חומרים…',uploading:'מעלים קובץ…',saved:'הקובץ נוסף לתלמיד/ה.',
+  select:'בחרו קובץ.',invalid:'אפשר להוסיף רק PDF ותמונות JPG, PNG, WebP או HEIC.',
+  large:'גודל הקובץ חייב להיות עד 15 MB.',open:'פתיחה',download:'הורדה',remove:'מחיקה',
+  confirm:'למחוק את החומר הזה? לא ניתן לבטל.',deleting:'מוחקים…',deleted:'החומר נמחק.',
+  opening:'פותחים את הקובץ…',failed:'שגיאה: '
+ }:{
+  titleTeacher:'Материалы для ученика',helpTeacher:'Добавляйте ноты в PDF или изображения. Файлы доступны только выбранному ученику и преподавателю.',
+  fileLabel:'PDF или изображение (до 15 МБ)',titleLabel:'Название или пояснение (необязательно)',titlePlaceholder:'Например: Сонатина, стр. 1',
+  upload:'Добавить материал',titleStudent:'Мои материалы',helpStudent:'Ноты, PDF и изображения от преподавателя.',
+  noneTeacher:'Для этого ученика пока нет файлов.',noneStudent:'Преподаватель пока не добавил материалы.',
+  loading:'Загружаю материалы…',uploading:'Загружаю файл…',saved:'Материал добавлен ученику.',
+  select:'Выберите файл.',invalid:'Разрешены только PDF, JPG, PNG, WebP и HEIC.',
+  large:'Размер файла не должен превышать 15 МБ.',open:'Открыть',download:'Скачать',remove:'Удалить',
+  confirm:'Удалить этот материал? Отменить действие нельзя.',deleting:'Удаляю…',deleted:'Материал удалён.',
+  opening:'Открываю файл…',failed:'Ошибка: '
+ };
+}
+function setMaterialLanguage(){
+ const t=materialWords();
+ for(const [id,key] of [
+  ['teacherMaterialsHeading','titleTeacher'],['teacherMaterialsHelp','helpTeacher'],
+  ['materialFileLabel','fileLabel'],['materialTitleLabel','titleLabel'],
+  ['uploadMaterial','upload'],['studentMaterialsHeading','titleStudent'],
+  ['studentMaterialsHelp','helpStudent']
+ ])$(id).textContent=t[key];
+ $('materialTitle').placeholder=t.titlePlaceholder;
+ renderMaterialList('teacher');
+ renderMaterialList('student');
+}
+function renderMaterialList(role){
+ const rows=role==='teacher'?teacherMaterialRows:studentMaterialRows;
+ const element=$(role==='teacher'?'teacherMaterialsList':'studentMaterialsList');
+ const t=materialWords();
+ if(!rows.length){element.innerHTML='<p class="small">'+safe(role==='teacher'?t.noneTeacher:t.noneStudent)+'</p>';return}
+ const locale=lang==='he'?'he-IL':'ru-RU';
+ element.innerHTML=rows.map(m=>{
+  const title=safe(m.title||m.file_name),filename=safe(m.file_name);
+  const type=m.mime_type==='application/pdf'?'PDF':'IMG';
+  const date=new Date(m.created_at).toLocaleDateString(locale);
+  const detail=filename+' · '+Math.max(1,Math.ceil(m.file_size/1024))+' KB · '+safe(date);
+  const deleteButton=role==='teacher'?'<button type="button" class="material-remove" data-material-remove="'+safe(m.id)+'">'+safe(t.remove)+'</button>':'';
+  return '<article class="material-item"><span class="material-illustration" aria-hidden="true">'+type+'</span>'+
+   '<div class="material-info"><strong>'+title+'</strong><small>'+detail+'</small></div>'+
+   '<div class="material-actions"><button type="button" data-material-open="'+safe(m.id)+'" data-material-role="'+role+'">'+safe(t.open)+'</button>'+
+   '<button type="button" data-material-download="'+safe(m.id)+'" data-material-role="'+role+'">'+safe(t.download)+'</button>'+deleteButton+'</div></article>';
+ }).join('');
+}
+async function loadTeacherMaterials(){
+ const id=selectedId;if(!id)return;
+ $('teacherMaterialsList').textContent=materialWords().loading;
+ const {data,error}=await db.from('piano_class_materials').select('id,student_id,storage_path,file_name,title,mime_type,file_size,created_at').eq('student_id',id).order('created_at',{ascending:false}).limit(200);
+ if(id!==selectedId)return;
+ if(error){$('teacherMaterialsList').textContent=materialWords().failed+error.message;return}
+ teacherMaterialRows=data||[];
+ renderMaterialList('teacher');
+}
+async function loadStudentMaterials(){
+ const id=student?.id;if(!id)return;
+ $('studentMaterialsList').textContent=materialWords().loading;
+ const {data,error}=await db.from('piano_class_materials').select('id,student_id,storage_path,file_name,title,mime_type,file_size,created_at').eq('student_id',id).order('created_at',{ascending:false}).limit(200);
+ if(id!==student?.id)return;
+ if(error){$('studentMaterialsList').textContent=materialWords().failed+error.message;return}
+ studentMaterialRows=data||[];
+ renderMaterialList('student');
+}
+$('uploadMaterial').onclick=async()=>{
+ const studentId=selectedId;
+ if(!teacher||!teacherRows.some(s=>s.id===studentId))return;
+ const t=materialWords(),status=$('uploadMaterialStatus'),file=$('materialFile').files?.[0];
+ if(!file){status.textContent=t.select;return}
+ const ext=file.name.split('.').pop()?.toLowerCase()||'',mime=MATERIAL_MIMES[ext];
+ if(!mime){status.textContent=t.invalid;return}
+ if(!file.size||file.size>MATERIAL_MAX_BYTES){status.textContent=t.large;return}
+ const name=file.name.slice(0,255),title=$('materialTitle').value.trim().slice(0,160);
+ const path=studentId+'/'+crypto.randomUUID()+'.'+ext;
+ const button=$('uploadMaterial');
+ button.disabled=true;status.textContent=t.uploading;
+ let uploaded=false;
+ try{
+  const {error:storageError}=await db.storage.from(MATERIAL_BUCKET).upload(path,file,{contentType:mime,upsert:false});
+  if(storageError)throw storageError;
+  uploaded=true;
+  const {error:rowError}=await db.from('piano_class_materials').insert({student_id:studentId,storage_path:path,file_name:name,title,mime_type:mime,file_size:file.size});
+  if(rowError)throw rowError;
+  uploaded=false;
+  $('materialFile').value='';$('materialTitle').value='';
+  status.textContent=t.saved;
+  if(studentId===selectedId)await loadTeacherMaterials();
+ }catch(e){
+  if(uploaded)await db.storage.from(MATERIAL_BUCKET).remove([path]);
+  status.textContent=t.failed+(e.message||String(e));
+ }finally{button.disabled=false}
+};
+async function openStudentMaterial(material,download){
+ const t=materialWords(),tab=window.open('about:blank','_blank');
+ if(tab)tab.document.body.textContent=t.opening;
+ try{
+  const opts=download?{download:material.file_name}:undefined;
+  const {data,error}=await db.storage.from(MATERIAL_BUCKET).createSignedUrl(material.storage_path,180,opts);
+  if(error||!data?.signedUrl)throw error||new Error('No signed URL');
+  if(tab&&!tab.closed)tab.location.replace(data.signedUrl);
+  else window.location.assign(data.signedUrl);
+ }catch(e){
+  if(tab&&!tab.closed)tab.close();
+  const target=teacher?'uploadMaterialStatus':'studentMaterialsHelp';
+  $(target).textContent=t.failed+(e.message||String(e));
+ }
+}
+document.addEventListener('click',async e=>{
+ const openButton=e.target.closest('[data-material-open],[data-material-download]');
+ const deleteButton=e.target.closest('[data-material-remove]');
+ if(openButton){
+  const role=openButton.dataset.materialRole;
+  const id=openButton.dataset.materialOpen||openButton.dataset.materialDownload;
+  const list=role==='teacher'?teacherMaterialRows:studentMaterialRows;
+  const material=list.find(m=>m.id===id);
+  if(!material)return;
+  await openStudentMaterial(material,Boolean(openButton.dataset.materialDownload));
+ }else if(deleteButton&&teacher){
+  const id=deleteButton.dataset.materialRemove;
+  const item=teacherMaterialRows.find(m=>m.id===id&&m.student_id===selectedId);
+  if(!item||!window.confirm(materialWords().confirm))return;
+  const t=materialWords(),status=$('uploadMaterialStatus');
+  deleteButton.disabled=true;status.textContent=t.deleting;
+  try{
+   const {error:storageError}=await db.storage.from(MATERIAL_BUCKET).remove([item.storage_path]);
+   if(storageError)throw storageError;
+   const {error:rowError}=await db.from('piano_class_materials').delete().eq('id',item.id);
+   if(rowError)throw rowError;
+   status.textContent=t.deleted;
+   await loadTeacherMaterials();
+  }catch(err){status.textContent=t.failed+(err.message||String(err));deleteButton.disabled=false}
+ }
+});
+
 async function initialize(){
  if(new URLSearchParams(location.search).has("password-recovery"))passwordRecoveryMode=true;
  const code=new URLSearchParams(location.search).get('invite')||localStorage.getItem('piano-school-pending-invite');
