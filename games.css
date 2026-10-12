@@ -3,3 +3,9 @@
 #quizGame .quiz-volume{display:flex;align-items:center;justify-content:center;gap:12px;width:min(320px,100%);margin:16px auto 0;font-size:14px;color:#5d4d4e}
 #quizGame .quiz-volume input{flex:1;min-width:100px;accent-color:#8f5961;cursor:pointer;touch-action:auto}
 #quizGame .quiz-volume output{min-width:40px;text-align:right;font-variant-numeric:tabular-nums}
+
+/* Save completed games to the linked student's electronic journal. */
+.school-linked-note{font-size:13px;line-height:1.4;color:#28735c;margin:13px 0 0}
+.game-school-status{font-size:14px;font-weight:600;line-height:1.5;margin:12px 0;color:#28735c}
+.game-school-status a,.game-sync-retry{color:#71394e;font-weight:750;text-decoration:underline}
+.game-sync-retry{background:transparent;border:0;cursor:pointer;font:inherit;padding:3px 4px}
