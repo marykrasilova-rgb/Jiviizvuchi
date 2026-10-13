@@ -26,7 +26,7 @@
 .mk-journey-eyebrow{font-size:11px;color:#905971;font-weight:800;text-transform:uppercase;letter-spacing:.07em;margin:0 0 4px}
 .mk-journey-title{font-size:22px;line-height:1.3;color:#54283d;margin:0 0 9px}
 .mk-journey-intro{max-width:730px;margin:0 0 17px;color:#66585b;font-size:14px}
-.mk-journey-links{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:9px}
+.mk-journey-links{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:9px}
 .mk-journey-step{display:flex;align-items:center;gap:8px;position:relative;border:1px solid #e5d4d9;border-radius:12px;background:#fdf8fa;color:#663648!important;min-width:0;padding:10px 12px;text-decoration:none;min-height:64px;font-size:13px;font-weight:750}
 .mk-journey-step:hover,.mk-journey-step:focus-visible{background:#f2e2e8}
 .mk-journey-current{background:#efdee5;border-color:#ba879f}
