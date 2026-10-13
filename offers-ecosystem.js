@@ -128,7 +128,7 @@
   }
   const main=document.querySelector('main');if(!main)return;
   const railHolder=element('div','mk-offer-host'),journeyHolder=element('div','mk-journey-host');
-  const placement=(p==='/'||p==='/index.html')?main.querySelector('#people'):main.querySelector('.hero');
+  const placement=(p==='/'||p==='/index.html')?main.querySelector('#people'):(main.querySelector('.hero')?.nextElementSibling||main.querySelector('.hero'));
   if(placement)placement.after(railHolder);else main.append(railHolder);
   main.append(journeyHolder);
   function render(){
