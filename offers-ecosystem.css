@@ -1,0 +1,54 @@
+/* Editorial cross-navigation: real experiences and next steps, not discount popups. */
+.mk-offer-host,.mk-journey-host{box-sizing:border-box}
+.mk-offer-rail,.mk-offer-rail *, .mk-journey,.mk-journey *{box-sizing:border-box}
+.mk-offer-rail{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;text-align:start;direction:inherit;color:#32252a;font-size:14px;line-height:1.42;max-width:100%;margin:32px auto;padding:15px;border-radius:18px;border:1px solid #e1d6cf;background:#fffcf8;box-shadow:0 12px 34px rgba(82,57,51,.08)}
+.mk-offer-rail h2,.mk-offer-rail h3,.mk-journey h2{font-family:inherit;letter-spacing:normal;text-transform:none}
+.mk-offer-heading{margin:2px 0 13px}
+.mk-offer-eyebrow{display:block;color:#8b5662;font-size:11px;font-weight:750;letter-spacing:.06em;text-transform:uppercase}
+.mk-offer-label{color:#602d42;margin:5px 0 0;font-size:18px;line-height:1.25}
+.mk-offer-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.mk-event-card{display:flex;flex-direction:column;position:relative;gap:9px;min-width:0;padding:16px;border-radius:15px;background:#f7e9e3;border:1px solid #e5c9c1;overflow:hidden}
+.mk-event-fairy{background:linear-gradient(140deg,#fff0e4,#f6e7ed)}
+.mk-event-concert{background:linear-gradient(140deg,#faedf1,#eee2df)}
+.mk-event-date{font-size:11px;color:#784259;font-weight:800;letter-spacing:.025em}
+.mk-event-title{font-size:17px;line-height:1.25;font-weight:850;color:#532337;margin:0}
+.mk-event-description{font-size:13px;line-height:1.5;margin:0;color:#5b4450;flex-grow:1}
+.mk-event-cta,.mk-next-link{display:inline-flex;align-items:center;justify-content:space-between;min-height:38px;border-radius:10px;padding:9px 10px;text-decoration:none;background:#78384a;color:#fff!important;font-size:12px;font-weight:800;line-height:1.3;margin-top:4px}
+.mk-event-cta:hover,.mk-event-cta:focus-visible,.mk-next-link:hover,.mk-next-link:focus-visible{background:#532337;text-decoration:underline}
+.mk-next-card{display:flex;flex-direction:column;gap:6px;min-width:0;padding:15px;border-radius:14px;background:#fff;border:1px solid #e6d9d3;margin-top:12px}
+.mk-next-eyebrow{font-size:11px;color:#87606c;font-weight:800;margin:0;text-transform:uppercase;letter-spacing:.04em}
+.mk-next-title{font-size:16px;line-height:1.28;font-weight:800;color:#54283d;margin:0}
+.mk-next-body{font-size:13px;color:#5d5552;margin:0;line-height:1.48}
+.mk-next-detail{font-size:12px;font-weight:750;color:#7b5260;margin:2px 0}
+.mk-next-link{background:#f7e9ed;color:#603049!important;border:1px solid #e5ced7}
+.mk-next-link:hover,.mk-next-link:focus-visible{background:#f0dce3}
+.mk-journey{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;direction:inherit;max-width:1060px;margin:40px auto 46px;padding:22px 24px;border:1px solid #e5d7cf;border-radius:18px;background:#fffdf9;color:#302629;line-height:1.4;text-align:start}
+.mk-journey-eyebrow{font-size:11px;color:#905971;font-weight:800;text-transform:uppercase;letter-spacing:.07em;margin:0 0 4px}
+.mk-journey-title{font-size:22px;line-height:1.3;color:#54283d;margin:0 0 9px}
+.mk-journey-intro{max-width:730px;margin:0 0 17px;color:#66585b;font-size:14px}
+.mk-journey-links{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:9px}
+.mk-journey-step{display:flex;align-items:center;gap:8px;position:relative;border:1px solid #e5d4d9;border-radius:12px;background:#fdf8fa;color:#663648!important;min-width:0;padding:10px 12px;text-decoration:none;min-height:64px;font-size:13px;font-weight:750}
+.mk-journey-step:hover,.mk-journey-step:focus-visible{background:#f2e2e8}
+.mk-journey-current{background:#efdee5;border-color:#ba879f}
+.mk-journey-number{display:grid;place-items:center;flex:0 0 25px;height:25px;border-radius:50%;background:#ead2dc;color:#693447;font-size:12px}
+.mk-journey-current .mk-journey-number{background:#70384b;color:#fff}
+.mk-journey-step-name{flex:1;overflow-wrap:anywhere}
+.mk-journey-you{font-size:10px;font-weight:650;color:#754b5b}
+@media(min-width:1360px){
+  .mk-offer-rail:not(.mk-offer-home){position:fixed;z-index:20;inset-inline-end:16px;top:100px;width:210px;max-height:calc(100dvh - 116px);overflow-y:auto;overscroll-behavior:contain;scrollbar-width:thin;margin:0;padding:10px}
+  .mk-offer-rail:not(.mk-offer-home) .mk-offer-list{grid-template-columns:1fr;gap:10px}
+  .mk-offer-rail:not(.mk-offer-home) .mk-event-card{padding:12px;gap:7px}
+  .mk-offer-rail:not(.mk-offer-home) .mk-event-title{font-size:15px}
+  .mk-offer-rail:not(.mk-offer-home) .mk-next-card{padding:12px}
+}
+@media(min-width:1700px){
+  .mk-offer-rail.mk-offer-home{position:fixed;z-index:20;inset-inline-end:16px;top:100px;width:215px;max-height:calc(100dvh - 116px);overflow-y:auto;overscroll-behavior:contain;scrollbar-width:thin;margin:0;padding:10px}
+  .mk-offer-rail.mk-offer-home .mk-offer-list{grid-template-columns:1fr;gap:10px}
+  .mk-offer-rail.mk-offer-home .mk-event-card{padding:12px;gap:7px}
+  .mk-offer-rail.mk-offer-home .mk-event-title{font-size:15px}
+  .mk-offer-rail.mk-offer-home .mk-next-card{padding:12px}
+}
+@media(min-width:820px) and (max-width:1359px){.mk-offer-rail{max-width:820px}}
+@media(max-width:700px){.mk-offer-rail{margin:18px auto;padding:12px}.mk-offer-list{grid-template-columns:1fr}.mk-event-card{padding:14px}.mk-journey{padding:16px;margin:30px 0}.mk-journey-links{grid-template-columns:repeat(2,minmax(0,1fr))}.mk-journey-step{padding:9px;min-height:58px}.mk-journey-title{font-size:19px}}
+@media(max-width:360px){.mk-journey-links{grid-template-columns:1fr}}
+@media print{.mk-offer-host,.mk-journey-host{display:none!important}}
