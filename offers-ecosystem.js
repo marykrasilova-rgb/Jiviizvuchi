@@ -25,19 +25,20 @@
   const i18n={
     ru:{eyebrow:'Вживую · с Катей Алюровой',events:'Скоро на сцене',button:'Открыть событие в Facebook ↗',
       next:'Продолжить свой музыкальный путь',journey:'У каждого свой путь к звучанию',journeyNote:'Можно начать с короткой бесплатной практики, выбрать самостоятельный формат или прийти на живую встречу. Все форматы — самостоятельные, ничего покупать по цепочке не обязательно.',current:'Вы здесь',details:'Подробнее →',
-      steps:['Попробовать бесплатно','Полный гайд','14 дней с голосом','Живая импровизация'],stage:'Один голос · разные форматы'},
+      steps:['Попробовать бесплатно','Полный гайд','14 дней с голосом','Живая импровизация','Голосовой дневник'],stage:'Один голос · разные форматы'},
     en:{eyebrow:'Live · with Katya Alyurova',events:'On stage soon',button:'View the Facebook event ↗',
       next:'Your next musical step',journey:'Find your own path into music',journeyNote:'Start with free exercises, choose a self-paced program, or come to a live meeting. Each is independent; no sequential purchase is required.',current:'You are here',details:'Explore →',
-      steps:['Try for free','Complete voice guide','14-day voice course','Live improvisation'],stage:'One voice · many paths'},
+      steps:['Try for free','Complete voice guide','14-day voice course','Live improvisation','Voice diary'],stage:'One voice · many paths'},
     he:{eyebrow:'לייב · עם קטיה אליורובה',events:'בקרוב על הבמה',button:'פתיחת אירוע בפייסבוק ↗',
       next:'הצעד המוזיקלי הבא שלך',journey:'לכל אחד ואחת מסלול מוזיקלי אישי',journeyNote:'אפשר להתחיל בחינם, לתרגל באופן עצמאי או להגיע למפגש חי. כל אחד מהמסלולים עומד בפני עצמו.',current:'כאן אתם',details:'לפרטים ←',
-      steps:['תרגול חינמי','מדריך קולי מלא','קורס קול ל-14 יום','אלתור בקבוצה'],stage:'קול אחד · דרכים רבות'}
+      steps:['תרגול חינמי','מדריך קולי מלא','קורס קול ל-14 יום','אלתור בקבוצה','יומן קולי'],stage:'קול אחד · דרכים רבות'}
   };
   const routes=[
     {id:'free',href:'/3-praktiki-golosa.html'},
     {id:'guide',href:'/guide-how-to-stop-being-shy-of-your-voice.html'},
     {id:'course',href:'/golos-bez-straha.html'},
-    {id:'group',href:'/zhivi-i-zvuchi.html'}
+    {id:'group',href:'/zhivi-i-zvuchi.html'},
+    {id:'diary',href:'/diary'}
   ];
   const nextByPage={
     '/':'course','/index.html':'course',
