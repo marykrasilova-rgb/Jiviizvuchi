@@ -1,5 +1,5 @@
-/* Мария Красилова: ненавязчивые переходы между программами и афиши живых событий.
-   Ссылки FB даны автором по порядку: первая — ХОЧУХА, вторая — концерт. */
+/* Мария Красилова: переходы между программами и афиши живых событий.
+   Карточки ведут на собственные страницы мероприятий, без зависимости от Facebook. */
 (function () {
   'use strict';
   const pathname=location.pathname.replace(/\/$/,'')||'/';
@@ -15,8 +15,8 @@
   if(!supported.has(p) && !p.startsWith('/articles/'))return;
 
   const EVENT_LINKS=Object.freeze({
-    fairy:'https://www.facebook.com/share/1KNoQgFwvo/?mibextid=wwXIfr',
-    concert:'https://www.facebook.com/share/19WWbcRTVZ/?mibextid=wwXIfr'
+    fairy:'/muzykalnaya-skazka-hochuhi.html',
+    concert:'/babonki-gulyayut.html'
   });
   const events=[
     {id:'fairy',date:'2026-10-31',url:EVENT_LINKS.fairy,kicker:['31 октября · интенсив-перформанс','31 October · creative performance day','31 באוקטובר · סדנת יצירה והופעה'],title:['Музыкальная сказка твоей ХОЧУХИ','The musical fairy tale of your wishes','האגדה המוזיקלית של הרצונות שלך'],description:['Один день, чтобы выразить собственную историю и вместе создать мини-спектакль.','A creative day to bring your story to the stage in a small shared performance.','יום יצירתי לספר את הסיפור שלך וליצור מופע משותף.']},
@@ -79,9 +79,11 @@
   function eventCard(event,l,c){
     const card=element('article','mk-event-card mk-event-'+event.id);
     const top=element('div','mk-event-date',tr(event.kicker,l));
-    const title=element('h3','mk-event-title',tr(event.title,l));
+    const title=element('h3','mk-event-title');
+    title.append(anchor(event.url,'mk-event-title-link',tr(event.title,l)));
     const description=element('p','mk-event-description',tr(event.description,l));
-    const cta=anchor(event.url,'mk-event-cta',c.button,true);
+    const buttonText=event.id==='fairy'?(l==='ru'?'Программа и запись →':l==='en'?'Details and registration →':'פרטים והרשמה ←'):(l==='ru'?'Подробнее и билеты →':l==='en'?'Details and tickets →':'פרטים וכרטיסים ←');
+    const cta=anchor(event.url,'mk-event-cta',buttonText);
     cta.dataset.offerId=event.id;cta.dataset.funnelStep='event_'+event.id;
     card.append(top,title,description,cta);
     return card;
