@@ -1,5 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 1200" role="img" aria-labelledby="title desc">
-  <title id="title">Живи и звучи — Хайфа, четверги, 19:30</title>
+  <title id="title">Живи и звучи — Хайфа, даты по запросу</title>
   <desc id="desc">Плакат в геометрической модернистской стилистике: группа по вокальной импровизации, идея меньше репетировать жизнь в голове и чаще входить в неё.</desc>
   <rect width="1200" height="1200" fill="#f4f0e6"/>
   <g stroke="#111" stroke-width="16" fill="none">
@@ -40,7 +40,7 @@
     <text x="676" y="998" font-size="28" font-weight="800" fill="#fff">встроить это</text>
     <text x="676" y="1036" font-size="28" font-weight="800" fill="#fff">в происходящее</text>
 
-    <text x="90" y="1146" font-size="38" font-weight="800">Хайфа · четверги · 19:30</text>
+    <text x="90" y="1146" font-size="38" font-weight="800">Хайфа · даты по запросу</text>
     <text x="898" y="1135" font-size="36" font-weight="900" fill="#fff">Пиши «ЖИВИ»</text>
   </g>
 
