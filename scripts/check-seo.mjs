@@ -2,7 +2,7 @@ import { readFile, readdir, stat } from "node:fs/promises";
 import { dirname, extname, join, normalize, relative, resolve } from "node:path";
 
 const root = resolve(import.meta.dirname, "..");
-const origin = "https://mariakrasilovacom.vercel.app";
+const origin = "https://krasilova.com";
 const errors = [];
 
 async function walk(directory) {
